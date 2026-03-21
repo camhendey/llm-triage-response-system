@@ -2,11 +2,13 @@
 
 This repo is a **translation of an operational workflow into code**. The original system was **not code-based**—it was a decision-making process used in a high-volume restaurant environment to triage and respond to incoming guest reservation requests. This project is the **first structured implementation** of that process in Python.
 
-The current implementation focuses on a clear separation of concerns: **classification and triage** followed by **routing into a response template**, then drafting a human-sounding reply.
+The implementation keeps things split cleanly: **classify and triage** the message, **pick a response template** by category, then **draft a reply** that still sounds like a person wrote it.
+
+You can run that flow from a **small Streamlit page** (`app.py`) or from the **command line** (`main.py`). Same pipeline; pick whatever fits how you’re working.
 
 ### One-line mental model
 
-**A real-world decision system, previously executed mentally, now encoded into a programmable triage engine.**
+**A real-world decision system that used to live in someone’s head, now encoded so a machine can run it.**
 
 ---
 
@@ -18,71 +20,55 @@ Incoming guest requests were often:
 - incomplete or ambiguous
 - time-sensitive
 
-Without a system, responses could become inconsistent and onboarding new staff was harder. The workflow introduced:
+Without a system, responses could drift and training new people took longer. The workflow was meant to add repeatability, consistency, and less mental overhead.
 
-- repeatability
-- consistency
-- reduced cognitive load
-
-This repository demonstrates how that kind of operational logic can be **formalized and routed** through software.
+This repo is one way to show that kind of operational logic **formalized and routed** through software—not slide deck theory.
 
 ---
 
 ## What the system does (current state)
 
-Given a message string (a guest request), the pipeline performs:
+Given a message string (a guest request), the pipeline does:
 
-1. **Input interpretation**
-   - The system does not rely on rigid parsing yet; it uses an LLM to interpret the message intent.
+1. **Interpretation**  
+   No brittle parsing layer yet—the model reads the message and infers intent.
 
-2. **Classification**
-   - The message is classified into exactly one category:
-     - `inquiry`
-     - `complaint`
-     - `urgent_request`
-     - `confirmation`
-     - `cancellation`
-     - `other`
-   - The classifier also returns:
-     - `confidence` (`high` / `medium` / `low`)
-     - `reasoning` (one sentence)
-     - `priority` derived from `PRIORITY_MAP`
+2. **Classification**  
+   One category from:
 
-3. **Routing / response templating**
-   - A response template is selected based on the category (in `templates.py`).
-   - Claude drafts a warm reply using the chosen template as a guide and filling in the `{specific_detail}` placeholder based on the original message.
+   - `inquiry`
+   - `complaint`
+   - `urgent_request`
+   - `confirmation`
+   - `cancellation`
+   - `other`
 
-Important note: this is an **early stage translation layer**. The repo is designed to preserve clarity and traceability over abstraction right now, and additional rule-based constraint evaluation and more structured routing are planned next.
+   You also get `confidence` (`high` / `medium` / `low`), a one-line `reasoning`, and a `priority` bucket from `PRIORITY_MAP`.
+
+3. **Response**  
+   `templates.py` picks the template for that category. Claude drafts the actual text using that template and the original message (including filling `{specific_detail}`).
+
+That’s still an **early translation layer**: clarity and traceability matter more than clever abstraction right now. Tighter rules and validation can come later.
 
 ---
 
 ## Key code components
 
-- `classifier.py`
-  - Calls Claude to produce structured JSON classification.
-  - Parses the JSON and attaches `priority` via `PRIORITY_MAP`.
-- `responder.py`
-  - Selects a template from `TEMPLATES` based on the category.
-  - Prompts Claude to draft the final reply text.
-- `templates.py`
-  - Contains category-specific reply templates.
-  - Contains the `PRIORITY_MAP` (category → `high`/`medium`/`low`).
-- `main.py`
-  - CLI entry point to run a triage pass for a single message or a batch of messages in a CSV.
+- `app.py` — Streamlit UI: paste a message, hit one button, see category, priority, reasoning, and suggested reply.
+- `classifier.py` — Calls Claude for structured JSON classification; attaches `priority` via `PRIORITY_MAP`.
+- `responder.py` — Chooses a template from `TEMPLATES`, asks Claude to write the final reply.
+- `templates.py` — Category templates and `PRIORITY_MAP` (category → `high` / `medium` / `low`).
+- `main.py` — CLI: one message as a string, or a batch from a CSV.
 
 ---
 
 ## Repository intent (what this is / isn’t)
 
-This is not:
+This is not a toy demo, a tutorial walkthrough, or a paper architecture exercise.
 
-- a toy project
-- a tutorial exercise
-- purely theoretical systems design
+It **is** a real workflow turned into code: systems thinking, process formalization, and a working sketch of something you could actually run in front of someone.
 
-This is a **real operational system translated into code**: a working example of systems thinking, process formalization, and early system design that aims for **consistency and repeatability**.
-
-The repo is intentionally not a fully polished product yet. It preserves original logic structure where useful and is evolving toward a cleaner modular triage engine.
+It’s not pretending to be a finished product. The structure is meant to stay readable while the internals evolve.
 
 ---
 
@@ -98,7 +84,7 @@ python -m pip install -r requirements.txt
 
 ### 2. Configure Anthropic credentials
 
-Create (or edit) a `.env` file in the project root with:
+Create or edit a `.env` in the project root:
 
 ```text
 ANTHROPIC_API_KEY=your_key_here
@@ -108,62 +94,58 @@ ANTHROPIC_API_KEY=your_key_here
 
 ## Usage
 
-### Single message
+### Web UI (Streamlit)
+
+```powershell
+streamlit run app.py
+```
+
+Streamlit should print a local URL (usually `http://localhost:8501`). If your browser doesn’t open on its own, paste that URL in manually.
+
+On the page: paste an incoming message, click **Process Message**, and you’ll see category, priority (with a simple visual cue), the model’s reasoning, and the suggested response.
+
+### Single message (CLI)
 
 ```powershell
 python main.py "Hi I need to cancel my booking for Friday"
 ```
 
-You’ll get output that includes:
-
-- `category`
-- `priority`
-- `confidence`
-- `reasoning`
-- `suggested_response` (the drafted reply)
+Output includes `category`, `priority`, `confidence`, `reasoning`, and `suggested_response`.
 
 ### Batch from CSV
-
-Run:
 
 ```powershell
 python main.py --batch sample_messages.csv
 ```
 
-Requirements for the CSV:
-
-- It must contain a `message` column.
-
-The script writes enriched results to `output.csv`.
+The CSV needs a `message` column. Results go to `output.csv`.
 
 ---
 
 ## Example input
 
-This repository includes `sample_messages.csv` with messages representing different intents (inquiry, complaint, urgent request, confirmation, cancellation, etc.).
+`sample_messages.csv` has a mix of intents—inquiries, complaints, urgent requests, confirmations, cancellations, and so on—if you want something to batch through without writing strings by hand.
 
 ---
 
 ## Planned evolution
 
-The next steps are to move from prompt-constrained classification + templated drafting toward a more explicit, rule-based triage engine, including:
+Rough direction from here:
 
-- modular architecture (separating concerns more cleanly)
-- rule-based / config-driven routing logic
-- clearer classification layers
-- improved input handling and validation
-- test coverage for edge cases
-- optional API/UI layer for integration
+- clearer modular boundaries as the logic grows
+- more explicit, config- or rule-driven routing (not only prompt constraints)
+- stronger validation and handling of messy inputs
+- tests on the weird edge cases
+- integrations (API, webhooks, whatever fits the next use case)
 
-Long-term direction: generalize this triage engine beyond a single domain (e.g., support tickets or other intake systems) while preserving the core “translation of operational workflow into code” approach.
+Longer term, the same triage shape could apply outside reservations—support queues, intake forms, anything where messy text shows up and you need consistent routing.
 
 ---
 
 ## Why employers should care
 
-You can think of this as signal for:
+Rough signal for:
 
-- extracting structure from messy real-world inputs
-- formalizing previously implicit decision logic
-- building a repeatable routing engine that reduces cognitive load and improves consistency
-
+- pulling structure out of messy real-world input
+- making implicit decision rules explicit and repeatable
+- building something that reduces one-off judgment calls without pretending the hard parts disappear
