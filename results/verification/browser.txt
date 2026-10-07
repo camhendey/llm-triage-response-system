@@ -1,0 +1,3 @@
+{"width": 820, "overflow": {"viewport": 820, "docWidth": 820, "mainWidth": 570}}
+{"width": 390, "overflow": {"viewport": 390, "docWidth": 390, "mainWidth": 390}}
+Captured clean UI

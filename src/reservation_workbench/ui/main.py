@@ -37,111 +37,123 @@ def _current_wb() -> Workbench:
 
 def sidebar(wb: Workbench) -> str:
     with st.sidebar:
-        st.markdown("**Reservation Workbench**")
-        st.caption("Sole developer · Cameron Hendey")
+        st.markdown("### Reservation Workbench")
         view = st.radio(
-            "View",
-            ["Workbench", "Service view", "Operator study", "Policies & about"],
+            "Navigation",
+            ["Inquiries", "Service", "Project", "Settings"],
             key="view",
             label_visibility="collapsed",
         )
         st.divider()
-        if view == "Workbench":
+        if view == "Inquiries":
             from .workbench_view import render_queue
 
             render_queue(wb)
-        with st.expander("Environment & settings"):
-            kind = st.radio(
-                "Database",
-                ["demo", "session"],
-                key="db_kind_pick",
-                horizontal=True,
-                index=0 if st.session_state.get("db_kind", "demo") == "demo" else 1,
-                help="demo: fixed clock, resettable synthetic data. session: real clock, persistent.",
-            )
-            if kind != st.session_state.get("db_kind", "demo"):
-                st.session_state["db_kind"] = kind
-                st.session_state.pop("selected", None)
-                st.rerun()
-            tz = wb.cfg.tz
-            st.caption(
-                f"Clock ({'fixed demo' if wb.mode == 'demo' else 'system'}): "
-                f"{fmt_local(wb.now(), tz)} {tz.key}"
-            )
-            if wb.mode == "demo":
-                c1, c2 = st.columns(2)
-                for col, label, delta in (
-                    (c1, "+1 hour", timedelta(hours=1)),
-                    (c2, "+1 day", timedelta(days=1)),
-                ):
-                    if col.button(label, key=f"clk_{label}", width="stretch"):
-                        target = wb.now() + delta
-                        res = wb.set_demo_clock(
-                            target, key=f"ui:clock:{target.isoformat()}"
-                        )
-                        st.session_state["flash"] = (res.ok, res.message, False)
-                        st.rerun()
-            prov = wb.provider
-            mode = getattr(prov, "mode", "?")
-            if mode == "live_anthropic":
-                ok = getattr(prov, "configured", False)
-                st.caption(
-                    f"Interpreter: live model ({prov.settings.model}) · API key "
-                    f"{'present' if ok else 'MISSING - calls will fail and be shown as failed'}"
-                )
-            else:
-                st.caption(
-                    "Interpreter: offline pattern rules (not a language model). Set RW_PROVIDER=live and "
-                    "ANTHROPIC_API_KEY to use the live model."
-                )
-            st.caption(f"Policy {wb.cfg.policy_version} · config {config_hash()[:10]}")
-            with st.expander("Import messages (CSV)"):
-                st.caption(
-                    "Columns: guest_label, message, received_at (ISO, optional), inquiry_id (optional). "
-                    "Rows are validated one by one; bad rows are reported, not guessed."
-                )
-                up = st.file_uploader(
-                    "CSV file", type=["csv"], key="csv_up", label_visibility="collapsed"
-                )
-                if up is not None and st.button("Import rows", key="csv_go"):
-                    content = up.getvalue()
-                    rep = import_csv(
-                        wb,
-                        content,
-                        batch_key=f"ui:csv:{stable_hash(content)}",
-                        interpret=True,
-                    )
-                    if rep.fatal:
-                        st.error(rep.fatal)
-                    else:
-                        st.success(
-                            f"Imported {rep.imported} row(s); {rep.failed} rejected."
-                        )
-                        for r in rep.rows:
-                            if not r.ok:
-                                st.caption(f"Row {r.row}: {r.message}")
-            if wb.mode == "demo":
-                with st.expander("Reset demo data"):
-                    st.caption(
-                        f"Deletes and re-seeds only the designated demo database: {demo_db_path().name}"
-                    )
-                    if st.button("Reset demo database", key="reset_demo"):
-                        try:
-                            wb.db.close()
-                            reset_demo()
-                            for resource_key in list(st.session_state):
-                                if str(resource_key).startswith("workbench_resource:"):
-                                    del st.session_state[resource_key]
-                            st.session_state.pop("selected", None)
-                            st.session_state["flash"] = (
-                                True,
-                                "Demo database reset to its seeded state.",
-                                False,
-                            )
-                        except ResetRefused as exc:
-                            st.session_state["flash"] = (False, str(exc), False)
-                        st.rerun()
+        st.caption("Cameron Hendey · Sole developer")
     return view
+
+
+def settings_page(wb):
+    st.markdown("# Settings")
+    with st.expander("Environment & settings"):
+        kind = st.radio(
+            "Database",
+            ["demo", "session"],
+            key="db_kind_pick",
+            horizontal=True,
+            index=0 if st.session_state.get("db_kind", "demo") == "demo" else 1,
+            help="demo: fixed clock, resettable synthetic data. session: real clock, persistent.",
+        )
+        if kind != st.session_state.get("db_kind", "demo"):
+            st.session_state["db_kind"] = kind
+            st.session_state.pop("selected", None)
+            st.rerun()
+        tz = wb.cfg.tz
+        st.caption(
+            f"Clock ({'fixed demo' if wb.mode == 'demo' else 'system'}): "
+            f"{fmt_local(wb.now(), tz)} {tz.key}"
+        )
+        if wb.mode == "demo":
+            c1, c2 = st.columns(2)
+            for col, label, delta in (
+                (c1, "+1 hour", timedelta(hours=1)),
+                (c2, "+1 day", timedelta(days=1)),
+            ):
+                if col.button(label, key=f"clk_{label}", width="stretch"):
+                    target = wb.now() + delta
+                    res = wb.set_demo_clock(
+                        target, key=f"ui:clock:{target.isoformat()}"
+                    )
+                    st.session_state["flash"] = (res.ok, res.message, False)
+                    st.rerun()
+        prov = wb.provider
+        mode = getattr(prov, "mode", "?")
+        if mode == "live_anthropic":
+            ok = getattr(prov, "configured", False)
+            st.caption(
+                f"Interpreter: live model ({prov.settings.model}) · API key "
+                f"{'present' if ok else 'MISSING - calls will fail and be shown as failed'}"
+            )
+        else:
+            st.caption(
+                "Interpreter: offline pattern rules (not a language model). Set RW_PROVIDER=live and "
+                "ANTHROPIC_API_KEY to use the live model."
+            )
+        st.caption(f"Policy {wb.cfg.policy_version} · config {config_hash()[:10]}")
+        with st.expander("Import messages (CSV)"):
+            st.caption(
+                "Columns: guest_label, message, received_at (ISO, optional), inquiry_id (optional). "
+                "Rows are validated one by one; bad rows are reported, not guessed."
+            )
+            up = st.file_uploader(
+                "CSV file", type=["csv"], key="csv_up", label_visibility="collapsed"
+            )
+            if up is not None and st.button("Import rows", key="csv_go"):
+                content = up.getvalue()
+                rep = import_csv(
+                    wb,
+                    content,
+                    batch_key=f"ui:csv:{stable_hash(content)}",
+                    interpret=True,
+                )
+                if rep.fatal:
+                    st.error(rep.fatal)
+                else:
+                    st.success(
+                        f"Imported {rep.imported} row(s); {rep.failed} rejected."
+                    )
+                    for r in rep.rows:
+                        if not r.ok:
+                            st.caption(f"Row {r.row}: {r.message}")
+        if wb.mode == "demo":
+            with st.expander("Reset demo data"):
+                st.caption(
+                    f"Deletes and re-seeds only the designated demo database: {demo_db_path().name}"
+                )
+                if st.button("Reset demo database", key="reset_demo"):
+                    try:
+                        wb.db.close()
+                        reset_demo()
+                        for resource_key in list(st.session_state):
+                            if str(resource_key).startswith(
+                                (
+                                    "workbench_resource:",
+                                    "draft_text",
+                                    "draft_buffers",
+                                    "stage_",
+                                    "previous_",
+                                )
+                            ):
+                                del st.session_state[resource_key]
+                        st.session_state.pop("selected", None)
+                        st.session_state["flash"] = (
+                            True,
+                            "Demo database reset to its seeded state.",
+                            False,
+                        )
+                    except ResetRefused as exc:
+                        st.session_state["flash"] = (False, str(exc), False)
+                    st.rerun()
 
 
 def policies_page(wb: Workbench) -> None:
@@ -227,74 +239,91 @@ def policies_page(wb: Workbench) -> None:
     st.code(wb.provider.describe(), language=None, wrap_lines=True)
 
 
+def project_page(wb):
+    from .workbench_view import select_inquiry
+
+    st.markdown("# Project")
+    st.caption(
+        "Sole developer: Cameron Hendey. Original workflow developed at JOEY in 2024; refined in 2025."
+    )
+    section = st.radio(
+        "Project section",
+        ["Guided examples", "Evaluation", "About & policies"],
+        horizontal=True,
+        label_visibility="collapsed",
+    )
+    if section == "Guided examples":
+        st.write(
+            "Explore three decisions from a reservation coordinator’s day. All guests and restaurant policies are synthetic."
+        )
+        for iid, title, body in [
+            (
+                "INQ-0101",
+                "A straightforward booking",
+                "Select seating, confirm the booking and review the guest reply.",
+            ),
+            (
+                "INQ-0103",
+                "An accessibility conflict",
+                "Compare step-free options and alternative times.",
+            ),
+            (
+                "INQ-0104",
+                "A changing party size",
+                "Review how a correction affects the booking plan.",
+            ),
+        ]:
+            with st.container(border=True):
+                st.markdown("### " + title)
+                st.write(body)
+                if st.button("Explore scenario", key="scenario_" + iid):
+                    if wb.repo.get_inquiry(iid):
+                        select_inquiry(wb, iid)
+                    else:
+                        st.info(
+                            "Switch to the demo database in Settings to open these examples."
+                        )
+    elif section == "Evaluation":
+        from .study_view import render_study_view
+
+        render_study_view()
+    else:
+        policies_page(wb)
+
+
 def run() -> None:
     from dotenv import load_dotenv
 
-    load_dotenv()  # reads .env if present; existing environment variables win
+    load_dotenv()
     st.set_page_config(
-        page_title="Reservation Operations Workbench",
-        layout="wide",
-        initial_sidebar_state="auto",
+        page_title="Reservation Workbench", layout="wide", initial_sidebar_state="auto"
     )
     html_block(CSS)
+    if "nav_request" in st.session_state:
+        st.session_state["view"] = st.session_state.pop("nav_request")
     try:
         wb = _current_wb()
     except Exception as exc:
         st.error(f"Could not open the database: {exc}")
         st.stop()
     view = sidebar(wb)
-    html_block(f'<div class="rw-banner">{esc(BANNER)}</div>')
-    if view == "Workbench":
-        from .workbench_view import render_workspace, show_flash
+    clock = fmt_local(wb.now(), wb.cfg.tz)
+    html_block(
+        f'<div class="rw-banner"><strong>Synthetic workspace</strong><span>{esc(clock)} · {"Demo clock" if wb.mode == "demo" else "Local time"}</span><span>Nothing here is sent or synced.</span></div>'
+    )
+    if view == "Inquiries":
+        from .workbench_view import render_workspace, render_home
 
-        sel = st.session_state.get("selected")
-        if sel:
-            if st.button("Back to overview", key="back_overview"):
-                st.session_state.pop("selected", None)
-                st.rerun()
-            render_workspace(wb, sel)
+        selected = st.session_state.get("selected")
+        if selected:
+            render_workspace(wb, selected)
         else:
-            show_flash()
-            st.markdown("# From guest request to a clear booking decision")
-            st.markdown(
-                "Review the conversation, compare suitable seating and prepare an accurate reply. Every booking action stays under your control."
-            )
-            cols = st.columns(3)
-            for col, iid, title, body in zip(
-                cols,
-                ["INQ-0101", "INQ-0103", "INQ-0104"],
-                [
-                    "A straightforward booking",
-                    "An accessibility conflict",
-                    "A changing party size",
-                ],
-                [
-                    "Review a complete request and confirm the arrangement.",
-                    "Find step-free seating when the requested time is unavailable.",
-                    "See how revised guest details change the plan.",
-                ],
-            ):
-                with col:
-                    st.markdown("### " + title)
-                    st.write(body)
-                    if st.button("Explore scenario", key="scenario_" + iid):
-                        if wb.repo.get_inquiry(iid):
-                            st.session_state["selected"] = iid
-                            st.rerun()
-                        else:
-                            st.info(
-                                "These examples are available in the demo environment. Create an inquiry from the sidebar."
-                            )
-            st.caption(
-                "Original workflow developed at JOEY in 2024; refined in 2025. Sole developer: Cameron Hendey."
-            )
-    elif view == "Service view":
+            render_home(wb)
+    elif view == "Service":
         from .service_view import render_service_view
 
         render_service_view(wb)
-    elif view == "Operator study":
-        from .study_view import render_study_view
-
-        render_study_view()
+    elif view == "Settings":
+        settings_page(wb)
     else:
-        policies_page(wb)
+        project_page(wb)

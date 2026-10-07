@@ -56,7 +56,7 @@ def seating_svg(wb, v, option):
                 else "#f5f4f0"
             )
             status = (
-                "Selected"
+                "Preview"
                 if t.id in selected
                 else "Busy: " + occupied[t.id]
                 if t.id in occupied
@@ -85,5 +85,5 @@ def render_seating_visual(wb, v, option):
     )
     if option:
         st.caption(
-            f"Selected interval: {fmt_local(option.start, wb.cfg.tz)}–{fmt_local(option.end, wb.cfg.tz, False)}"
+            f"Preview interval: {fmt_local(option.start, wb.cfg.tz)}–{fmt_local(option.end, wb.cfg.tz, False)}"
         )

@@ -2,17 +2,17 @@
 
 Sole developer: Cameron Hendey. Original workflow developed at JOEY in 2024; refined in 2025.
 
-The app records decisions for a simulated restaurant. Email sending and external reservation updates happen outside this app. Start with a scenario on the overview or an inquiry in the sidebar. Environment & settings contains the fixed demo clock, database switch, CSV import and demo reset.
+The app records decisions for a simulated restaurant. Email sending and external reservation updates happen outside this app. Start with a guided example under **Project** or an inquiry in the sidebar. **Settings** contains the fixed demo clock, database switch, CSV import and demo reset.
 
 ## Complete one inquiry
 
 1. **Understand the request.** Read the conversation and the next action. Adding a guest reply runs offline interpretation automatically. In live mode use **Interpret new reply** explicitly. Unknown information stays unknown.
-2. **Review details.** Use **Edit guest details** for typed dates, times, party size and policy values. Save related changes together with a source/reason. Resolve ambiguous statements in **Sources and conflicts**. Occasion is optional. Empty form values do not erase existing records.
-3. **Choose seating.** **Select suggested arrangement** is the shortcut. **Compare seating and times** shows feasible options, a table schematic, comparison rows and rejected-option reasons. Selecting an alternative is an offer, not evidence the guest accepted it. Update/confirm the requested time from the guest's reply before finalizing.
+2. **Review details.** Use **Edit reservation**, **Edit requirements** or **Edit guest & preferences** for typed dates, times, party size and policy values. Save related changes together with a source/reason. Resolve ambiguous statements in the inline review cards and **Sources for these details**. Occasion is optional. Use **Mark unknown** to clear an incorrect value explicitly; clearing preserves its history.
+3. **Choose seating.** **Select suggested arrangement** is the shortcut. **Compare seating & other times** shows feasible options, a table schematic, comparison rows and rejected-option reasons. Selecting an alternative is an offer, not evidence the guest accepted it. Update/confirm the requested time from the guest's reply before finalizing.
 4. **Record the decision.** After selection, **Create hold**, **Confirm booking**, or **Review and commit change** performs human approval and an atomic availability recheck. In the demo these update only the local simulated booking. Short-notice holds ask for an expiry deadline.
-5. **Prepare the reply.** **Prepare reply** uses the selected arrangement and actual action status. Edit the single reply field, **Save reply**, then **Mark reviewed**. Draft edits survive navigation within the current browser session; save to persist across restarts. Changed facts or seating invalidate earlier drafts and approvals.
-6. **Hand off.** Export the reply and booking notes. Once you have sent a reply elsewhere, **I sent this reply elsewhere** adds the exact reviewed text to the conversation as an operator assertion. It does not send or verify delivery.
-7. **Prepare service.** In **Service view**, choose a date, inspect occupancy and export the daily service handoff with access, allergens, billing, occasion and outstanding items. Expired or cancelled bookings are excluded.
+5. **Prepare the reply.** The **Reply** panel uses the selected arrangement and actual action status. Edit the single reply field, **Save reply**, then **Mark reviewed**. Draft edits survive navigation within the current browser session; save to persist across restarts. Changed facts, seating or a new guest message invalidate earlier drafts and approvals.
+6. **Hand off.** Copy the reviewed reply, or download it and the booking notes. Once you have sent a reply elsewhere, **Record sent elsewhere** adds the exact reviewed text to the conversation as an operator assertion. It does not send or verify delivery.
+7. **Prepare service.** In **Service**, choose a date, read arrival briefs or switch to the timeline and export the daily service handoff with access, allergens, billing, occasion and outstanding items. Expired or cancelled bookings are excluded.
 
 ## Exceptions and review
 

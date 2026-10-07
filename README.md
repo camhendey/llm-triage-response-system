@@ -6,21 +6,23 @@ A single-operator, human-reviewed workbench for large-party restaurant reservati
 
 Nothing in this application sends email, reads or updates any external booking system, takes payments or is deployed anywhere. It is a portfolio project by Cameron Hendey; see [docs/PROVENANCE.md](docs/PROVENANCE.md) for how it relates to his earlier, manual, LLM-assisted workflow.
 
-![Refined workbench (real application screenshot)](docs/screenshots/refined/03-reply.png)
+![Refined workbench (real application screenshot)](docs/screenshots/clean/02-plan.png)
 
 ## Status (2026-10-07)
 
 | Gate | State |
 |---|---|
 | Implemented | Workbench UI, service layer, rules engine, offline and live interpreters, CLI, evaluation runner, study harness |
-| Deterministic tests | **117 passed** (`pytest`), covering acceptance scenarios A01-A30 |
-| Actual UI verified | Chromium captures at 1440 px and 820 px; end-to-end Streamlit interaction tests ([docs/VERIFICATION.md](docs/VERIFICATION.md)) |
+| Deterministic tests | **123 passed** (`pytest`), covering acceptance scenarios A01-A30 |
+| Actual UI verified | Chromium captures at 1440 px, 820 px and 390 px; end-to-end Streamlit interaction tests ([docs/VERIFICATION.md](docs/VERIFICATION.md)) |
 | Live model verified | **not_run**: no API key or spending limit was supplied ([results/eval/live_status.json](results/eval/live_status.json)) |
 | Human handling-time study | **pending**: harness and protocol ready, 0 of 36 sessions recorded |
 
 The original 40-case blind offline run allowed the expected next action in **33/40** cases with **1 critical-error case**. The refinement regression run reaches **39/40** with **0 critical-error cases** and 97/97 labelled field agreement. This is a **retest of previously inspected synthetic cases**, not a fresh blind benchmark; making occasion optional explains two improved next-action results. Live AI performance and time savings remain unmeasured. [Evaluation and limitations](docs/EVALUATION.md).
 
-Version **1.1** adds a unified coordinator workspace, typed guest-detail editing, selected-plan drafting, seating/time comparisons, outgoing conversation history, explicit referral reporting and a daily handoff export. [Changes](docs/REFINEMENT.md).
+Version **1.2** simplifies navigation, separates booking and reply progress, groups editable details, adds explicit unknown-value clearing, and puts arrival briefs first. [UI changes and decisions](docs/UI_REDESIGN.md).
+
+Version **1.1** added a unified coordinator workspace, typed guest-detail editing, selected-plan drafting, seating/time comparisons, outgoing conversation history, explicit referral reporting and a daily handoff export. [Changes](docs/REFINEMENT.md).
 
 ## Quick start
 
@@ -33,7 +35,7 @@ cp .env.example .env                                     # optional; values are 
 streamlit run app.py                                     # http://localhost:8501
 ```
 
-The app opens on the **demo** database (`data/demo/workbench_demo.sqlite`), seeded from `data/synthetic/demo_inquiries.json` with a fixed demo clock of Tue Nov 10 2026, 10:00 America/Toronto. Use **+1 hour / +1 day** in the sidebar to move the demo clock (holds expire against it). Switch to the **session** database for a persistent workspace on the real clock.
+The app opens on the **demo** database (`data/demo/workbench_demo.sqlite`), seeded from `data/synthetic/demo_inquiries.json` with a fixed demo clock of Tue Nov 10 2026, 10:00 America/Toronto. Use **+1 hour / +1 day** in **Settings** to move the demo clock (holds expire against it). Switch to the **session** database for a persistent workspace on the real clock.
 
 ```bash
 rw init-demo                    # create/seed the demo database if missing
@@ -41,12 +43,12 @@ rw reset-demo                   # delete and re-seed ONLY the designated demo da
 rw queue                        # queue as text
 rw show INQ-0103 --notes        # facts, rules and copyable booking notes
 rw import-csv messages.csv --interpret          # into the session database
-pytest                                          # 117 tests
+pytest                                          # 123 tests
 rw eval validate                                # dataset shape and freeze hash
 rw eval run --split heldout --mode offline      # writes results/eval/<run>/
 python scripts/run_worked_examples.py           # replays examples/01-03
 python scripts/make_charts.py                   # historical evaluation figures
-python scripts/capture_refined.py                # current screenshots; needs Playwright Chromium
+python scripts/capture_clean.py                # current screenshots; needs Playwright Chromium
 ```
 
 `reset-demo` refuses any path other than the designated demo database and refuses any database whose stored kind is not `demo`.

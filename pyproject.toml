@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "reservation-workbench"
-version = "1.1.0"
+version = "1.2.0"
 description = "Human-reviewed reservation operations workbench for a synthetic restaurant (portfolio project)."
 readme = "README.md"
 requires-python = ">=3.11"

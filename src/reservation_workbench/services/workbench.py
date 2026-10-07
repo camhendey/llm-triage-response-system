@@ -320,6 +320,8 @@ class Workbench:
         m = Message(id=mid, inquiry_id=inquiry_id, seq=seq, direction=Direction.INBOUND, text=text,
                     received_at=received_at, source=source)
         self.repo.insert_message(m)
+        if self.repo.drafts(inquiry_id):
+            inq = self._bump(inq, "new guest message received; review the response again")
         self.repo.update_inquiry(inq.model_copy(update={"updated_at": self.now()}))
         if self.repo.find_event(key) is None:
             self._event(key, "message_received", inquiry_id, actor="guest",
@@ -438,11 +440,45 @@ class Workbench:
         def fn():
             self._check_version(self._inq(inquiry_id), expected_record_version)
             for field, value in values.items():
-                r = self.set_fact(inquiry_id, field, value, reason, key + ":" + field)
+                r = (self.clear_fact(inquiry_id, field, reason, key + ":" + field) if value is None
+                     else self.set_fact(inquiry_id, field, value, reason, key + ":" + field))
                 if not r.ok:
                     raise DomainError(r.code or "validation", r.message)
             self._event(key, "guest_details_saved", inquiry_id, after={"fields": list(values)})
             return CommandResult(ok=True, message=f"Saved {len(values)} guest details.")
+        return self._run(key, fn)
+
+    def clear_fact(self, inquiry_id: str, field_name: str, reason: str, key: str,
+                   expected_record_version: int | None = None) -> CommandResult:
+        """Explicit operator tombstone preserves history and restores unknown, never 'none'."""
+        def fn():
+            inq = self._inq(inquiry_id)
+            self._check_version(inq, expected_record_version)
+            try:
+                name = FieldName(field_name)
+            except ValueError as exc:
+                raise DomainError("validation", "Unknown field") from exc
+            before = resolve(self.cfg, self.repo.observations(inquiry_id))
+            self.repo.insert_observation(Observation(
+                id="OBS-" + uuid.uuid4().hex[:10], inquiry_id=inquiry_id,
+                seq=self.repo.next_obs_seq(inquiry_id), field=name, value=None,
+                source_type="operator", status=FieldStatus.OPERATOR_CONFIRMED,
+                note=self._reason(reason), observed_at=self.now()))
+            self._after_fact_change(inq, before, f"operator cleared {name.value}")
+            self._event(key, "fact_cleared", inquiry_id,
+                        before={"field": name.value, "value": before.get(name).value},
+                        after={"field": name.value, "value": None}, reason=reason)
+            self._refresh_state(inquiry_id)
+            return CommandResult(ok=True, message="Detail marked unknown. Previous evidence is retained.")
+        return self._run(key, fn)
+
+    def mark_conversation_reviewed(self, inquiry_id: str, key: str) -> CommandResult:
+        """Reading a conversation is independent of interpreting it or sending a reply."""
+        def fn():
+            messages = self.load(inquiry_id).messages
+            seq = max((m.seq for m in messages if m.direction == Direction.INBOUND), default=0)
+            self._event(key, "conversation_reviewed", inquiry_id, after={"message_seq": seq})
+            return CommandResult(ok=True, message="Conversation reviewed.")
         return self._run(key, fn)
 
     def confirm_fact(self, inquiry_id: str, field_name: str, key: str, expected_record_version: int | None = None,

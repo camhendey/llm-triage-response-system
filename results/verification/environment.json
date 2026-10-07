@@ -14,5 +14,7 @@
     "pillow": "12.3.0"
   },
   "provider": "offline_rules",
-  "live_api_run": false
+  "live_api_run": false,
+  "verified_at": "2026-10-07",
+  "release": "1.2.0"
 }

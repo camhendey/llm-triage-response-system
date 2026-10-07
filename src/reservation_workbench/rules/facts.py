@@ -59,7 +59,7 @@ def resolve_field(name: FieldName, obs: list[Observation]) -> FieldView:
         fv.current = anchor
         fv.value = anchor.value
         fv.conflicts = [o for o in later if not _same(o.value, anchor.value)]
-        fv.state = "conflict" if fv.conflicts else "known"
+        fv.state = "conflict" if fv.conflicts else ("unknown" if anchor.value is None else "known")
         for o in items:
             if o is anchor:
                 st = FieldStatus.OPERATOR_CONFIRMED
