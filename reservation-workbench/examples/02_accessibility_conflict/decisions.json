@@ -1,0 +1,128 @@
+[
+  {
+    "at": "2026-11-10T15:00:00+00:00",
+    "actor": "guest",
+    "action": "message received (new inquiry)",
+    "ok": true,
+    "message": "Created INQ-0001"
+  },
+  {
+    "at": "2026-11-10T15:00:00+00:00",
+    "actor": "operator",
+    "action": "Interpret new messages (offline rules)",
+    "ok": true,
+    "message": "Interpretation ok: 10 facts"
+  },
+  {
+    "at": "2026-11-10T15:00:00+00:00",
+    "actor": "operator",
+    "action": "Try proposing stairs-only M1 (should be refused)",
+    "ok": false,
+    "message": "M1 cannot be used: R-ACCESS: stairs-only seating; guest needs step-free access"
+  },
+  {
+    "at": "2026-11-10T15:00:00+00:00",
+    "actor": "operator",
+    "action": "Propose checked alternative 20:30 on G_L3_L4",
+    "ok": true,
+    "message": "Proposal P-0001: G_L3_L4 (tables L3+L4), Fri Nov 13 20:30. Approve it before creating a hold or confirmation."
+  },
+  {
+    "at": "2026-11-10T15:00:00+00:00",
+    "actor": "operator",
+    "action": "Approve proposal",
+    "ok": true,
+    "message": "Proposal P-0001 approved for record version 2."
+  },
+  {
+    "at": "2026-11-10T15:00:00+00:00",
+    "actor": "operator",
+    "action": "Generate draft",
+    "ok": true,
+    "message": "Draft DR-0001 generated (alternative_offer, prose: deterministic)."
+  },
+  {
+    "at": "2026-11-10T15:00:00+00:00",
+    "actor": "operator",
+    "action": "Mark draft reviewed",
+    "ok": true,
+    "message": "Draft marked reviewed. It has not been sent anywhere."
+  },
+  {
+    "at": "2026-11-10T15:00:00+00:00",
+    "actor": "operator",
+    "action": "Record that I copied the draft (not sent)",
+    "ok": true,
+    "message": "draft copy/export recorded (not a send)."
+  },
+  {
+    "at": "2026-11-10T15:00:00+00:00",
+    "actor": "operator",
+    "action": "Mark reply sent (reported) - awaiting guest",
+    "ok": true,
+    "message": "INQ-0001: awaiting guest marked."
+  },
+  {
+    "at": "2026-11-10T16:30:00+00:00",
+    "actor": "guest",
+    "action": "message received",
+    "ok": true,
+    "message": "Added message INQ-0001-M2"
+  },
+  {
+    "at": "2026-11-10T16:30:00+00:00",
+    "actor": "operator",
+    "action": "Interpret new messages (offline rules)",
+    "ok": true,
+    "message": "Interpretation ok: 1 facts"
+  },
+  {
+    "at": "2026-11-10T16:30:00+00:00",
+    "actor": "operator",
+    "action": "Check & propose",
+    "ok": true,
+    "message": "Proposal P-0002: G_L3_L4 (tables L3+L4), Fri Nov 13 20:30. Approve it before creating a hold or confirmation."
+  },
+  {
+    "at": "2026-11-10T16:30:00+00:00",
+    "actor": "operator",
+    "action": "Approve proposal",
+    "ok": true,
+    "message": "Proposal P-0002 approved for record version 3."
+  },
+  {
+    "at": "2026-11-10T16:30:00+00:00",
+    "actor": "operator",
+    "action": "Create demo hold",
+    "ok": true,
+    "message": "Demo hold B-A0001 created on L3, L4 until 2026-11-12 11:30."
+  },
+  {
+    "at": "2026-11-10T16:30:00+00:00",
+    "actor": "operator",
+    "action": "Record demo confirmation",
+    "ok": true,
+    "message": "Demo confirmation recorded for B-A0001."
+  },
+  {
+    "at": "2026-11-10T16:30:00+00:00",
+    "actor": "operator",
+    "action": "Generate draft",
+    "ok": true,
+    "message": "Draft DR-0002 generated (confirmation, prose: deterministic)."
+  },
+  {
+    "at": "2026-11-10T16:30:00+00:00",
+    "actor": "operator",
+    "action": "Mark draft reviewed",
+    "ok": true,
+    "message": "Draft marked reviewed. It has not been sent anywhere."
+  },
+  {
+    "at": "2026-11-10T16:30:00+00:00",
+    "actor": "operator",
+    "action": "Record that I copied the draft (not sent)",
+    "ok": true,
+    "message": "draft copy/export recorded (not a send)."
+  }
+]

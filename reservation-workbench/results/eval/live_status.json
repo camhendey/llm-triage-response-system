@@ -1,0 +1,12 @@
+{
+  "status": "not_run",
+  "reason": "ANTHROPIC_API_KEY is not set",
+  "requested": {
+    "split": "heldout",
+    "repeats": 3,
+    "max_calls": null,
+    "budget_usd": null
+  },
+  "checked_at": "2026-10-07T00:00:40+00:00",
+  "note": "No live-model results exist. No live scores are reported or estimated."
+}

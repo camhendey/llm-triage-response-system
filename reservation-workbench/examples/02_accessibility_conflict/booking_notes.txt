@@ -1,0 +1,20 @@
+DEMO RECORD - simulated restaurant; not synced to any external booking system
+
+Table: L3, L4 (separate tables)
+Dine time: Fri Nov 13 2026 20:30-23:00
+Status: CONFIRMED (booking B-A0001)
+Party: 12
+------------------------------
+Auto gratuity: applies (18%) - disclose
+Minors: none
+Accessibility: step_free_required
+Payment: one_bill
+------------------------------
+Occasion: birthday
+Allergies: none
+------------------------------
+Guest: Synthetic Guest (Taylor)
+Email: taylor@example.com
+Tel: UNKNOWN - ask guest
+------------------------------
+Inquiry: INQ-0001  record v5  policy demo-2026-11-a

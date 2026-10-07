@@ -1,0 +1,156 @@
+[
+  {
+    "at": "2026-11-10T15:00:00+00:00",
+    "actor": "guest",
+    "action": "message received",
+    "ok": true,
+    "message": "Added message INQ-B002-M2"
+  },
+  {
+    "at": "2026-11-10T15:00:00+00:00",
+    "actor": "operator",
+    "action": "Interpret new messages (offline rules)",
+    "ok": true,
+    "message": "Interpretation ok: 7 facts"
+  },
+  {
+    "at": "2026-11-10T15:00:00+00:00",
+    "actor": "operator",
+    "action": "Check & propose (L1 at 19:00)",
+    "ok": false,
+    "message": "L1 cannot be used: R-OVERLAP: table L1 confirmed by B001 18:00-20:30"
+  },
+  {
+    "at": "2026-11-10T15:00:00+00:00",
+    "actor": "operator",
+    "action": "Generate draft",
+    "ok": true,
+    "message": "Draft DR-0001 generated (change_unavailable, prose: deterministic)."
+  },
+  {
+    "at": "2026-11-10T15:00:00+00:00",
+    "actor": "operator",
+    "action": "Mark draft reviewed",
+    "ok": true,
+    "message": "Draft marked reviewed. It has not been sent anywhere."
+  },
+  {
+    "at": "2026-11-10T15:00:00+00:00",
+    "actor": "operator",
+    "action": "Record that I copied the draft (not sent)",
+    "ok": true,
+    "message": "draft copy/export recorded (not a send)."
+  },
+  {
+    "at": "2026-11-10T15:30:00+00:00",
+    "actor": "guest",
+    "action": "message received",
+    "ok": true,
+    "message": "Added message INQ-B002-M3"
+  },
+  {
+    "at": "2026-11-10T15:30:00+00:00",
+    "actor": "operator",
+    "action": "Interpret new messages (offline rules)",
+    "ok": true,
+    "message": "Interpretation ok: 2 facts"
+  },
+  {
+    "at": "2026-11-10T15:30:00+00:00",
+    "actor": "operator",
+    "action": "Check & propose",
+    "ok": true,
+    "message": "Proposal P-0001: D1, Fri Nov 13 19:00. Approve it before creating a hold or confirmation."
+  },
+  {
+    "at": "2026-11-10T15:30:00+00:00",
+    "actor": "operator",
+    "action": "Approve proposal",
+    "ok": true,
+    "message": "Proposal P-0001 approved for record version 3."
+  },
+  {
+    "at": "2026-11-10T15:30:00+00:00",
+    "actor": "operator",
+    "action": "Commit demo change",
+    "ok": true,
+    "message": "B002 moved to D1 2026-11-13 19:00."
+  },
+  {
+    "at": "2026-11-10T15:30:00+00:00",
+    "actor": "operator",
+    "action": "Commit demo change again (rerun)",
+    "ok": false,
+    "message": "Proposal P-0001 was already committed."
+  },
+  {
+    "at": "2026-11-10T15:30:00+00:00",
+    "actor": "operator",
+    "action": "Generate draft",
+    "ok": true,
+    "message": "Draft DR-0002 generated (change_confirmed, prose: deterministic)."
+  },
+  {
+    "at": "2026-11-10T15:30:00+00:00",
+    "actor": "operator",
+    "action": "Mark draft reviewed",
+    "ok": true,
+    "message": "Draft marked reviewed. It has not been sent anywhere."
+  },
+  {
+    "at": "2026-11-10T15:30:00+00:00",
+    "actor": "operator",
+    "action": "Record that I copied the draft (not sent)",
+    "ok": true,
+    "message": "draft copy/export recorded (not a send)."
+  },
+  {
+    "at": "2026-11-10T16:30:00+00:00",
+    "actor": "guest",
+    "action": "message received",
+    "ok": true,
+    "message": "Added message INQ-B002-M4"
+  },
+  {
+    "at": "2026-11-10T16:30:00+00:00",
+    "actor": "operator",
+    "action": "Interpret new messages (offline rules)",
+    "ok": true,
+    "message": "Interpretation ok: 0 facts"
+  },
+  {
+    "at": "2026-11-10T16:30:00+00:00",
+    "actor": "operator",
+    "action": "Generate draft",
+    "ok": true,
+    "message": "Draft DR-0003 generated (cancellation_received, prose: deterministic)."
+  },
+  {
+    "at": "2026-11-10T16:30:00+00:00",
+    "actor": "operator",
+    "action": "Record demo cancellation",
+    "ok": true,
+    "message": "Demo cancellation recorded for B002; tables released."
+  },
+  {
+    "at": "2026-11-10T16:30:00+00:00",
+    "actor": "operator",
+    "action": "Generate draft",
+    "ok": true,
+    "message": "Draft DR-0004 generated (cancellation_confirmed, prose: deterministic)."
+  },
+  {
+    "at": "2026-11-10T16:30:00+00:00",
+    "actor": "operator",
+    "action": "Mark draft reviewed",
+    "ok": true,
+    "message": "Draft marked reviewed. It has not been sent anywhere."
+  },
+  {
+    "at": "2026-11-10T16:30:00+00:00",
+    "actor": "operator",
+    "action": "Record that I copied the draft (not sent)",
+    "ok": true,
+    "message": "draft copy/export recorded (not a send)."
+  }
+]

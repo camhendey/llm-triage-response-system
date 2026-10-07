@@ -1,0 +1,20 @@
+DEMO RECORD - simulated restaurant; not synced to any external booking system
+
+Table: D1
+Dine time: Fri Nov 13 2026 19:00-21:30
+Status: CANCELLED (booking B002)
+Party: 8
+------------------------------
+Auto gratuity: applies (18%) - disclose
+Minors: none
+Accessibility: none
+Payment: separate_bills
+------------------------------
+Occasion: team dinner
+Allergies: none
+------------------------------
+Guest: Synthetic Guest B / Blake
+Email: guest.b@example.com
+Tel: UNKNOWN - ask guest
+------------------------------
+Inquiry: INQ-B002  record v5  policy demo-2026-11-a

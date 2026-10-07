@@ -1,0 +1,13 @@
+{
+  "sessions_planned": 36,
+  "sessions_completed": 0,
+  "by_method": {
+    "template_only": 0,
+    "structured_llm": 0,
+    "workbench": 0
+  },
+  "status": "pending - no real sessions recorded",
+  "note": "Durations exist only for sessions an operator actually timed. None are generated.",
+  "figure": null,
+  "reason": "No completed operator sessions; no handling-time chart is drawn and no times are estimated."
+}

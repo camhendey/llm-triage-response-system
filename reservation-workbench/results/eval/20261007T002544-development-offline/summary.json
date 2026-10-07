@@ -1,0 +1,119 @@
+{
+  "cases_total": 20,
+  "cases_run": 20,
+  "cases_not_run_budget": 0,
+  "run_errors": 0,
+  "field_agreement_all": {
+    "n": 77,
+    "d": 78,
+    "rate": 0.9872
+  },
+  "field_agreement_known_values": {
+    "n": 67,
+    "d": 68,
+    "rate": 0.9853
+  },
+  "unknown_kept_unknown": {
+    "n": 8,
+    "d": 8,
+    "rate": 1.0
+  },
+  "ambiguity_sent_to_review": {
+    "n": 2,
+    "d": 2,
+    "rate": 1.0
+  },
+  "provenance_verbatim_valid": {
+    "n": 122,
+    "d": 122,
+    "rate": 1.0
+  },
+  "provenance_gold_message_match": {
+    "n": 6,
+    "d": 6,
+    "rate": 1.0
+  },
+  "citations_rejected_by_validator": 0,
+  "next_action_allowed": {
+    "n": 19,
+    "d": 19,
+    "rate": 1.0
+  },
+  "required_constraint_recall": {
+    "n": 15,
+    "d": 15,
+    "rate": 1.0
+  },
+  "false_warnings": 0,
+  "drafts_generated": 19,
+  "drafts_with_prohibited_claims": 0,
+  "prohibited_claims_total": 0,
+  "drafts_with_validator_errors": 0,
+  "cases_with_critical_errors": 0,
+  "critical_errors_total": 0,
+  "provider_status_counts": {
+    "ok": 19,
+    "partial": 2,
+    "unsupported": 1
+  },
+  "provider_failures": 0,
+  "interpret_calls": 22,
+  "interpret_latency_ms": {
+    "median": 1.0,
+    "max": 10
+  },
+  "usage_tokens": {
+    "input_tokens": 0,
+    "output_tokens": 0
+  },
+  "by_group": {
+    "ordinary": {
+      "cases": 3,
+      "next_ok": 3,
+      "next_scored": 3,
+      "critical_cases": 0
+    },
+    "capacity_accessibility": {
+      "cases": 2,
+      "next_ok": 2,
+      "next_scored": 2,
+      "critical_cases": 0
+    },
+    "missing_conflicting": {
+      "cases": 3,
+      "next_ok": 3,
+      "next_scored": 3,
+      "critical_cases": 0
+    },
+    "modification_cancellation": {
+      "cases": 3,
+      "next_ok": 3,
+      "next_scored": 3,
+      "critical_cases": 0
+    },
+    "overlap_hold_time": {
+      "cases": 3,
+      "next_ok": 2,
+      "next_scored": 2,
+      "critical_cases": 0
+    },
+    "oversized_minspend": {
+      "cases": 2,
+      "next_ok": 2,
+      "next_scored": 2,
+      "critical_cases": 0
+    },
+    "service_allergy": {
+      "cases": 2,
+      "next_ok": 2,
+      "next_scored": 2,
+      "critical_cases": 0
+    },
+    "adversarial_unsupported": {
+      "cases": 2,
+      "next_ok": 2,
+      "next_scored": 2,
+      "critical_cases": 0
+    }
+  }
+}

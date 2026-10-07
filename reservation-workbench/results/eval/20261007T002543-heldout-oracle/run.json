@@ -1,0 +1,33 @@
+{
+  "run_id": "20261007T002543-heldout-oracle",
+  "split": "heldout",
+  "mode": "oracle",
+  "repeats": 1,
+  "started_at": "2026-10-07T00:25:43+00:00",
+  "duration_s": 0.37,
+  "frozen_check": "scenarios_heldout.yaml matches frozen hash d731ee1ec2c7",
+  "retest_note": "Retest 6: confirmation run on a clean commit (no engine or interpreter change since retest 5; adds uncommitted-source detection to the run record). Not blind.",
+  "environment": {
+    "python": "3.13.16",
+    "platform": "Linux-6.18.44-fc-v70-x86_64-with-glibc2.39",
+    "packages": {
+      "pydantic": "2.13.5",
+      "anthropic": "1.11.0",
+      "streamlit": "1.65.0",
+      "pyyaml": "6.0.3"
+    },
+    "code_version": "d06cbee",
+    "config_hash": "4b682c9d5ec83e90a450ef8e30bc04c17bb940eaf63fe6f7c8e1216892118b94",
+    "mode": "oracle",
+    "provider_mode": "offline_rules",
+    "dataset_hashes": {
+      "scenarios_dev.yaml": "3592494d77e454c1bc2b9f389618a64cd0d69fba65b351796e86d18fbd27c43b",
+      "scenarios_heldout.yaml": "d731ee1ec2c7fbacf074fb7aa602f24d85b7db4661b180b0dc4832a3622fe3cb"
+    },
+    "generation": {
+      "model": "offline-pattern-v1",
+      "note": "deterministic pattern rules, not a language model"
+    }
+  },
+  "cost": "not applicable (offline, no API calls)"
+}

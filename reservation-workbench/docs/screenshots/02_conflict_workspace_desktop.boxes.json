@@ -1,0 +1,32 @@
+{
+  "Queue sorted by urgency": {
+    "x": 330,
+    "y": 68.65625,
+    "width": 229.25,
+    "height": 1158.21875
+  },
+  "Next action, blockers and rule IDs": {
+    "x": 591.25,
+    "y": 165.71875,
+    "width": 768.765625,
+    "height": 158.796875
+  },
+  "Guest text with cited evidence highlighted": {
+    "x": 591.25,
+    "y": 390.515625,
+    "width": 257.34375,
+    "height": 836.359375
+  },
+  "Facts with status and provenance": {
+    "x": 880.59375,
+    "y": 437.703125,
+    "width": 479.4375,
+    "height": 675.46875
+  },
+  "Demo clock, provider mode, policy hash": {
+    "x": 0,
+    "y": 0,
+    "width": 250,
+    "height": 1299
+  }
+}

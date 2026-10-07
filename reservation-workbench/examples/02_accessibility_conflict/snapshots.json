@@ -1,0 +1,730 @@
+[
+  {
+    "label": "requested time checked",
+    "at": "2026-11-10T15:00:00+00:00",
+    "inquiry_state": "needs_review",
+    "record_version": 2,
+    "booking": null,
+    "next_action": "offer_alternative",
+    "next_action_detail": "Requested time unavailable; offer checked times: 15:30 (G_L3_L4), 20:30 (G_L3_L4), 15:00 (G_L3_L4)",
+    "rules": [
+      {
+        "id": "R-NO-OPTION",
+        "severity": "blocker",
+        "message": "No feasible seating at the requested time (15 options checked; see rejected options)."
+      },
+      {
+        "id": "R-GRATUITY",
+        "severity": "advisory",
+        "message": "Auto-gratuity 18% applies to parties of 8+ (must be disclosed in the response)."
+      }
+    ],
+    "facts": {
+      "party_size": {
+        "state": "known",
+        "value": 12,
+        "source": "12 guests",
+        "changed_from": []
+      },
+      "requested_date": {
+        "state": "known",
+        "value": "2026-11-13",
+        "source": "November 13, 2026",
+        "changed_from": []
+      },
+      "requested_time": {
+        "state": "known",
+        "value": "18:00",
+        "source": "6 pm",
+        "changed_from": []
+      },
+      "contact_email": {
+        "state": "known",
+        "value": "taylor@example.com",
+        "source": "taylor@example.com",
+        "changed_from": []
+      },
+      "accessibility": {
+        "state": "known",
+        "value": "step_free_required",
+        "source": "wheelchair",
+        "changed_from": []
+      },
+      "minors": {
+        "state": "known",
+        "value": "none",
+        "source": "No minors",
+        "changed_from": []
+      },
+      "allergies": {
+        "state": "known",
+        "value": "none",
+        "source": "No minors or allergies",
+        "changed_from": []
+      },
+      "billing": {
+        "state": "known",
+        "value": "one_bill",
+        "source": "one bill",
+        "changed_from": []
+      },
+      "occasion": {
+        "state": "known",
+        "value": "birthday",
+        "source": "birthday",
+        "changed_from": []
+      },
+      "split_seating_ok": {
+        "state": "known",
+        "value": "yes",
+        "source": "Separate tables are fine",
+        "changed_from": []
+      }
+    },
+    "missing_required": [],
+    "availability": {
+      "options": [],
+      "rejected": [
+        {
+          "unit": "D1",
+          "tables": [
+            "D1"
+          ],
+          "reasons": [
+            "R-CAP: capacity 10 < party 12",
+            "R-OVERLAP: table D1 confirmed by B002 18:00-20:30"
+          ]
+        },
+        {
+          "unit": "D2",
+          "tables": [
+            "D2"
+          ],
+          "reasons": [
+            "R-CAP: capacity 10 < party 12"
+          ]
+        },
+        {
+          "unit": "G_D1_D2",
+          "tables": [
+            "D1",
+            "D2"
+          ],
+          "reasons": [
+            "R-OVERLAP: table D1 confirmed by B002 18:00-20:30"
+          ]
+        },
+        {
+          "unit": "G_L1_L2",
+          "tables": [
+            "L1",
+            "L2"
+          ],
+          "reasons": [
+            "R-OVERLAP: table L1 confirmed by B001 18:00-20:30"
+          ]
+        },
+        {
+          "unit": "G_L3_L4",
+          "tables": [
+            "L3",
+            "L4"
+          ],
+          "reasons": [
+            "R-OVERLAP: table L3, L4 held by H001 18:00-20:30"
+          ]
+        },
+        {
+          "unit": "G_M1_M4",
+          "tables": [
+            "M1",
+            "M4"
+          ],
+          "reasons": [
+            "R-ACCESS: stairs-only seating; guest needs step-free access"
+          ]
+        },
+        {
+          "unit": "G_M2_M3",
+          "tables": [
+            "M2",
+            "M3"
+          ],
+          "reasons": [
+            "R-ACCESS: stairs-only seating; guest needs step-free access"
+          ]
+        },
+        {
+          "unit": "L1",
+          "tables": [
+            "L1"
+          ],
+          "reasons": [
+            "R-OVERLAP: table L1 confirmed by B001 18:00-20:30"
+          ]
+        },
+        {
+          "unit": "L2",
+          "tables": [
+            "L2"
+          ],
+          "reasons": [
+            "R-CAP: capacity 5 < party 12"
+          ]
+        },
+        {
+          "unit": "L3",
+          "tables": [
+            "L3"
+          ],
+          "reasons": [
+            "R-CAP: capacity 8 < party 12",
+            "R-OVERLAP: table L3 held by H001 18:00-20:30"
+          ]
+        },
+        {
+          "unit": "L4",
+          "tables": [
+            "L4"
+          ],
+          "reasons": [
+            "R-CAP: capacity 8 < party 12",
+            "R-OVERLAP: table L4 held by H001 18:00-20:30"
+          ]
+        },
+        {
+          "unit": "M1",
+          "tables": [
+            "M1"
+          ],
+          "reasons": [
+            "R-ACCESS: stairs-only seating; guest needs step-free access"
+          ]
+        },
+        {
+          "unit": "M2",
+          "tables": [
+            "M2"
+          ],
+          "reasons": [
+            "R-CAP: capacity 8 < party 12",
+            "R-ACCESS: stairs-only seating; guest needs step-free access"
+          ]
+        },
+        {
+          "unit": "M3",
+          "tables": [
+            "M3"
+          ],
+          "reasons": [
+            "R-CAP: capacity 8 < party 12",
+            "R-ACCESS: stairs-only seating; guest needs step-free access"
+          ]
+        },
+        {
+          "unit": "M4",
+          "tables": [
+            "M4"
+          ],
+          "reasons": [
+            "R-CAP: capacity 9 < party 12",
+            "R-ACCESS: stairs-only seating; guest needs step-free access"
+          ]
+        }
+      ]
+    },
+    "alternatives": [
+      {
+        "start": "15:30",
+        "unit": "G_L3_L4"
+      },
+      {
+        "start": "20:30",
+        "unit": "G_L3_L4"
+      },
+      {
+        "start": "15:00",
+        "unit": "G_L3_L4"
+      }
+    ]
+  },
+  {
+    "label": "guest accepted 20:30",
+    "at": "2026-11-10T16:30:00+00:00",
+    "inquiry_state": "needs_review",
+    "record_version": 3,
+    "booking": null,
+    "next_action": "recheck_proposal",
+    "next_action_detail": "Proposal P-0001 is stale: new guest message: changed interval, requested_time",
+    "rules": [
+      {
+        "id": "R-STALE",
+        "severity": "blocker",
+        "message": "Proposal P-0001 is stale (new guest message: changed interval, requested_time); recheck before any commit."
+      },
+      {
+        "id": "R-GRATUITY",
+        "severity": "advisory",
+        "message": "Auto-gratuity 18% applies to parties of 8+ (must be disclosed in the response)."
+      },
+      {
+        "id": "R-SPLIT",
+        "severity": "advisory",
+        "message": "Best option G_L3_L4 is separate tables (L3 + L4); disclose that they are not one joined table."
+      }
+    ],
+    "facts": {
+      "party_size": {
+        "state": "known",
+        "value": 12,
+        "source": "12 guests",
+        "changed_from": []
+      },
+      "requested_date": {
+        "state": "known",
+        "value": "2026-11-13",
+        "source": "November 13, 2026",
+        "changed_from": []
+      },
+      "requested_time": {
+        "state": "known",
+        "value": "20:30",
+        "source": "8:30 pm",
+        "changed_from": [
+          "18:00"
+        ]
+      },
+      "contact_email": {
+        "state": "known",
+        "value": "taylor@example.com",
+        "source": "taylor@example.com",
+        "changed_from": []
+      },
+      "accessibility": {
+        "state": "known",
+        "value": "step_free_required",
+        "source": "wheelchair",
+        "changed_from": []
+      },
+      "minors": {
+        "state": "known",
+        "value": "none",
+        "source": "No minors",
+        "changed_from": []
+      },
+      "allergies": {
+        "state": "known",
+        "value": "none",
+        "source": "No minors or allergies",
+        "changed_from": []
+      },
+      "billing": {
+        "state": "known",
+        "value": "one_bill",
+        "source": "one bill",
+        "changed_from": []
+      },
+      "occasion": {
+        "state": "known",
+        "value": "birthday",
+        "source": "birthday",
+        "changed_from": []
+      },
+      "split_seating_ok": {
+        "state": "known",
+        "value": "yes",
+        "source": "Separate tables are fine",
+        "changed_from": []
+      }
+    },
+    "missing_required": [],
+    "availability": {
+      "options": [
+        {
+          "unit": "G_L3_L4",
+          "tables": [
+            "L3",
+            "L4"
+          ],
+          "step_free": true,
+          "split": true
+        },
+        {
+          "unit": "L1",
+          "tables": [
+            "L1"
+          ],
+          "step_free": true,
+          "split": false
+        },
+        {
+          "unit": "G_D1_D2",
+          "tables": [
+            "D1",
+            "D2"
+          ],
+          "step_free": true,
+          "split": true
+        },
+        {
+          "unit": "G_L1_L2",
+          "tables": [
+            "L1",
+            "L2"
+          ],
+          "step_free": true,
+          "split": true
+        }
+      ],
+      "rejected": [
+        {
+          "unit": "D1",
+          "tables": [
+            "D1"
+          ],
+          "reasons": [
+            "R-CAP: capacity 10 < party 12"
+          ]
+        },
+        {
+          "unit": "D2",
+          "tables": [
+            "D2"
+          ],
+          "reasons": [
+            "R-CAP: capacity 10 < party 12"
+          ]
+        },
+        {
+          "unit": "G_M1_M4",
+          "tables": [
+            "M1",
+            "M4"
+          ],
+          "reasons": [
+            "R-ACCESS: stairs-only seating; guest needs step-free access"
+          ]
+        },
+        {
+          "unit": "G_M2_M3",
+          "tables": [
+            "M2",
+            "M3"
+          ],
+          "reasons": [
+            "R-ACCESS: stairs-only seating; guest needs step-free access"
+          ]
+        },
+        {
+          "unit": "L2",
+          "tables": [
+            "L2"
+          ],
+          "reasons": [
+            "R-CAP: capacity 5 < party 12"
+          ]
+        },
+        {
+          "unit": "L3",
+          "tables": [
+            "L3"
+          ],
+          "reasons": [
+            "R-CAP: capacity 8 < party 12"
+          ]
+        },
+        {
+          "unit": "L4",
+          "tables": [
+            "L4"
+          ],
+          "reasons": [
+            "R-CAP: capacity 8 < party 12"
+          ]
+        },
+        {
+          "unit": "M1",
+          "tables": [
+            "M1"
+          ],
+          "reasons": [
+            "R-ACCESS: stairs-only seating; guest needs step-free access"
+          ]
+        },
+        {
+          "unit": "M2",
+          "tables": [
+            "M2"
+          ],
+          "reasons": [
+            "R-CAP: capacity 8 < party 12",
+            "R-ACCESS: stairs-only seating; guest needs step-free access"
+          ]
+        },
+        {
+          "unit": "M3",
+          "tables": [
+            "M3"
+          ],
+          "reasons": [
+            "R-CAP: capacity 8 < party 12",
+            "R-ACCESS: stairs-only seating; guest needs step-free access"
+          ]
+        },
+        {
+          "unit": "M4",
+          "tables": [
+            "M4"
+          ],
+          "reasons": [
+            "R-CAP: capacity 9 < party 12",
+            "R-ACCESS: stairs-only seating; guest needs step-free access"
+          ]
+        }
+      ]
+    },
+    "alternatives": []
+  },
+  {
+    "label": "confirmed at 20:30",
+    "at": "2026-11-10T16:30:00+00:00",
+    "inquiry_state": "resolved",
+    "record_version": 5,
+    "booking": {
+      "id": "B-A0001",
+      "status": "confirmed",
+      "tables": [
+        "L3",
+        "L4"
+      ],
+      "start": "2026-11-13T20:30:00-05:00",
+      "end": "2026-11-13T23:00:00-05:00",
+      "version": 2
+    },
+    "next_action": "no_action",
+    "next_action_detail": "Booking B-A0001 confirmed.",
+    "rules": [
+      {
+        "id": "R-GRATUITY",
+        "severity": "advisory",
+        "message": "Auto-gratuity 18% applies to parties of 8+ (must be disclosed in the response)."
+      },
+      {
+        "id": "R-SPLIT",
+        "severity": "advisory",
+        "message": "Best option G_L3_L4 is separate tables (L3 + L4); disclose that they are not one joined table."
+      }
+    ],
+    "facts": {
+      "party_size": {
+        "state": "known",
+        "value": 12,
+        "source": "12 guests",
+        "changed_from": []
+      },
+      "requested_date": {
+        "state": "known",
+        "value": "2026-11-13",
+        "source": "November 13, 2026",
+        "changed_from": []
+      },
+      "requested_time": {
+        "state": "known",
+        "value": "20:30",
+        "source": "8:30 pm",
+        "changed_from": [
+          "18:00"
+        ]
+      },
+      "contact_email": {
+        "state": "known",
+        "value": "taylor@example.com",
+        "source": "taylor@example.com",
+        "changed_from": []
+      },
+      "accessibility": {
+        "state": "known",
+        "value": "step_free_required",
+        "source": "wheelchair",
+        "changed_from": []
+      },
+      "minors": {
+        "state": "known",
+        "value": "none",
+        "source": "No minors",
+        "changed_from": []
+      },
+      "allergies": {
+        "state": "known",
+        "value": "none",
+        "source": "No minors or allergies",
+        "changed_from": []
+      },
+      "billing": {
+        "state": "known",
+        "value": "one_bill",
+        "source": "one bill",
+        "changed_from": []
+      },
+      "occasion": {
+        "state": "known",
+        "value": "birthday",
+        "source": "birthday",
+        "changed_from": []
+      },
+      "split_seating_ok": {
+        "state": "known",
+        "value": "yes",
+        "source": "Separate tables are fine",
+        "changed_from": []
+      }
+    },
+    "missing_required": [],
+    "availability": {
+      "options": [
+        {
+          "unit": "G_L3_L4",
+          "tables": [
+            "L3",
+            "L4"
+          ],
+          "step_free": true,
+          "split": true
+        },
+        {
+          "unit": "L1",
+          "tables": [
+            "L1"
+          ],
+          "step_free": true,
+          "split": false
+        },
+        {
+          "unit": "G_D1_D2",
+          "tables": [
+            "D1",
+            "D2"
+          ],
+          "step_free": true,
+          "split": true
+        },
+        {
+          "unit": "G_L1_L2",
+          "tables": [
+            "L1",
+            "L2"
+          ],
+          "step_free": true,
+          "split": true
+        }
+      ],
+      "rejected": [
+        {
+          "unit": "D1",
+          "tables": [
+            "D1"
+          ],
+          "reasons": [
+            "R-CAP: capacity 10 < party 12"
+          ]
+        },
+        {
+          "unit": "D2",
+          "tables": [
+            "D2"
+          ],
+          "reasons": [
+            "R-CAP: capacity 10 < party 12"
+          ]
+        },
+        {
+          "unit": "G_M1_M4",
+          "tables": [
+            "M1",
+            "M4"
+          ],
+          "reasons": [
+            "R-ACCESS: stairs-only seating; guest needs step-free access"
+          ]
+        },
+        {
+          "unit": "G_M2_M3",
+          "tables": [
+            "M2",
+            "M3"
+          ],
+          "reasons": [
+            "R-ACCESS: stairs-only seating; guest needs step-free access"
+          ]
+        },
+        {
+          "unit": "L2",
+          "tables": [
+            "L2"
+          ],
+          "reasons": [
+            "R-CAP: capacity 5 < party 12"
+          ]
+        },
+        {
+          "unit": "L3",
+          "tables": [
+            "L3"
+          ],
+          "reasons": [
+            "R-CAP: capacity 8 < party 12"
+          ]
+        },
+        {
+          "unit": "L4",
+          "tables": [
+            "L4"
+          ],
+          "reasons": [
+            "R-CAP: capacity 8 < party 12"
+          ]
+        },
+        {
+          "unit": "M1",
+          "tables": [
+            "M1"
+          ],
+          "reasons": [
+            "R-ACCESS: stairs-only seating; guest needs step-free access"
+          ]
+        },
+        {
+          "unit": "M2",
+          "tables": [
+            "M2"
+          ],
+          "reasons": [
+            "R-CAP: capacity 8 < party 12",
+            "R-ACCESS: stairs-only seating; guest needs step-free access"
+          ]
+        },
+        {
+          "unit": "M3",
+          "tables": [
+            "M3"
+          ],
+          "reasons": [
+            "R-CAP: capacity 8 < party 12",
+            "R-ACCESS: stairs-only seating; guest needs step-free access"
+          ]
+        },
+        {
+          "unit": "M4",
+          "tables": [
+            "M4"
+          ],
+          "reasons": [
+            "R-CAP: capacity 9 < party 12",
+            "R-ACCESS: stairs-only seating; guest needs step-free access"
+          ]
+        }
+      ]
+    },
+    "alternatives": []
+  }
+]

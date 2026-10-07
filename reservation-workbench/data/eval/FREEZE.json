@@ -1,0 +1,8 @@
+{
+  "frozen_at": "2026-10-06T23:57:09+00:00",
+  "files": {
+    "scenarios_dev.yaml": "3592494d77e454c1bc2b9f389618a64cd0d69fba65b351796e86d18fbd27c43b",
+    "scenarios_heldout.yaml": "d731ee1ec2c7fbacf074fb7aa602f24d85b7db4661b180b0dc4832a3622fe3cb"
+  },
+  "note": "Frozen before the first held-out run (the development split was run beforehand to debug the runner). Labels written by the same coding agent that built the workbench; no independent review yet."
+}

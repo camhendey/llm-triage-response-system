@@ -1,0 +1,30 @@
+flowchart LR
+  subgraph EXT["Outside this system (never read or written)"]
+    G["Guest email / phone"]
+    X["Real booking system, mail client"]
+  end
+  subgraph AI["AI suggests (untrusted output)"]
+    P["Interpreter: offline pattern rules or live model<br/>facts + quotes, intents, ambiguities"]
+    PR["Live model: connecting prose only (optional)"]
+  end
+  subgraph DET["Deterministic code enforces"]
+    V["Evidence validator<br/>quote must exist in a new message"]
+    F["Fact resolver<br/>operator values win; contradictions become conflicts"]
+    R["Rules engine<br/>capacity, groupings, overlap, access, hours, holds"]
+    N["Next action + blockers / reviews / info"]
+    D["Draft templates + claim validator"]
+    DB[("SQLite demo records<br/>bookings and holds")]
+    EV[("Event log<br/>every action, reason, version")]
+  end
+  subgraph HUM["Coordinator decides"]
+    O["Resolve conflicts, approve proposal,<br/>create hold, record confirmation/change/cancel,<br/>review draft"]
+  end
+  G -- "operator pastes text" --> P
+  P --> V --> F --> R --> N --> O
+  PR --> D
+  F --> D
+  O -- "approved commands" --> DB
+  DB --> EV
+  DB --> R
+  O -- "copies text; sends it outside" --> X
+  O -. "external action reported<br/>by operator (assertion)" .-> EV

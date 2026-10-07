@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "reservation-workbench"
+version = "1.0.0"
+description = "Human-reviewed reservation operations workbench for a synthetic restaurant (portfolio project)."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Cameron Hendey" }]
+dependencies = [
+  "streamlit>=1.40",
+  "pydantic>=2.7",
+  "pyyaml>=6.0",
+  "python-dotenv>=1.0",
+  "anthropic>=1.0",
+  "tzdata>=2024.1",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0",
+  "matplotlib>=3.8",
+  "pillow>=10.0",
+  "playwright>=1.45",
+]
+
+[project.scripts]
+rw = "reservation_workbench.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+reservation_workbench = ["py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+  "ui: headless Streamlit AppTest runs of app.py (no browser)",
+]
+addopts = "-q"

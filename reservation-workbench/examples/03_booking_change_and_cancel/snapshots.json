@@ -1,0 +1,1010 @@
+[
+  {
+    "label": "change to L1 requested",
+    "at": "2026-11-10T15:00:00+00:00",
+    "inquiry_state": "needs_review",
+    "record_version": 2,
+    "booking": {
+      "id": "B002",
+      "status": "confirmed",
+      "tables": [
+        "D1"
+      ],
+      "start": "2026-11-13T18:00:00-05:00",
+      "end": "2026-11-13T20:30:00-05:00",
+      "version": 1
+    },
+    "next_action": "explain_change_unavailable",
+    "next_action_detail": "Requested change is not available: R-OVERLAP: table L1 confirmed by B001 18:00-20:30. Booking B002 remains unchanged.",
+    "rules": [
+      {
+        "id": "R-GRATUITY",
+        "severity": "advisory",
+        "message": "Auto-gratuity 18% applies to parties of 8+ (must be disclosed in the response)."
+      },
+      {
+        "id": "R-PREF",
+        "severity": "advisory",
+        "message": "Preference not satisfied: guest asked for table L1"
+      }
+    ],
+    "facts": {
+      "guest_name": {
+        "state": "known",
+        "value": "Blake",
+        "source": "seed",
+        "changed_from": []
+      },
+      "party_size": {
+        "state": "known",
+        "value": 8,
+        "source": "dinner for 8",
+        "changed_from": []
+      },
+      "requested_date": {
+        "state": "known",
+        "value": "2026-11-13",
+        "source": "November 13",
+        "changed_from": []
+      },
+      "requested_time": {
+        "state": "known",
+        "value": "19:00",
+        "source": "7 pm",
+        "changed_from": [
+          "18:00"
+        ]
+      },
+      "contact_email": {
+        "state": "known",
+        "value": "guest.b@example.com",
+        "source": "seed",
+        "changed_from": []
+      },
+      "accessibility": {
+        "state": "known",
+        "value": "none",
+        "source": "seed",
+        "changed_from": []
+      },
+      "minors": {
+        "state": "known",
+        "value": "none",
+        "source": "seed",
+        "changed_from": []
+      },
+      "allergies": {
+        "state": "known",
+        "value": "none",
+        "source": "seed",
+        "changed_from": []
+      },
+      "billing": {
+        "state": "known",
+        "value": "separate_bills",
+        "source": "seed",
+        "changed_from": []
+      },
+      "occasion": {
+        "state": "known",
+        "value": "team dinner",
+        "source": "team dinner",
+        "changed_from": []
+      },
+      "preferred_table": {
+        "state": "known",
+        "value": "L1",
+        "source": "L1",
+        "changed_from": []
+      }
+    },
+    "missing_required": [],
+    "availability": {
+      "options": [
+        {
+          "unit": "D1",
+          "tables": [
+            "D1"
+          ],
+          "step_free": true,
+          "split": false
+        },
+        {
+          "unit": "M2",
+          "tables": [
+            "M2"
+          ],
+          "step_free": false,
+          "split": false
+        },
+        {
+          "unit": "M3",
+          "tables": [
+            "M3"
+          ],
+          "step_free": false,
+          "split": false
+        },
+        {
+          "unit": "M4",
+          "tables": [
+            "M4"
+          ],
+          "step_free": false,
+          "split": false
+        },
+        {
+          "unit": "D2",
+          "tables": [
+            "D2"
+          ],
+          "step_free": true,
+          "split": false
+        }
+      ],
+      "rejected": [
+        {
+          "unit": "G_L1_L2",
+          "tables": [
+            "L1",
+            "L2"
+          ],
+          "reasons": [
+            "R-OVERLAP: table L1 confirmed by B001 18:00-20:30"
+          ]
+        },
+        {
+          "unit": "G_L3_L4",
+          "tables": [
+            "L3",
+            "L4"
+          ],
+          "reasons": [
+            "R-OVERLAP: table L3, L4 held by H001 18:00-20:30"
+          ]
+        },
+        {
+          "unit": "L1",
+          "tables": [
+            "L1"
+          ],
+          "reasons": [
+            "R-OVERLAP: table L1 confirmed by B001 18:00-20:30"
+          ]
+        },
+        {
+          "unit": "L2",
+          "tables": [
+            "L2"
+          ],
+          "reasons": [
+            "R-CAP: capacity 5 < party 8"
+          ]
+        },
+        {
+          "unit": "L3",
+          "tables": [
+            "L3"
+          ],
+          "reasons": [
+            "R-OVERLAP: table L3 held by H001 18:00-20:30"
+          ]
+        },
+        {
+          "unit": "L4",
+          "tables": [
+            "L4"
+          ],
+          "reasons": [
+            "R-OVERLAP: table L4 held by H001 18:00-20:30"
+          ]
+        }
+      ]
+    },
+    "alternatives": []
+  },
+  {
+    "label": "change to D1 at 19:00 requested",
+    "at": "2026-11-10T15:30:00+00:00",
+    "inquiry_state": "ready_for_action",
+    "record_version": 3,
+    "booking": {
+      "id": "B002",
+      "status": "confirmed",
+      "tables": [
+        "D1"
+      ],
+      "start": "2026-11-13T18:00:00-05:00",
+      "end": "2026-11-13T20:30:00-05:00",
+      "version": 1
+    },
+    "next_action": "process_modification",
+    "next_action_detail": "Requested change is available. Approve and commit; the original allocation is released only when the new one is committed.",
+    "rules": [
+      {
+        "id": "R-GRATUITY",
+        "severity": "advisory",
+        "message": "Auto-gratuity 18% applies to parties of 8+ (must be disclosed in the response)."
+      }
+    ],
+    "facts": {
+      "guest_name": {
+        "state": "known",
+        "value": "Blake",
+        "source": "seed",
+        "changed_from": []
+      },
+      "party_size": {
+        "state": "known",
+        "value": 8,
+        "source": "dinner for 8",
+        "changed_from": []
+      },
+      "requested_date": {
+        "state": "known",
+        "value": "2026-11-13",
+        "source": "November 13",
+        "changed_from": []
+      },
+      "requested_time": {
+        "state": "known",
+        "value": "19:00",
+        "source": "7 pm",
+        "changed_from": [
+          "18:00"
+        ]
+      },
+      "contact_email": {
+        "state": "known",
+        "value": "guest.b@example.com",
+        "source": "seed",
+        "changed_from": []
+      },
+      "accessibility": {
+        "state": "known",
+        "value": "none",
+        "source": "seed",
+        "changed_from": []
+      },
+      "minors": {
+        "state": "known",
+        "value": "none",
+        "source": "seed",
+        "changed_from": []
+      },
+      "allergies": {
+        "state": "known",
+        "value": "none",
+        "source": "seed",
+        "changed_from": []
+      },
+      "billing": {
+        "state": "known",
+        "value": "separate_bills",
+        "source": "seed",
+        "changed_from": []
+      },
+      "occasion": {
+        "state": "known",
+        "value": "team dinner",
+        "source": "team dinner",
+        "changed_from": []
+      },
+      "preferred_table": {
+        "state": "known",
+        "value": "D1",
+        "source": "D1",
+        "changed_from": [
+          "L1"
+        ]
+      }
+    },
+    "missing_required": [],
+    "availability": {
+      "options": [
+        {
+          "unit": "D1",
+          "tables": [
+            "D1"
+          ],
+          "step_free": true,
+          "split": false
+        },
+        {
+          "unit": "M2",
+          "tables": [
+            "M2"
+          ],
+          "step_free": false,
+          "split": false
+        },
+        {
+          "unit": "M3",
+          "tables": [
+            "M3"
+          ],
+          "step_free": false,
+          "split": false
+        },
+        {
+          "unit": "M4",
+          "tables": [
+            "M4"
+          ],
+          "step_free": false,
+          "split": false
+        },
+        {
+          "unit": "D2",
+          "tables": [
+            "D2"
+          ],
+          "step_free": true,
+          "split": false
+        }
+      ],
+      "rejected": [
+        {
+          "unit": "G_L1_L2",
+          "tables": [
+            "L1",
+            "L2"
+          ],
+          "reasons": [
+            "R-OVERLAP: table L1 confirmed by B001 18:00-20:30"
+          ]
+        },
+        {
+          "unit": "G_L3_L4",
+          "tables": [
+            "L3",
+            "L4"
+          ],
+          "reasons": [
+            "R-OVERLAP: table L3, L4 held by H001 18:00-20:30"
+          ]
+        },
+        {
+          "unit": "L1",
+          "tables": [
+            "L1"
+          ],
+          "reasons": [
+            "R-OVERLAP: table L1 confirmed by B001 18:00-20:30"
+          ]
+        },
+        {
+          "unit": "L2",
+          "tables": [
+            "L2"
+          ],
+          "reasons": [
+            "R-CAP: capacity 5 < party 8"
+          ]
+        },
+        {
+          "unit": "L3",
+          "tables": [
+            "L3"
+          ],
+          "reasons": [
+            "R-OVERLAP: table L3 held by H001 18:00-20:30"
+          ]
+        },
+        {
+          "unit": "L4",
+          "tables": [
+            "L4"
+          ],
+          "reasons": [
+            "R-OVERLAP: table L4 held by H001 18:00-20:30"
+          ]
+        }
+      ]
+    },
+    "alternatives": []
+  },
+  {
+    "label": "change committed",
+    "at": "2026-11-10T15:30:00+00:00",
+    "inquiry_state": "resolved",
+    "record_version": 4,
+    "booking": {
+      "id": "B002",
+      "status": "confirmed",
+      "tables": [
+        "D1"
+      ],
+      "start": "2026-11-13T19:00:00-05:00",
+      "end": "2026-11-13T21:30:00-05:00",
+      "version": 2
+    },
+    "next_action": "no_action",
+    "next_action_detail": "Booking B002 confirmed.",
+    "rules": [
+      {
+        "id": "R-GRATUITY",
+        "severity": "advisory",
+        "message": "Auto-gratuity 18% applies to parties of 8+ (must be disclosed in the response)."
+      }
+    ],
+    "facts": {
+      "guest_name": {
+        "state": "known",
+        "value": "Blake",
+        "source": "seed",
+        "changed_from": []
+      },
+      "party_size": {
+        "state": "known",
+        "value": 8,
+        "source": "dinner for 8",
+        "changed_from": []
+      },
+      "requested_date": {
+        "state": "known",
+        "value": "2026-11-13",
+        "source": "November 13",
+        "changed_from": []
+      },
+      "requested_time": {
+        "state": "known",
+        "value": "19:00",
+        "source": "7 pm",
+        "changed_from": [
+          "18:00"
+        ]
+      },
+      "contact_email": {
+        "state": "known",
+        "value": "guest.b@example.com",
+        "source": "seed",
+        "changed_from": []
+      },
+      "accessibility": {
+        "state": "known",
+        "value": "none",
+        "source": "seed",
+        "changed_from": []
+      },
+      "minors": {
+        "state": "known",
+        "value": "none",
+        "source": "seed",
+        "changed_from": []
+      },
+      "allergies": {
+        "state": "known",
+        "value": "none",
+        "source": "seed",
+        "changed_from": []
+      },
+      "billing": {
+        "state": "known",
+        "value": "separate_bills",
+        "source": "seed",
+        "changed_from": []
+      },
+      "occasion": {
+        "state": "known",
+        "value": "team dinner",
+        "source": "team dinner",
+        "changed_from": []
+      },
+      "preferred_table": {
+        "state": "known",
+        "value": "D1",
+        "source": "D1",
+        "changed_from": [
+          "L1"
+        ]
+      }
+    },
+    "missing_required": [],
+    "availability": {
+      "options": [
+        {
+          "unit": "D1",
+          "tables": [
+            "D1"
+          ],
+          "step_free": true,
+          "split": false
+        },
+        {
+          "unit": "M2",
+          "tables": [
+            "M2"
+          ],
+          "step_free": false,
+          "split": false
+        },
+        {
+          "unit": "M3",
+          "tables": [
+            "M3"
+          ],
+          "step_free": false,
+          "split": false
+        },
+        {
+          "unit": "M4",
+          "tables": [
+            "M4"
+          ],
+          "step_free": false,
+          "split": false
+        },
+        {
+          "unit": "D2",
+          "tables": [
+            "D2"
+          ],
+          "step_free": true,
+          "split": false
+        }
+      ],
+      "rejected": [
+        {
+          "unit": "G_L1_L2",
+          "tables": [
+            "L1",
+            "L2"
+          ],
+          "reasons": [
+            "R-OVERLAP: table L1 confirmed by B001 18:00-20:30"
+          ]
+        },
+        {
+          "unit": "G_L3_L4",
+          "tables": [
+            "L3",
+            "L4"
+          ],
+          "reasons": [
+            "R-OVERLAP: table L3, L4 held by H001 18:00-20:30"
+          ]
+        },
+        {
+          "unit": "L1",
+          "tables": [
+            "L1"
+          ],
+          "reasons": [
+            "R-OVERLAP: table L1 confirmed by B001 18:00-20:30"
+          ]
+        },
+        {
+          "unit": "L2",
+          "tables": [
+            "L2"
+          ],
+          "reasons": [
+            "R-CAP: capacity 5 < party 8"
+          ]
+        },
+        {
+          "unit": "L3",
+          "tables": [
+            "L3"
+          ],
+          "reasons": [
+            "R-OVERLAP: table L3 held by H001 18:00-20:30"
+          ]
+        },
+        {
+          "unit": "L4",
+          "tables": [
+            "L4"
+          ],
+          "reasons": [
+            "R-OVERLAP: table L4 held by H001 18:00-20:30"
+          ]
+        }
+      ]
+    },
+    "alternatives": []
+  },
+  {
+    "label": "cancellation requested (booking still confirmed)",
+    "at": "2026-11-10T16:30:00+00:00",
+    "inquiry_state": "needs_review",
+    "record_version": 4,
+    "booking": {
+      "id": "B002",
+      "status": "confirmed",
+      "tables": [
+        "D1"
+      ],
+      "start": "2026-11-13T19:00:00-05:00",
+      "end": "2026-11-13T21:30:00-05:00",
+      "version": 2
+    },
+    "next_action": "process_cancellation",
+    "next_action_detail": "Guest asked to cancel. Booking B002 stays confirmed until the coordinator records the cancellation.",
+    "rules": [
+      {
+        "id": "R-GRATUITY",
+        "severity": "advisory",
+        "message": "Auto-gratuity 18% applies to parties of 8+ (must be disclosed in the response)."
+      }
+    ],
+    "facts": {
+      "guest_name": {
+        "state": "known",
+        "value": "Blake",
+        "source": "seed",
+        "changed_from": []
+      },
+      "party_size": {
+        "state": "known",
+        "value": 8,
+        "source": "dinner for 8",
+        "changed_from": []
+      },
+      "requested_date": {
+        "state": "known",
+        "value": "2026-11-13",
+        "source": "November 13",
+        "changed_from": []
+      },
+      "requested_time": {
+        "state": "known",
+        "value": "19:00",
+        "source": "7 pm",
+        "changed_from": [
+          "18:00"
+        ]
+      },
+      "contact_email": {
+        "state": "known",
+        "value": "guest.b@example.com",
+        "source": "seed",
+        "changed_from": []
+      },
+      "accessibility": {
+        "state": "known",
+        "value": "none",
+        "source": "seed",
+        "changed_from": []
+      },
+      "minors": {
+        "state": "known",
+        "value": "none",
+        "source": "seed",
+        "changed_from": []
+      },
+      "allergies": {
+        "state": "known",
+        "value": "none",
+        "source": "seed",
+        "changed_from": []
+      },
+      "billing": {
+        "state": "known",
+        "value": "separate_bills",
+        "source": "seed",
+        "changed_from": []
+      },
+      "occasion": {
+        "state": "known",
+        "value": "team dinner",
+        "source": "team dinner",
+        "changed_from": []
+      },
+      "preferred_table": {
+        "state": "known",
+        "value": "D1",
+        "source": "D1",
+        "changed_from": [
+          "L1"
+        ]
+      }
+    },
+    "missing_required": [],
+    "availability": {
+      "options": [
+        {
+          "unit": "D1",
+          "tables": [
+            "D1"
+          ],
+          "step_free": true,
+          "split": false
+        },
+        {
+          "unit": "M2",
+          "tables": [
+            "M2"
+          ],
+          "step_free": false,
+          "split": false
+        },
+        {
+          "unit": "M3",
+          "tables": [
+            "M3"
+          ],
+          "step_free": false,
+          "split": false
+        },
+        {
+          "unit": "M4",
+          "tables": [
+            "M4"
+          ],
+          "step_free": false,
+          "split": false
+        },
+        {
+          "unit": "D2",
+          "tables": [
+            "D2"
+          ],
+          "step_free": true,
+          "split": false
+        }
+      ],
+      "rejected": [
+        {
+          "unit": "G_L1_L2",
+          "tables": [
+            "L1",
+            "L2"
+          ],
+          "reasons": [
+            "R-OVERLAP: table L1 confirmed by B001 18:00-20:30"
+          ]
+        },
+        {
+          "unit": "G_L3_L4",
+          "tables": [
+            "L3",
+            "L4"
+          ],
+          "reasons": [
+            "R-OVERLAP: table L3, L4 held by H001 18:00-20:30"
+          ]
+        },
+        {
+          "unit": "L1",
+          "tables": [
+            "L1"
+          ],
+          "reasons": [
+            "R-OVERLAP: table L1 confirmed by B001 18:00-20:30"
+          ]
+        },
+        {
+          "unit": "L2",
+          "tables": [
+            "L2"
+          ],
+          "reasons": [
+            "R-CAP: capacity 5 < party 8"
+          ]
+        },
+        {
+          "unit": "L3",
+          "tables": [
+            "L3"
+          ],
+          "reasons": [
+            "R-OVERLAP: table L3 held by H001 18:00-20:30"
+          ]
+        },
+        {
+          "unit": "L4",
+          "tables": [
+            "L4"
+          ],
+          "reasons": [
+            "R-OVERLAP: table L4 held by H001 18:00-20:30"
+          ]
+        }
+      ]
+    },
+    "alternatives": []
+  },
+  {
+    "label": "cancellation recorded",
+    "at": "2026-11-10T16:30:00+00:00",
+    "inquiry_state": "resolved",
+    "record_version": 5,
+    "booking": {
+      "id": "B002",
+      "status": "cancelled",
+      "tables": [
+        "D1"
+      ],
+      "start": "2026-11-13T19:00:00-05:00",
+      "end": "2026-11-13T21:30:00-05:00",
+      "version": 3
+    },
+    "next_action": "no_action",
+    "next_action_detail": "Booking B002 cancelled.",
+    "rules": [
+      {
+        "id": "R-GRATUITY",
+        "severity": "advisory",
+        "message": "Auto-gratuity 18% applies to parties of 8+ (must be disclosed in the response)."
+      }
+    ],
+    "facts": {
+      "guest_name": {
+        "state": "known",
+        "value": "Blake",
+        "source": "seed",
+        "changed_from": []
+      },
+      "party_size": {
+        "state": "known",
+        "value": 8,
+        "source": "dinner for 8",
+        "changed_from": []
+      },
+      "requested_date": {
+        "state": "known",
+        "value": "2026-11-13",
+        "source": "November 13",
+        "changed_from": []
+      },
+      "requested_time": {
+        "state": "known",
+        "value": "19:00",
+        "source": "7 pm",
+        "changed_from": [
+          "18:00"
+        ]
+      },
+      "contact_email": {
+        "state": "known",
+        "value": "guest.b@example.com",
+        "source": "seed",
+        "changed_from": []
+      },
+      "accessibility": {
+        "state": "known",
+        "value": "none",
+        "source": "seed",
+        "changed_from": []
+      },
+      "minors": {
+        "state": "known",
+        "value": "none",
+        "source": "seed",
+        "changed_from": []
+      },
+      "allergies": {
+        "state": "known",
+        "value": "none",
+        "source": "seed",
+        "changed_from": []
+      },
+      "billing": {
+        "state": "known",
+        "value": "separate_bills",
+        "source": "seed",
+        "changed_from": []
+      },
+      "occasion": {
+        "state": "known",
+        "value": "team dinner",
+        "source": "team dinner",
+        "changed_from": []
+      },
+      "preferred_table": {
+        "state": "known",
+        "value": "D1",
+        "source": "D1",
+        "changed_from": [
+          "L1"
+        ]
+      }
+    },
+    "missing_required": [],
+    "availability": {
+      "options": [
+        {
+          "unit": "D1",
+          "tables": [
+            "D1"
+          ],
+          "step_free": true,
+          "split": false
+        },
+        {
+          "unit": "M2",
+          "tables": [
+            "M2"
+          ],
+          "step_free": false,
+          "split": false
+        },
+        {
+          "unit": "M3",
+          "tables": [
+            "M3"
+          ],
+          "step_free": false,
+          "split": false
+        },
+        {
+          "unit": "M4",
+          "tables": [
+            "M4"
+          ],
+          "step_free": false,
+          "split": false
+        },
+        {
+          "unit": "D2",
+          "tables": [
+            "D2"
+          ],
+          "step_free": true,
+          "split": false
+        }
+      ],
+      "rejected": [
+        {
+          "unit": "G_L1_L2",
+          "tables": [
+            "L1",
+            "L2"
+          ],
+          "reasons": [
+            "R-OVERLAP: table L1 confirmed by B001 18:00-20:30"
+          ]
+        },
+        {
+          "unit": "G_L3_L4",
+          "tables": [
+            "L3",
+            "L4"
+          ],
+          "reasons": [
+            "R-OVERLAP: table L3, L4 held by H001 18:00-20:30"
+          ]
+        },
+        {
+          "unit": "L1",
+          "tables": [
+            "L1"
+          ],
+          "reasons": [
+            "R-OVERLAP: table L1 confirmed by B001 18:00-20:30"
+          ]
+        },
+        {
+          "unit": "L2",
+          "tables": [
+            "L2"
+          ],
+          "reasons": [
+            "R-CAP: capacity 5 < party 8"
+          ]
+        },
+        {
+          "unit": "L3",
+          "tables": [
+            "L3"
+          ],
+          "reasons": [
+            "R-OVERLAP: table L3 held by H001 18:00-20:30"
+          ]
+        },
+        {
+          "unit": "L4",
+          "tables": [
+            "L4"
+          ],
+          "reasons": [
+            "R-OVERLAP: table L4 held by H001 18:00-20:30"
+          ]
+        }
+      ]
+    },
+    "alternatives": []
+  }
+]

@@ -1,0 +1,400 @@
+{
+  "inquiry": {
+    "id": "INQ-B002",
+    "guest_label": "Synthetic Guest B",
+    "state": "resolved",
+    "booking_id": "B002",
+    "record_version": 5,
+    "created_at": "2026-11-10T15:00:00Z",
+    "updated_at": "2026-11-10T16:30:00Z",
+    "title": "Existing booking B002",
+    "handled_seq": 4,
+    "handled_obs_seq": 19,
+    "state_set_seq": 1
+  },
+  "booking": {
+    "id": "B002",
+    "inquiry_id": "INQ-B002",
+    "guest_label": "Synthetic Guest B",
+    "status": "cancelled",
+    "table_ids": [
+      "D1"
+    ],
+    "party_size": 8,
+    "start": "2026-11-14T00:00:00Z",
+    "end": "2026-11-14T02:30:00Z",
+    "hold_expires_at": null,
+    "version": 3,
+    "source": "seed",
+    "created_at": "2026-11-10T15:00:00Z",
+    "updated_at": "2026-11-10T16:30:00Z"
+  },
+  "events": [
+    {
+      "at": "2026-11-10T15:00:00+00:00",
+      "type": "seed_booking_loaded",
+      "actor": "system",
+      "booking": "B002",
+      "reason": null,
+      "after": {
+        "status": "confirmed",
+        "tables": [
+          "D1"
+        ]
+      }
+    },
+    {
+      "at": "2026-11-10T15:00:00+00:00",
+      "type": "message_received",
+      "actor": "guest",
+      "booking": null,
+      "reason": null,
+      "after": {
+        "chars": 86,
+        "message_id": "INQ-B002-M2",
+        "source": "pasted"
+      }
+    },
+    {
+      "at": "2026-11-10T15:00:00+00:00",
+      "type": "interpretation_recorded",
+      "actor": "provider",
+      "booking": null,
+      "reason": null,
+      "after": {
+        "facts": 7,
+        "interpretation_id": "INT-a6e0e43bbb",
+        "provider": "offline_rules",
+        "rejected": 0,
+        "status": "ok"
+      }
+    },
+    {
+      "at": "2026-11-10T15:00:00+00:00",
+      "type": "inquiry_state_changed",
+      "actor": "system",
+      "booking": null,
+      "reason": "explain_change_unavailable",
+      "after": {
+        "state": "needs_review"
+      }
+    },
+    {
+      "at": "2026-11-10T15:00:00+00:00",
+      "type": "draft_generated",
+      "actor": "operator",
+      "booking": null,
+      "reason": null,
+      "after": {
+        "draft_id": "DR-0001",
+        "errors": 0,
+        "prose_error": null,
+        "prose_source": "deterministic",
+        "purpose": "change_unavailable"
+      }
+    },
+    {
+      "at": "2026-11-10T15:00:00+00:00",
+      "type": "draft_approved",
+      "actor": "operator",
+      "booking": null,
+      "reason": null,
+      "after": {
+        "draft_id": "DR-0001",
+        "note": "approved text; NOT sent",
+        "purpose": "change_unavailable"
+      }
+    },
+    {
+      "at": "2026-11-10T15:00:00+00:00",
+      "type": "copied_or_exported",
+      "actor": "operator",
+      "booking": null,
+      "reason": null,
+      "after": {
+        "draft_id": "DR-0001",
+        "note": "copied/exported only; not sent, not synced",
+        "what": "draft"
+      }
+    },
+    {
+      "at": "2026-11-10T15:30:00+00:00",
+      "type": "message_received",
+      "actor": "guest",
+      "booking": null,
+      "reason": null,
+      "after": {
+        "chars": 32,
+        "message_id": "INQ-B002-M3",
+        "source": "pasted"
+      }
+    },
+    {
+      "at": "2026-11-10T15:30:00+00:00",
+      "type": "interpretation_recorded",
+      "actor": "provider",
+      "booking": null,
+      "reason": null,
+      "after": {
+        "facts": 2,
+        "interpretation_id": "INT-c6cac130c5",
+        "provider": "offline_rules",
+        "rejected": 0,
+        "status": "ok"
+      }
+    },
+    {
+      "at": "2026-11-10T15:30:00+00:00",
+      "type": "draft_approval_stale",
+      "actor": "system",
+      "booking": null,
+      "reason": "new guest message: changed preferred_table",
+      "after": {
+        "draft_id": "DR-0001"
+      }
+    },
+    {
+      "at": "2026-11-10T15:30:00+00:00",
+      "type": "inquiry_state_changed",
+      "actor": "system",
+      "booking": null,
+      "reason": "process_modification",
+      "after": {
+        "state": "ready_for_action"
+      }
+    },
+    {
+      "at": "2026-11-10T15:30:00+00:00",
+      "type": "proposal_created",
+      "actor": "operator",
+      "booking": null,
+      "reason": null,
+      "after": {
+        "end": "2026-11-14T02:30:00+00:00",
+        "kind": "modification",
+        "proposal_id": "P-0001",
+        "start": "2026-11-14T00:00:00+00:00",
+        "tables": [
+          "D1"
+        ],
+        "unit": "D1"
+      }
+    },
+    {
+      "at": "2026-11-10T15:30:00+00:00",
+      "type": "proposal_approved",
+      "actor": "operator",
+      "booking": null,
+      "reason": null,
+      "after": {
+        "record_version": 3,
+        "status": "approved"
+      }
+    },
+    {
+      "at": "2026-11-10T15:30:00+00:00",
+      "type": "draft_approval_stale",
+      "actor": "system",
+      "booking": null,
+      "reason": "booking modified",
+      "after": {
+        "draft_id": "DR-0001"
+      }
+    },
+    {
+      "at": "2026-11-10T15:30:00+00:00",
+      "type": "booking_modified",
+      "actor": "operator",
+      "booking": "B002",
+      "reason": null,
+      "after": {
+        "end": "2026-11-14T02:30:00+00:00",
+        "party_size": 8,
+        "start": "2026-11-14T00:00:00+00:00",
+        "status": "confirmed",
+        "tables": [
+          "D1"
+        ]
+      }
+    },
+    {
+      "at": "2026-11-10T15:30:00+00:00",
+      "type": "inquiry_state_changed",
+      "actor": "system",
+      "booking": null,
+      "reason": "no_action",
+      "after": {
+        "state": "resolved"
+      }
+    },
+    {
+      "at": "2026-11-10T15:30:00+00:00",
+      "type": "draft_generated",
+      "actor": "operator",
+      "booking": null,
+      "reason": null,
+      "after": {
+        "draft_id": "DR-0002",
+        "errors": 0,
+        "prose_error": null,
+        "prose_source": "deterministic",
+        "purpose": "change_confirmed"
+      }
+    },
+    {
+      "at": "2026-11-10T15:30:00+00:00",
+      "type": "draft_approved",
+      "actor": "operator",
+      "booking": null,
+      "reason": null,
+      "after": {
+        "draft_id": "DR-0002",
+        "note": "approved text; NOT sent",
+        "purpose": "change_confirmed"
+      }
+    },
+    {
+      "at": "2026-11-10T15:30:00+00:00",
+      "type": "copied_or_exported",
+      "actor": "operator",
+      "booking": null,
+      "reason": null,
+      "after": {
+        "draft_id": "DR-0002",
+        "note": "copied/exported only; not sent, not synced",
+        "what": "draft"
+      }
+    },
+    {
+      "at": "2026-11-10T16:30:00+00:00",
+      "type": "message_received",
+      "actor": "guest",
+      "booking": null,
+      "reason": null,
+      "after": {
+        "chars": 54,
+        "message_id": "INQ-B002-M4",
+        "source": "pasted"
+      }
+    },
+    {
+      "at": "2026-11-10T16:30:00+00:00",
+      "type": "interpretation_recorded",
+      "actor": "provider",
+      "booking": null,
+      "reason": null,
+      "after": {
+        "facts": 0,
+        "interpretation_id": "INT-30e99d5913",
+        "provider": "offline_rules",
+        "rejected": 0,
+        "status": "ok"
+      }
+    },
+    {
+      "at": "2026-11-10T16:30:00+00:00",
+      "type": "inquiry_state_changed",
+      "actor": "system",
+      "booking": null,
+      "reason": "process_cancellation",
+      "after": {
+        "state": "needs_review"
+      }
+    },
+    {
+      "at": "2026-11-10T16:30:00+00:00",
+      "type": "draft_generated",
+      "actor": "operator",
+      "booking": null,
+      "reason": null,
+      "after": {
+        "draft_id": "DR-0003",
+        "errors": 0,
+        "prose_error": null,
+        "prose_source": "deterministic",
+        "purpose": "cancellation_received"
+      }
+    },
+    {
+      "at": "2026-11-10T16:30:00+00:00",
+      "type": "draft_approval_stale",
+      "actor": "system",
+      "booking": null,
+      "reason": "booking cancelled",
+      "after": {
+        "draft_id": "DR-0001"
+      }
+    },
+    {
+      "at": "2026-11-10T16:30:00+00:00",
+      "type": "draft_approval_stale",
+      "actor": "system",
+      "booking": null,
+      "reason": "booking cancelled",
+      "after": {
+        "draft_id": "DR-0002"
+      }
+    },
+    {
+      "at": "2026-11-10T16:30:00+00:00",
+      "type": "booking_cancelled",
+      "actor": "operator",
+      "booking": "B002",
+      "reason": "guest asked to cancel by email",
+      "after": {
+        "status": "cancelled",
+        "tables_released": [
+          "D1"
+        ]
+      }
+    },
+    {
+      "at": "2026-11-10T16:30:00+00:00",
+      "type": "inquiry_state_changed",
+      "actor": "system",
+      "booking": null,
+      "reason": "no_action",
+      "after": {
+        "state": "resolved"
+      }
+    },
+    {
+      "at": "2026-11-10T16:30:00+00:00",
+      "type": "draft_generated",
+      "actor": "operator",
+      "booking": null,
+      "reason": null,
+      "after": {
+        "draft_id": "DR-0004",
+        "errors": 0,
+        "prose_error": null,
+        "prose_source": "deterministic",
+        "purpose": "cancellation_confirmed"
+      }
+    },
+    {
+      "at": "2026-11-10T16:30:00+00:00",
+      "type": "draft_approved",
+      "actor": "operator",
+      "booking": null,
+      "reason": null,
+      "after": {
+        "draft_id": "DR-0004",
+        "note": "approved text; NOT sent",
+        "purpose": "cancellation_confirmed"
+      }
+    },
+    {
+      "at": "2026-11-10T16:30:00+00:00",
+      "type": "copied_or_exported",
+      "actor": "operator",
+      "booking": null,
+      "reason": null,
+      "after": {
+        "draft_id": "DR-0004",
+        "note": "copied/exported only; not sent, not synced",
+        "what": "draft"
+      }
+    }
+  ]
+}

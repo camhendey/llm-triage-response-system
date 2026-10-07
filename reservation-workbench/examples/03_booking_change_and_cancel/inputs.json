@@ -1,0 +1,20 @@
+{
+  "clock_start": "2026-11-10T10:00:00-05:00",
+  "messages": [
+    {
+      "received_at": "2026-11-10T15:00:00+00:00",
+      "inquiry": "INQ-B002",
+      "text": "Please move our 8-person booking on November 13 from 6 pm to 7 pm, specifically to L1."
+    },
+    {
+      "received_at": "2026-11-10T15:30:00+00:00",
+      "inquiry": "INQ-B002",
+      "text": "OK, D1 is fine then, still 7 pm."
+    },
+    {
+      "received_at": "2026-11-10T16:30:00+00:00",
+      "inquiry": "INQ-B002",
+      "text": "So sorry - we now need to cancel the booking entirely."
+    }
+  ]
+}

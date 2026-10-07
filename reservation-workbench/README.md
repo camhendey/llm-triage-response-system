@@ -1,0 +1,102 @@
+# Reservation Operations Workbench
+
+A single-operator, human-reviewed workbench for large-party restaurant reservation inquiries, built on a **simulated restaurant** ("Harbour Table Demo") with **synthetic data only**. It turns guest emails into typed facts with quoted evidence, checks seating with deterministic rules, records holds, confirmations, changes and cancellations in a local demo database, and prepares reviewed draft replies that the operator copies elsewhere.
+
+Nothing in this application sends email, reads or updates any external booking system, takes payments or is deployed anywhere. It is a portfolio project by Cameron Hendey; see [docs/PROVENANCE.md](docs/PROVENANCE.md) for how it relates to his earlier, manual, LLM-assisted workflow.
+
+![Annotated workbench overview (real screenshot)](docs/figures/annotated_overview.png)
+
+## Status (2026-10-07)
+
+| Gate | State |
+|---|---|
+| Implemented | Workbench UI, service layer, rules engine, offline and live interpreters, CLI, evaluation runner, study harness |
+| Deterministic tests | **102 passed** (`pytest`), covering acceptance scenarios A01-A30 |
+| Actual UI verified | Real Playwright screenshots at 1440 px and 820 px, plus headless Streamlit script runs ([docs/VERIFICATION.md](docs/VERIFICATION.md)) |
+| Live model verified | **not_run**: no API key or spending limit was supplied ([results/eval/live_status.json](results/eval/live_status.json)) |
+| Human handling-time study | **pending**: harness and protocol ready, 0 of 36 sessions recorded |
+
+Held-out evaluation (40 agent-authored scenarios, offline interpreter): the first blind run allowed the expected next action in **33/40** cases with **1** critical-error case; after fixes the final retest reached **37/40** with **0** critical-error cases. Retests are not blind. Details and limitations: [docs/EVALUATION.md](docs/EVALUATION.md).
+
+## Quick start
+
+Requires Python 3.11+.
+
+```bash
+python -m venv .venv && source .venv/bin/activate      # Windows: .venv\Scripts\activate
+pip install -e ".[dev]"
+cp .env.example .env                                     # optional; values are empty by default
+streamlit run app.py                                     # http://localhost:8501
+```
+
+The app opens on the **demo** database (`data/demo/workbench_demo.sqlite`), seeded from `data/synthetic/demo_inquiries.json` with a fixed demo clock of Tue Nov 10 2026, 10:00 America/Toronto. Use **+1 hour / +1 day** in the sidebar to move the demo clock (holds expire against it). Switch to the **session** database for a persistent workspace on the real clock.
+
+```bash
+rw init-demo                    # create/seed the demo database if missing
+rw reset-demo                   # delete and re-seed ONLY the designated demo database
+rw queue                        # queue as text
+rw show INQ-0103 --notes        # facts, rules and copyable booking notes
+rw import-csv messages.csv --interpret          # into the session database
+pytest                                          # 102 tests
+rw eval validate                                # dataset shape and freeze hash
+rw eval run --split heldout --mode offline      # writes results/eval/<run>/
+python scripts/run_worked_examples.py           # replays examples/01-03
+python scripts/make_charts.py                   # figures from saved results
+```
+
+`reset-demo` refuses any path other than the designated demo database and refuses any database whose stored kind is not `demo`.
+
+## Demo versus live interpreter
+
+| | Offline (default) | Live (optional) |
+|---|---|---|
+| What reads the email | Deterministic pattern rules in `providers/offline.py` | Anthropic Messages API with JSON-schema output, validated again locally |
+| Needs | nothing | `RW_PROVIDER=live` and `ANTHROPIC_API_KEY` in `.env` |
+| Honesty | Labelled "offline pattern rules (not a language model)"; unsupported text is returned as `unsupported` for manual interpretation | Every quote must exist verbatim in a guest message; invalid output is retried a bounded number of times, then fails visibly |
+
+In both modes seating, policy checks, booking state and the critical facts in drafts (dates, times, party size, tables, status) come from deterministic code. A live model may only write a greeting line and a closing line, and validators reject digits or booking/policy words in that prose.
+
+Live evaluation runs only with a key **and** explicit limits:
+
+```bash
+rw eval live --max-calls 400 --budget-usd 5 --usd-per-mtok-input <rate> --usd-per-mtok-output <rate>
+```
+
+Without them it writes `results/eval/live_status.json` with `status: not_run` and reports no live numbers.
+
+## What the operator can do
+
+- Queue sorted by urgency and deadline; add or paste messages; import CSV with row-level errors.
+- Facts with status (known, unknown, needs review, conflict, operator-confirmed), quoted evidence and change history. Operator values are never overwritten by later guest text; disagreements become conflicts.
+- Seating check over tables and groupings with reasons for every rejected option, checked alternative times, split-seating disclosure, and a private-events route above 25 guests.
+- Proposals bound to a record version; approve, then create a demo hold (reserving every constituent table until expiry), record a demo confirmation, commit a change atomically, record a cancellation, release, decline or escalate. Each action is idempotent.
+- Minimum spend and allergies require a recorded human decision; nothing is guaranteed to the guest.
+- Drafts from templates with deterministic validators; edit, mark reviewed, copy or export. Copying is recorded as copying, never as sending.
+- Service view (occupancy grid and an arrival-bucket heuristic, labelled as such) and an operator study timer.
+
+## Repository map
+
+| Path | Contents |
+|---|---|
+| `src/reservation_workbench/domain` | Typed models, config loading, clocks |
+| `src/reservation_workbench/rules` | Fact reconciliation, availability engine, assessment (next action, rule results) |
+| `src/reservation_workbench/providers` | Offline interpreter, live Anthropic provider, shared validation |
+| `src/reservation_workbench/services` | Workbench service layer (used by UI, CLI, tests and evaluation), drafting, CSV import, bootstrap/reset |
+| `src/reservation_workbench/persistence` | SQLite schema and repository (events, idempotency keys) |
+| `src/reservation_workbench/ui` | Streamlit views |
+| `src/reservation_workbench/evaluation`, `data/eval` | Scenario loader, freeze, runner; 20 development + 40 held-out scenarios |
+| `src/reservation_workbench/study`, `data/study`, `docs/study` | Handling-time study harness, cases and protocol |
+| `config/restaurant_demo.yaml` | Synthetic restaurant: tables, groupings, policies, seed bookings |
+| `examples/` | Three replayable worked examples |
+| `results/eval/` | Every saved evaluation run, including the first blind run |
+| `docs/` | Documentation, diagrams, figures, screenshots |
+
+## Documentation
+
+[Domain and policies](docs/DOMAIN_AND_POLICIES.md) · [Decisions](docs/DECISIONS.md) · [Provenance](docs/PROVENANCE.md) · [Operator guide](docs/OPERATOR_GUIDE.md) · [Evaluation](docs/EVALUATION.md) · [Verification](docs/VERIFICATION.md) · [Claims](docs/CLAIMS.md) · [Build status](docs/BUILD_STATUS.md)
+
+## Scope boundaries
+
+Synthetic restaurant and guests only. Policies in `config/restaurant_demo.yaml` are demonstration values, not any real restaurant's current policy. No real guest data, no restaurant branding, no affiliation with or integration into any reservation platform, no deployment. All guest text is treated as untrusted data and never as instructions.
+
+License: MIT.

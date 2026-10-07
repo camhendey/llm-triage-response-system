@@ -1,0 +1,15 @@
+{
+  "clock_start": "2026-11-10T10:00:00-05:00",
+  "messages": [
+    {
+      "received_at": "2026-11-10T15:00:00+00:00",
+      "inquiry": "(new)",
+      "text": "We are 12 guests for November 13, 2026 at 6 pm. One guest uses a wheelchair. No minors or allergies; one bill, birthday. Contact: taylor@example.com. Separate tables are fine."
+    },
+    {
+      "received_at": "2026-11-10T16:30:00+00:00",
+      "inquiry": "INQ-0001",
+      "text": "8:30 pm works for us. Thank you!"
+    }
+  ]
+}

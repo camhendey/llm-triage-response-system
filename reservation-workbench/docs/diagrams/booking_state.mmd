@@ -1,0 +1,18 @@
+stateDiagram-v2
+  direction LR
+  [*] --> none
+  none --> held: Create demo hold
+  none --> confirmed: Record demo confirmation
+  held --> confirmed: Record demo confirmation (recheck passes)
+  held --> released: expiry at clock instant, or release
+  held --> cancelled: Record demo cancellation
+  confirmed --> cancelled: Record demo cancellation
+  confirmed --> confirmed: Commit demo change (atomic, new tables committed before old released)
+  released --> [*]
+  cancelled --> [*]
+  note right of none
+    Hold, confirmation and change need an approved proposal
+    for the current record version, rechecked at commit.
+    Cancel and release need a reason. Every action is
+    idempotent per action key. No other transitions exist.
+  end note

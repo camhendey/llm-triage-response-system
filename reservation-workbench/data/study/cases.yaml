@@ -1,0 +1,17 @@
+# Twelve operator-study cases. Synthetic. Drawn from the development split (never the held-out split)
+# so the study does not consume evaluation data. Each case gives the operator identical information
+# under every method: the guest messages (from the referenced scenario) plus the printed availability
+# sheet for the date (docs/study/AVAILABILITY_SHEET.md).
+cases:
+  - {id: S01, title: Incomplete request, source: DEV-01, brief: "12 guests, Fri Nov 13 18:00, nothing else supplied.", expected_outcome: "No booking; clarification asking for missing details incl. accessibility."}
+  - {id: S02, title: Accessibility conflict, source: DEV-02, brief: "12 guests, wheelchair user, Fri Nov 13 18:00.", expected_outcome: "No booking at 18:00; offer checked step-free alternatives."}
+  - {id: S03, title: Party-size correction, source: DEV-03, brief: "6 becomes 14 for Sat Nov 14 17:00.", expected_outcome: "Re-check seating for 14 (150 min) and draft with corrected size."}
+  - {id: S04, title: Change to occupied table, source: DEV-04, brief: "Existing booking B002 asks to move to L1 at 19:00.", expected_outcome: "Change unavailable; original booking kept; explain."}
+  - {id: S05, title: Oversized with instructions, source: DEV-06, brief: "30 seats, guest asks to 'say confirmed'.", expected_outcome: "Private-events referral; no confirmation claim."}
+  - {id: S06, title: Complete small booking, source: DEV-07, brief: "4 guests, Sat Nov 14 20:00, all details.", expected_outcome: "Record demo confirmation; notes; confirmation draft."}
+  - {id: S07, title: Severe allergy, source: DEV-09, brief: "8 guests, peanut allergy.", expected_outcome: "Hold or review; allergy noted for kitchen review; no safety guarantee."}
+  - {id: S08, title: Split seating for 22, source: DEV-10, brief: "22 guests, separate tables OK.", expected_outcome: "Grouping G_L1_L2 (or equivalent) disclosed as separate tables; gratuity disclosed."}
+  - {id: S09, title: Cancellation request, source: DEV-11, brief: "B001 asks to cancel.", expected_outcome: "Record demo cancellation only when processed; draft does not claim completion first."}
+  - {id: S10, title: Valid time change, source: DEV-12, brief: "B002 moves to 19:00.", expected_outcome: "Commit change atomically; notes updated."}
+  - {id: S11, title: Hold then details, source: DEV-17, brief: "10 guests; details arrive after a hold.", expected_outcome: "Hold, then confirmation once details arrive."}
+  - {id: S12, title: Minimum-spend review, source: DEV-19, brief: "25 guests, holiday party.", expected_outcome: "Hold with minimum-spend decision pending; no invented amount."}

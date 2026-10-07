@@ -1,0 +1,269 @@
+{
+  "inquiry": {
+    "id": "INQ-0001",
+    "guest_label": "Synthetic Guest (Morgan)",
+    "state": "resolved",
+    "booking_id": "B-A0001",
+    "record_version": 4,
+    "created_at": "2026-11-10T15:00:00Z",
+    "updated_at": "2026-11-10T15:45:00Z",
+    "title": "",
+    "handled_seq": 2,
+    "handled_obs_seq": 9,
+    "state_set_seq": 0
+  },
+  "booking": {
+    "id": "B-A0001",
+    "inquiry_id": "INQ-0001",
+    "guest_label": "Synthetic Guest (Morgan)",
+    "status": "confirmed",
+    "table_ids": [
+      "L3"
+    ],
+    "party_size": 6,
+    "start": "2026-11-15T00:30:00Z",
+    "end": "2026-11-15T02:30:00Z",
+    "hold_expires_at": null,
+    "version": 2,
+    "source": "app",
+    "created_at": "2026-11-10T15:00:00Z",
+    "updated_at": "2026-11-10T15:45:00Z"
+  },
+  "events": [
+    {
+      "at": "2026-11-10T15:00:00+00:00",
+      "type": "inquiry_created",
+      "actor": "operator",
+      "booking": null,
+      "reason": null,
+      "after": {
+        "guest_label": "Synthetic Guest (Morgan)",
+        "inquiry_id": "INQ-0001"
+      }
+    },
+    {
+      "at": "2026-11-10T15:00:00+00:00",
+      "type": "message_received",
+      "actor": "guest",
+      "booking": null,
+      "reason": null,
+      "after": {
+        "chars": 219,
+        "message_id": "INQ-0001-M1",
+        "source": "pasted"
+      }
+    },
+    {
+      "at": "2026-11-10T15:00:00+00:00",
+      "type": "interpretation_recorded",
+      "actor": "provider",
+      "booking": null,
+      "reason": null,
+      "after": {
+        "facts": 9,
+        "interpretation_id": "INT-8c9a36f09d",
+        "provider": "offline_rules",
+        "rejected": 0,
+        "status": "partial"
+      }
+    },
+    {
+      "at": "2026-11-10T15:00:00+00:00",
+      "type": "inquiry_state_changed",
+      "actor": "system",
+      "booking": null,
+      "reason": "confirm_booking",
+      "after": {
+        "state": "ready_for_action"
+      }
+    },
+    {
+      "at": "2026-11-10T15:00:00+00:00",
+      "type": "proposal_created",
+      "actor": "operator",
+      "booking": null,
+      "reason": null,
+      "after": {
+        "end": "2026-11-15T02:30:00+00:00",
+        "kind": "new_allocation",
+        "proposal_id": "P-0001",
+        "start": "2026-11-15T00:30:00+00:00",
+        "tables": [
+          "L3"
+        ],
+        "unit": "L3"
+      }
+    },
+    {
+      "at": "2026-11-10T15:00:00+00:00",
+      "type": "proposal_approved",
+      "actor": "operator",
+      "booking": null,
+      "reason": null,
+      "after": {
+        "record_version": 2,
+        "status": "approved"
+      }
+    },
+    {
+      "at": "2026-11-10T15:00:00+00:00",
+      "type": "hold_created",
+      "actor": "operator",
+      "booking": "B-A0001",
+      "reason": null,
+      "after": {
+        "booking_id": "B-A0001",
+        "expires_at": "2026-11-12T15:00:00+00:00",
+        "status": "held",
+        "tables": [
+          "L3"
+        ]
+      }
+    },
+    {
+      "at": "2026-11-10T15:00:00+00:00",
+      "type": "draft_generated",
+      "actor": "operator",
+      "booking": null,
+      "reason": null,
+      "after": {
+        "draft_id": "DR-0001",
+        "errors": 0,
+        "prose_error": null,
+        "prose_source": "deterministic",
+        "purpose": "hold_offer"
+      }
+    },
+    {
+      "at": "2026-11-10T15:00:00+00:00",
+      "type": "draft_approved",
+      "actor": "operator",
+      "booking": null,
+      "reason": null,
+      "after": {
+        "draft_id": "DR-0001",
+        "note": "approved text; NOT sent",
+        "purpose": "hold_offer"
+      }
+    },
+    {
+      "at": "2026-11-10T15:00:00+00:00",
+      "type": "copied_or_exported",
+      "actor": "operator",
+      "booking": null,
+      "reason": null,
+      "after": {
+        "draft_id": "DR-0001",
+        "note": "copied/exported only; not sent, not synced",
+        "what": "draft"
+      }
+    },
+    {
+      "at": "2026-11-10T15:45:00+00:00",
+      "type": "message_received",
+      "actor": "guest",
+      "booking": null,
+      "reason": null,
+      "after": {
+        "chars": 49,
+        "message_id": "INQ-0001-M2",
+        "source": "pasted"
+      }
+    },
+    {
+      "at": "2026-11-10T15:45:00+00:00",
+      "type": "interpretation_recorded",
+      "actor": "provider",
+      "booking": null,
+      "reason": null,
+      "after": {
+        "facts": 0,
+        "interpretation_id": "INT-525a39c641",
+        "provider": "offline_rules",
+        "rejected": 0,
+        "status": "ok"
+      }
+    },
+    {
+      "at": "2026-11-10T15:45:00+00:00",
+      "type": "draft_approval_stale",
+      "actor": "system",
+      "booking": null,
+      "reason": "booking confirmed",
+      "after": {
+        "draft_id": "DR-0001"
+      }
+    },
+    {
+      "at": "2026-11-10T15:45:00+00:00",
+      "type": "booking_confirmed",
+      "actor": "operator",
+      "booking": "B-A0001",
+      "reason": null,
+      "after": {
+        "booking_id": "B-A0001",
+        "status": "confirmed"
+      }
+    },
+    {
+      "at": "2026-11-10T15:45:00+00:00",
+      "type": "inquiry_state_changed",
+      "actor": "system",
+      "booking": null,
+      "reason": "no_action",
+      "after": {
+        "state": "resolved"
+      }
+    },
+    {
+      "at": "2026-11-10T15:45:00+00:00",
+      "type": "draft_generated",
+      "actor": "operator",
+      "booking": null,
+      "reason": null,
+      "after": {
+        "draft_id": "DR-0002",
+        "errors": 0,
+        "prose_error": null,
+        "prose_source": "deterministic",
+        "purpose": "confirmation"
+      }
+    },
+    {
+      "at": "2026-11-10T15:45:00+00:00",
+      "type": "draft_approved",
+      "actor": "operator",
+      "booking": null,
+      "reason": null,
+      "after": {
+        "draft_id": "DR-0002",
+        "note": "approved text; NOT sent",
+        "purpose": "confirmation"
+      }
+    },
+    {
+      "at": "2026-11-10T15:45:00+00:00",
+      "type": "copied_or_exported",
+      "actor": "operator",
+      "booking": null,
+      "reason": null,
+      "after": {
+        "draft_id": "DR-0002",
+        "note": "copied/exported only; not sent, not synced",
+        "what": "draft"
+      }
+    },
+    {
+      "at": "2026-11-10T15:45:00+00:00",
+      "type": "copied_or_exported",
+      "actor": "operator",
+      "booking": null,
+      "reason": null,
+      "after": {
+        "draft_id": null,
+        "note": "copied/exported only; not sent, not synced",
+        "what": "booking_notes"
+      }
+    }
+  ]
+}

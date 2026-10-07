@@ -1,0 +1,87 @@
+# Synthetic demonstration configuration; NOT the verified operating policy of any real restaurant.
+schema_version: 1
+# Demonstration policy version. Bump when any value below changes; proposals and
+# drafts record the version they were evaluated against.
+policy_version: demo-2026-11-a
+restaurant:
+  id: demo_restaurant
+  name: Harbour Table Demo
+  timezone: America/Toronto
+  opening_time: '11:00'
+  closing_time: '23:00'
+  max_main_restaurant_party: 25
+demo_clock: '2026-11-10T10:00:00-05:00'
+policies:
+  default_duration_minutes: 150
+  small_party_duration_minutes: 120
+  small_party_max: 7
+  turnover_buffer_minutes: 0
+  hold_hours: 48
+  hold_expiry_must_precede_dining_start: true
+  short_notice_hold_requires_operator_deadline: true
+  auto_gratuity_percent: 18
+  auto_gratuity_min_party: 8
+  arrival_grace_minutes: 15
+  minimum_spend_review_min_party: 25
+  minimum_spend_amount: null
+  confirmation_required_fields:
+    - party_size
+    - dining_start
+    - dining_end
+    - contact_email
+    - accessibility
+    - minors
+    - billing
+    - occasion
+    - allergies
+  large_party_min_size: 8
+  arrival_bucket_minutes: 60
+  arrival_warning_party_count: 3
+  arrival_bucket_alignment: local_clock_hour
+  urgency:
+    hold_deadline_high_within_hours: 6
+    dining_high_within_hours: 24
+areas:
+  lounge: {step_free: true}
+  dining: {step_free: true}
+  mezzanine: {step_free: false}
+tables:
+  - {id: L1, area: lounge, capacity: 20, step_free: true, style: long_table}
+  - {id: L2, area: lounge, capacity: 5, step_free: true, style: adjacent_table}
+  - {id: L3, area: lounge, capacity: 8, step_free: true, style: booth}
+  - {id: L4, area: lounge, capacity: 8, step_free: true, style: booth}
+  - {id: D1, area: dining, capacity: 10, step_free: true, style: table}
+  - {id: D2, area: dining, capacity: 10, step_free: true, style: table}
+  - {id: M1, area: mezzanine, capacity: 16, step_free: false, style: long_table}
+  - {id: M2, area: mezzanine, capacity: 8, step_free: false, style: booth}
+  - {id: M3, area: mezzanine, capacity: 8, step_free: false, style: booth}
+  - {id: M4, area: mezzanine, capacity: 9, step_free: false, style: adjacent_table}
+groupings:
+  - {id: G_L1_L2, tables: [L1, L2], capacity: 25, arrangement: separate_adjacent_tables}
+  - {id: G_L3_L4, tables: [L3, L4], capacity: 16, arrangement: separate_adjacent_booths}
+  - {id: G_D1_D2, tables: [D1, D2], capacity: 20, arrangement: separate_tables}
+  - {id: G_M1_M4, tables: [M1, M4], capacity: 25, arrangement: separate_adjacent_tables}
+  - {id: G_M2_M3, tables: [M2, M3], capacity: 16, arrangement: separate_adjacent_booths}
+bookings:
+  - id: B001
+    guest: Synthetic Guest A
+    table_ids: [L1]
+    party_size: 18
+    start: '2026-11-13T18:00:00-05:00'
+    end: '2026-11-13T20:30:00-05:00'
+    status: confirmed
+  - id: B002
+    guest: Synthetic Guest B
+    table_ids: [D1]
+    party_size: 8
+    start: '2026-11-13T18:00:00-05:00'
+    end: '2026-11-13T20:30:00-05:00'
+    status: confirmed
+  - id: H001
+    guest: Synthetic Guest C
+    table_ids: [L3, L4]
+    party_size: 14
+    start: '2026-11-13T18:00:00-05:00'
+    end: '2026-11-13T20:30:00-05:00'
+    status: held
+    expires_at: '2026-11-10T12:00:00-05:00'

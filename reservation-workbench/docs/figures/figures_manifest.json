@@ -1,0 +1,27 @@
+{
+  "evaluation_reliability": {
+    "figure": [
+      "docs/figures/evaluation_reliability.png",
+      "docs/figures/evaluation_reliability.svg"
+    ],
+    "sources": [
+      "results/eval/20261006T235717-heldout-offline/summary.json",
+      "results/eval/20261007T002542-heldout-offline/summary.json",
+      "results/eval/20261007T002543-heldout-oracle/summary.json"
+    ],
+    "live": "not_run"
+  },
+  "constraint_resolution": {
+    "figure": [
+      "docs/figures/constraint_resolution.png",
+      "docs/figures/constraint_resolution.svg"
+    ],
+    "sources": [
+      "examples/02_accessibility_conflict/snapshots.json"
+    ]
+  },
+  "handling_time": {
+    "status": "pending",
+    "file": "docs/figures/handling_time_status.json"
+  }
+}

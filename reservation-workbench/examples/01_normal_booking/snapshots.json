@@ -1,0 +1,263 @@
+[
+  {
+    "label": "after interpretation",
+    "at": "2026-11-10T15:00:00+00:00",
+    "inquiry_state": "ready_for_action",
+    "record_version": 2,
+    "booking": null,
+    "next_action": "confirm_booking",
+    "next_action_detail": "All required details present; approve a proposal and record confirmation.",
+    "rules": [
+      {
+        "id": "R-UNINTERPRETED",
+        "severity": "review",
+        "message": "Text not interpreted (offline_rules): \"Thanks, Morgan\""
+      }
+    ],
+    "facts": {
+      "party_size": {
+        "state": "known",
+        "value": 6,
+        "source": "table for 6",
+        "changed_from": []
+      },
+      "requested_date": {
+        "state": "known",
+        "value": "2026-11-14",
+        "source": "November 14, 2026",
+        "changed_from": []
+      },
+      "requested_time": {
+        "state": "known",
+        "value": "19:30",
+        "source": "7:30 pm",
+        "changed_from": []
+      },
+      "contact_email": {
+        "state": "known",
+        "value": "morgan.example@example.com",
+        "source": "morgan.example@example.com",
+        "changed_from": []
+      },
+      "accessibility": {
+        "state": "known",
+        "value": "none",
+        "source": "No accessibility needs",
+        "changed_from": []
+      },
+      "minors": {
+        "state": "known",
+        "value": "none",
+        "source": "No accessibility needs, no minors",
+        "changed_from": []
+      },
+      "allergies": {
+        "state": "known",
+        "value": "none",
+        "source": "No accessibility needs, no minors and no allergies",
+        "changed_from": []
+      },
+      "billing": {
+        "state": "known",
+        "value": "one_bill",
+        "source": "One bill",
+        "changed_from": []
+      },
+      "occasion": {
+        "state": "known",
+        "value": "birthday",
+        "source": "birthday",
+        "changed_from": []
+      }
+    },
+    "missing_required": [],
+    "availability": {
+      "options": [
+        {
+          "unit": "L3",
+          "tables": [
+            "L3"
+          ],
+          "step_free": true,
+          "split": false
+        },
+        {
+          "unit": "L4",
+          "tables": [
+            "L4"
+          ],
+          "step_free": true,
+          "split": false
+        },
+        {
+          "unit": "M2",
+          "tables": [
+            "M2"
+          ],
+          "step_free": false,
+          "split": false
+        },
+        {
+          "unit": "M3",
+          "tables": [
+            "M3"
+          ],
+          "step_free": false,
+          "split": false
+        },
+        {
+          "unit": "M4",
+          "tables": [
+            "M4"
+          ],
+          "step_free": false,
+          "split": false
+        }
+      ],
+      "rejected": [
+        {
+          "unit": "L2",
+          "tables": [
+            "L2"
+          ],
+          "reasons": [
+            "R-CAP: capacity 5 < party 6"
+          ]
+        }
+      ]
+    },
+    "alternatives": []
+  },
+  {
+    "label": "after demo confirmation",
+    "at": "2026-11-10T15:45:00+00:00",
+    "inquiry_state": "resolved",
+    "record_version": 4,
+    "booking": {
+      "id": "B-A0001",
+      "status": "confirmed",
+      "tables": [
+        "L3"
+      ],
+      "start": "2026-11-14T19:30:00-05:00",
+      "end": "2026-11-14T21:30:00-05:00",
+      "version": 2
+    },
+    "next_action": "no_action",
+    "next_action_detail": "Booking B-A0001 confirmed.",
+    "rules": [],
+    "facts": {
+      "party_size": {
+        "state": "known",
+        "value": 6,
+        "source": "table for 6",
+        "changed_from": []
+      },
+      "requested_date": {
+        "state": "known",
+        "value": "2026-11-14",
+        "source": "November 14, 2026",
+        "changed_from": []
+      },
+      "requested_time": {
+        "state": "known",
+        "value": "19:30",
+        "source": "7:30 pm",
+        "changed_from": []
+      },
+      "contact_email": {
+        "state": "known",
+        "value": "morgan.example@example.com",
+        "source": "morgan.example@example.com",
+        "changed_from": []
+      },
+      "accessibility": {
+        "state": "known",
+        "value": "none",
+        "source": "No accessibility needs",
+        "changed_from": []
+      },
+      "minors": {
+        "state": "known",
+        "value": "none",
+        "source": "No accessibility needs, no minors",
+        "changed_from": []
+      },
+      "allergies": {
+        "state": "known",
+        "value": "none",
+        "source": "No accessibility needs, no minors and no allergies",
+        "changed_from": []
+      },
+      "billing": {
+        "state": "known",
+        "value": "one_bill",
+        "source": "One bill",
+        "changed_from": []
+      },
+      "occasion": {
+        "state": "known",
+        "value": "birthday",
+        "source": "birthday",
+        "changed_from": []
+      }
+    },
+    "missing_required": [],
+    "availability": {
+      "options": [
+        {
+          "unit": "L3",
+          "tables": [
+            "L3"
+          ],
+          "step_free": true,
+          "split": false
+        },
+        {
+          "unit": "L4",
+          "tables": [
+            "L4"
+          ],
+          "step_free": true,
+          "split": false
+        },
+        {
+          "unit": "M2",
+          "tables": [
+            "M2"
+          ],
+          "step_free": false,
+          "split": false
+        },
+        {
+          "unit": "M3",
+          "tables": [
+            "M3"
+          ],
+          "step_free": false,
+          "split": false
+        },
+        {
+          "unit": "M4",
+          "tables": [
+            "M4"
+          ],
+          "step_free": false,
+          "split": false
+        }
+      ],
+      "rejected": [
+        {
+          "unit": "L2",
+          "tables": [
+            "L2"
+          ],
+          "reasons": [
+            "R-CAP: capacity 5 < party 6"
+          ]
+        }
+      ]
+    },
+    "alternatives": []
+  }
+]

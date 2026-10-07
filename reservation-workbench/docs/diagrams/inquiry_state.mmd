@@ -1,0 +1,14 @@
+flowchart LR
+  N([new]) -->|interpreted, items open| R[needs_review]
+  N -->|interpreted, nothing blocking| A[ready_for_action]
+  R -->|facts and reviews resolved| A
+  A -->|material change or new message| R
+  A -->|booking committed, nothing open| D[resolved]
+  R -->|Mark reply sent - reported| W[awaiting_guest]
+  R -->|Escalate to private events| E[escalated]
+  R -->|Close or Decline, with reason| C[closed]
+  W --> M((new guest<br/>message))
+  E --> M
+  C --> M
+  D --> M
+  M --> R
