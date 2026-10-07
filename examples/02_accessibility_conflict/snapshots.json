@@ -252,7 +252,7 @@
     "label": "guest accepted 20:30",
     "at": "2026-11-10T16:30:00+00:00",
     "inquiry_state": "needs_review",
-    "record_version": 3,
+    "record_version": 4,
     "booking": null,
     "next_action": "recheck_proposal",
     "next_action_detail": "Proposal P-0001 is stale: new guest message: changed interval, requested_time",
@@ -489,7 +489,7 @@
     "label": "confirmed at 20:30",
     "at": "2026-11-10T16:30:00+00:00",
     "inquiry_state": "resolved",
-    "record_version": 5,
+    "record_version": 7,
     "booking": {
       "id": "B-A0001",
       "status": "confirmed",

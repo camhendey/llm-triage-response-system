@@ -119,7 +119,7 @@ class Recorder:
             f"## {x.id} ({x.purpose}, status {x.status}, record v{x.source_record_version})\n\n```\n{x.text}\n```"
             for x in drafts) + "\n", encoding="utf-8")
         (d / "booking_notes.txt").write_text(self.wb.booking_notes(iid) + "\n", encoding="utf-8")
-        lines = [f"# {self.title}", "", "Replay: `python scripts/run_worked_examples.py`. Synthetic data, fixed demo "
+        lines = [f"# {self.title}", "", "Sole developer: Cameron Hendey. Original workflow developed at JOEY in 2024; refined in 2025.", "", "Replay: `python scripts/run_worked_examples.py`. Synthetic data, fixed demo "
                  "clock, offline interpreter. Nothing is sent and no external system is read or updated.", "",
                  f"| Demo clock ({self.cfg.tz.key}) | Who | Action | Result |", "|---|---|---|---|"]
         for s in self.steps:
@@ -169,9 +169,9 @@ def example_accessibility(out: Path) -> None:
     pid = r.step("operator", f"Propose checked alternative {alt['start']} on {alt['unit']}",
                  r.wb.propose(iid, r.key("alt"), unit_id=alt["unit"], start_override=start))["proposal_id"]
     r.step("operator", "Approve proposal", r.wb.approve_proposal(pid, r.key("approve")))
-    r.draft(iid, purpose="alternative_offer")
-    r.step("operator", "Mark reply sent (reported) - awaiting guest",
-           r.wb.mark_awaiting_guest(iid, "operator reports reply sent from their own mail client", r.key("await")))
+    did = r.draft(iid, purpose="availability_offer")
+    r.step("operator", "Record exact reviewed reply as sent elsewhere",
+           r.wb.report_reply_sent(iid, did, r.key("sent")))
     r.tick(90)
     r.guest(iid, "8:30 pm works for us. Thank you!")
     r.snapshot(iid, "guest accepted 20:30")

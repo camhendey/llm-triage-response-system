@@ -1,5 +1,7 @@
 # Worked example 1: a normal booking
 
+Sole developer: Cameron Hendey. Original workflow developed at JOEY in 2024; refined in 2025.
+
 Replay: `python scripts/run_worked_examples.py`. Synthetic data, fixed demo clock, offline interpreter. Nothing is sent and no external system is read or updated.
 
 | Demo clock (America/Toronto) | Who | Action | Result |
@@ -7,7 +9,7 @@ Replay: `python scripts/run_worked_examples.py`. Synthetic data, fixed demo cloc
 | Tue Nov 10 10:00 | guest | message received (new inquiry) | ok: Created INQ-0001 |
 | Tue Nov 10 10:00 | operator | Interpret new messages (offline rules) | ok: Interpretation partial: 9 facts |
 | Tue Nov 10 10:00 | operator | Check & propose | ok: Proposal P-0001: L3, Sat Nov 14 19:30. Approve it before creating a hold or confirmation. |
-| Tue Nov 10 10:00 | operator | Approve proposal | ok: Proposal P-0001 approved for record version 2. |
+| Tue Nov 10 10:00 | operator | Approve proposal | ok: Proposal P-0001 approved for record version 3. |
 | Tue Nov 10 10:00 | operator | Approve proposal again (double click) | refused: Proposal P-0001 is approved; only proposed can be approved. |
 | Tue Nov 10 10:00 | operator | Create demo hold | ok: Demo hold B-A0001 created on L3 until 2026-11-12 10:00. |
 | Tue Nov 10 10:00 | operator | Generate draft | ok: Draft DR-0001 generated (hold_offer, prose: deterministic). |

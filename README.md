@@ -2,21 +2,25 @@
 
 A single-operator, human-reviewed workbench for large-party restaurant reservation inquiries, built on a **simulated restaurant** ("Harbour Table Demo") with **synthetic data only**. It turns guest emails into typed facts with quoted evidence, checks seating with deterministic rules, records holds, confirmations, changes and cancellations in a local demo database, and prepares reviewed draft replies that the operator copies elsewhere.
 
+**Sole developer: Cameron Hendey. Original workflow developed at JOEY in 2024; refined in 2025.** The original workflow used LLM chat tools and manual booking operations. This repository is its later software implementation; the dates on software verification records remain the actual run dates.
+
 Nothing in this application sends email, reads or updates any external booking system, takes payments or is deployed anywhere. It is a portfolio project by Cameron Hendey; see [docs/PROVENANCE.md](docs/PROVENANCE.md) for how it relates to his earlier, manual, LLM-assisted workflow.
 
-![Annotated workbench overview (real screenshot)](docs/figures/annotated_overview.png)
+![Refined workbench (real application screenshot)](docs/screenshots/refined/03-reply.png)
 
 ## Status (2026-10-07)
 
 | Gate | State |
 |---|---|
 | Implemented | Workbench UI, service layer, rules engine, offline and live interpreters, CLI, evaluation runner, study harness |
-| Deterministic tests | **102 passed** (`pytest`), covering acceptance scenarios A01-A30 |
-| Actual UI verified | Real Playwright screenshots at 1440 px and 820 px, plus headless Streamlit script runs ([docs/VERIFICATION.md](docs/VERIFICATION.md)) |
+| Deterministic tests | **117 passed** (`pytest`), covering acceptance scenarios A01-A30 |
+| Actual UI verified | Chromium captures at 1440 px and 820 px; end-to-end Streamlit interaction tests ([docs/VERIFICATION.md](docs/VERIFICATION.md)) |
 | Live model verified | **not_run**: no API key or spending limit was supplied ([results/eval/live_status.json](results/eval/live_status.json)) |
 | Human handling-time study | **pending**: harness and protocol ready, 0 of 36 sessions recorded |
 
-Held-out evaluation (40 agent-authored scenarios, offline interpreter): the first blind run allowed the expected next action in **33/40** cases with **1** critical-error case; after fixes the final retest reached **37/40** with **0** critical-error cases. Retests are not blind. Details and limitations: [docs/EVALUATION.md](docs/EVALUATION.md).
+The original 40-case blind offline run allowed the expected next action in **33/40** cases with **1 critical-error case**. The refinement regression run reaches **39/40** with **0 critical-error cases** and 97/97 labelled field agreement. This is a **retest of previously inspected synthetic cases**, not a fresh blind benchmark; making occasion optional explains two improved next-action results. Live AI performance and time savings remain unmeasured. [Evaluation and limitations](docs/EVALUATION.md).
+
+Version **1.1** adds a unified coordinator workspace, typed guest-detail editing, selected-plan drafting, seating/time comparisons, outgoing conversation history, explicit referral reporting and a daily handoff export. [Changes](docs/REFINEMENT.md).
 
 ## Quick start
 
@@ -24,7 +28,7 @@ Requires Python 3.11+.
 
 ```bash
 python -m venv .venv && source .venv/bin/activate      # Windows: .venv\Scripts\activate
-pip install -e ".[dev]"
+pip install -c constraints-tested.txt -e ".[dev]"
 cp .env.example .env                                     # optional; values are empty by default
 streamlit run app.py                                     # http://localhost:8501
 ```
@@ -37,11 +41,12 @@ rw reset-demo                   # delete and re-seed ONLY the designated demo da
 rw queue                        # queue as text
 rw show INQ-0103 --notes        # facts, rules and copyable booking notes
 rw import-csv messages.csv --interpret          # into the session database
-pytest                                          # 102 tests
+pytest                                          # 117 tests
 rw eval validate                                # dataset shape and freeze hash
 rw eval run --split heldout --mode offline      # writes results/eval/<run>/
 python scripts/run_worked_examples.py           # replays examples/01-03
-python scripts/make_charts.py                   # figures from saved results
+python scripts/make_charts.py                   # historical evaluation figures
+python scripts/capture_refined.py                # current screenshots; needs Playwright Chromium
 ```
 
 `reset-demo` refuses any path other than the designated demo database and refuses any database whose stored kind is not `demo`.
@@ -69,10 +74,11 @@ Without them it writes `results/eval/live_status.json` with `status: not_run` an
 - Queue sorted by urgency and deadline; add or paste messages; import CSV with row-level errors.
 - Facts with status (known, unknown, needs review, conflict, operator-confirmed), quoted evidence and change history. Operator values are never overwritten by later guest text; disagreements become conflicts.
 - Seating check over tables and groupings with reasons for every rejected option, checked alternative times, split-seating disclosure, and a private-events route above 25 guests.
-- Proposals bound to a record version; approve, then create a demo hold (reserving every constituent table until expiry), record a demo confirmation, commit a change atomically, record a cancellation, release, decline or escalate. Each action is idempotent.
+- Proposals bound to a record version; review and commit a demo hold (reserving every constituent table until expiry), record a demo confirmation, commit a change atomically, record a cancellation, release, decline or escalate. Each action is idempotent.
 - Minimum spend and allergies require a recorded human decision; nothing is guaranteed to the guest.
-- Drafts from templates with deterministic validators; edit, mark reviewed, copy or export. Copying is recorded as copying, never as sending.
-- Service view (occupancy grid and an arrival-bucket heuristic, labelled as such) and an operator study timer.
+- Drafts from templates with deterministic validators; edit, mark reviewed, copy or export. Exports do not send anything. A separate operator assertion adds the exact reviewed reply to conversation history.
+- Configuration-derived seating schematic and time comparisons; service occupancy grid, daily handoff CSV, and an arrival-bucket heuristic (not a kitchen-capacity model).
+- Operator study timer and protocol; no synthetic time-saving claims.
 
 ## Repository map
 

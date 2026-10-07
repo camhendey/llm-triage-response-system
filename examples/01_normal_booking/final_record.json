@@ -4,7 +4,7 @@
     "guest_label": "Synthetic Guest (Morgan)",
     "state": "resolved",
     "booking_id": "B-A0001",
-    "record_version": 4,
+    "record_version": 5,
     "created_at": "2026-11-10T15:00:00Z",
     "updated_at": "2026-11-10T15:45:00Z",
     "title": "",
@@ -61,7 +61,7 @@
       "reason": null,
       "after": {
         "facts": 9,
-        "interpretation_id": "INT-8c9a36f09d",
+        "interpretation_id": "INT-2f2e233386",
         "provider": "offline_rules",
         "rejected": 0,
         "status": "partial"
@@ -101,7 +101,7 @@
       "booking": null,
       "reason": null,
       "after": {
-        "record_version": 2,
+        "record_version": 3,
         "status": "approved"
       }
     },
@@ -178,7 +178,7 @@
       "reason": null,
       "after": {
         "facts": 0,
-        "interpretation_id": "INT-525a39c641",
+        "interpretation_id": "INT-34d773a3b4",
         "provider": "offline_rules",
         "rejected": 0,
         "status": "ok"

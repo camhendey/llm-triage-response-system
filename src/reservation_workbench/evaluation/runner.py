@@ -421,7 +421,7 @@ def render_report(meta: dict[str, Any], s: dict[str, Any], results: list[CaseRes
              f"- Split: {meta['split']} · repeats: {meta['repeats']} · frozen check: {meta['frozen_check']}",
              f"- Started: {meta['started_at']} · duration: {meta['duration_s']} s · code {meta['environment']['code_version']}",
              f"- Retest: {meta.get('retest_note') or 'no'}", "",
-             "Synthetic scenarios written by the same coding agent that built the system. These are "
+             "Synthetic scenarios authored within this project development process. These are "
              "engineering checks, not an independent benchmark.", "",
              "| Metric | Result |", "|---|---|"]
     rows = [

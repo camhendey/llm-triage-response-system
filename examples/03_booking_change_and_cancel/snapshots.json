@@ -408,7 +408,7 @@
     "label": "change committed",
     "at": "2026-11-10T15:30:00+00:00",
     "inquiry_state": "resolved",
-    "record_version": 4,
+    "record_version": 5,
     "booking": {
       "id": "B002",
       "status": "confirmed",
@@ -609,7 +609,7 @@
     "label": "cancellation requested (booking still confirmed)",
     "at": "2026-11-10T16:30:00+00:00",
     "inquiry_state": "needs_review",
-    "record_version": 4,
+    "record_version": 5,
     "booking": {
       "id": "B002",
       "status": "confirmed",
@@ -810,7 +810,7 @@
     "label": "cancellation recorded",
     "at": "2026-11-10T16:30:00+00:00",
     "inquiry_state": "resolved",
-    "record_version": 5,
+    "record_version": 6,
     "booking": {
       "id": "B002",
       "status": "cancelled",

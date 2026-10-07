@@ -17,4 +17,4 @@ Guest: Synthetic Guest (Taylor)
 Email: taylor@example.com
 Tel: UNKNOWN - ask guest
 ------------------------------
-Inquiry: INQ-0001  record v5  policy demo-2026-11-a
+Inquiry: INQ-0001  record v7  policy demo-2026-11-b

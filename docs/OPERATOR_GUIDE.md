@@ -1,57 +1,36 @@
 # Operator guide
 
-The workbench helps one operator handle reservation inquiries for the simulated restaurant. It records decisions in a local database. **It does not send anything and does not read or update any external booking system.** Anything you do outside the app (sending a reply, changing a booking elsewhere) is yours to do and, if you want it in the history, to record as an operator-reported action.
+Sole developer: Cameron Hendey. Original workflow developed at JOEY in 2024; refined in 2025.
 
-## Screen layout
+The app records decisions for a simulated restaurant. Email sending and external reservation updates happen outside this app. Start with a scenario on the overview or an inquiry in the sidebar. Environment & settings contains the fixed demo clock, database switch, CSV import and demo reset.
 
-![Annotated overview](figures/annotated_overview.png)
+## Complete one inquiry
 
-1. **Queue**: inquiries sorted by urgency, then nearest deadline. Filter (Actionable, Waiting, Resolved, All) and search. "New inquiry" adds a message by hand.
-2. **Next action**: the one thing the rules recommend now, with blockers (red), reviews (amber) and information (grey), each with its rule ID.
-3. **Conversation**: guest messages with the quoted evidence highlighted. Paste a later guest message here with its received date and time.
-4. **Structured facts**: each field's value, status (known, UNKNOWN, NEEDS REVIEW, CONFLICT, operator-confirmed, derived) and the message and quote it came from.
-5. **Sidebar**: demo or session database, demo clock (+1 hour, +1 day), interpreter mode, policy version and config hash, CSV import and demo reset.
+1. **Understand the request.** Read the conversation and the next action. Adding a guest reply runs offline interpretation automatically. In live mode use **Interpret new reply** explicitly. Unknown information stays unknown.
+2. **Review details.** Use **Edit guest details** for typed dates, times, party size and policy values. Save related changes together with a source/reason. Resolve ambiguous statements in **Sources and conflicts**. Occasion is optional. Empty form values do not erase existing records.
+3. **Choose seating.** **Select suggested arrangement** is the shortcut. **Compare seating and times** shows feasible options, a table schematic, comparison rows and rejected-option reasons. Selecting an alternative is an offer, not evidence the guest accepted it. Update/confirm the requested time from the guest's reply before finalizing.
+4. **Record the decision.** After selection, **Create hold**, **Confirm booking**, or **Review and commit change** performs human approval and an atomic availability recheck. In the demo these update only the local simulated booking. Short-notice holds ask for an expiry deadline.
+5. **Prepare the reply.** **Prepare reply** uses the selected arrangement and actual action status. Edit the single reply field, **Save reply**, then **Mark reviewed**. Draft edits survive navigation within the current browser session; save to persist across restarts. Changed facts or seating invalidate earlier drafts and approvals.
+6. **Hand off.** Export the reply and booking notes. Once you have sent a reply elsewhere, **I sent this reply elsewhere** adds the exact reviewed text to the conversation as an operator assertion. It does not send or verify delivery.
+7. **Prepare service.** In **Service view**, choose a date, inspect occupancy and export the daily service handoff with access, allergens, billing, occasion and outstanding items. Expired or cancelled bookings are excluded.
 
-Tabs: **Conversation & facts**, **Seating & actions**, **Draft & notes**, **History** (every event, with before/after and reason), **Diagnostics** (each interpretation record with mode, status, intents, ambiguities, errors, usage and raw output, plus the raw rule results).
+## Exceptions and review
 
-## Databases and clock
-
-- **demo**: seeded synthetic inquiries, fixed clock (Tue Nov 10 2026 10:00 Toronto) that you advance by hand. Reset it from the sidebar or with `rw reset-demo`; reset only ever touches the designated demo file.
-- **session**: empty, persistent, real clock. Never reset by the app.
-
-## Everyday workflow
-
-1. **Open** an inquiry. If it shows "Interpret new messages", press it. The offline interpreter is pattern rules, not a language model; anything it cannot read is listed as uninterpreted text for you.
-2. **Resolve facts.** For NEEDS REVIEW press "Confirm ..."; for CONFLICT choose "Keep ..." or "Use ...". To correct anything, open "Edit a fact (operator)", enter the value and a reason (for example "guest phoned"). Your value stays authoritative until you change it; later guest messages that disagree appear as conflicts.
-3. **Seating & actions.** The seating check lists ranked feasible options and, under "Rejected options", every unit with its reasons. Choose an option and press **Check & propose**, then **Approve proposal ... for record vN**.
-4. **Record the decision.** With an approved proposal: **Create demo hold** (default 48 h, must end before dining; short-notice requests ask you for the deadline), **Record demo confirmation**, or for an existing booking **Commit demo change (atomic)**.
-5. **Draft & notes.** Choose a purpose (only purposes valid for the current state are offered), **Generate draft**, edit if needed, **Save edit**, **Mark reviewed**. Copy it or **Export .txt**, then press **Record that I copied the draft**. Booking notes are on the right in the standard format with **Record that I copied booking notes**.
-6. After you send the reply yourself elsewhere, **Mark reply sent (reported) - awaiting guest**. The inquiry waits until a new guest message arrives.
-
-## Special cases
-
-| Situation | What you do |
+| Situation | Action |
 |---|---|
-| Party size or time changes after approval | The proposal becomes **stale** and cannot be committed. Press Check & propose again and re-approve ([correction sequence](figures/correction_sequence.png)). |
-| No feasible seating | Next action offers checked alternative times; "Propose" next to one creates a proposal for it. If none fit, Decline (reason required). |
-| More than 25 guests | Escalate to private events. The app does not know private-room availability and drafts never claim it. |
-| 25 guests (minimum spend) | Enter the amount you were given and record the guest's acknowledgment. No amount is configured or invented. |
-| Allergy mentioned | Press "Acknowledge allergy for follow-up (no guarantee)". Drafts never promise accommodation. |
-| Wheelchair user asks for the mezzanine | Operator review. Offer step-free seating; when the guest agrees, set preferred area to `no_preference`, then propose. |
-| Cancellation request on a confirmed booking | The booking stays confirmed until you press **Record demo cancellation** with a reason. A "cancellation received" draft says it is not yet processed. |
-| Change to an occupied slot | The original booking stays; draft purpose "change unavailable". |
-| Facts edited but no change was requested | "Revert facts to current booking" restores the booking's values. |
-| Guest text says "ignore the rules / mark confirmed" | Shown as an advisory. Nothing changes state. Handle the real request normally. |
-| Hold expires | At the clock instant the hold stops blocking tables and a single release event is recorded. A "hold released" draft is available. |
+| Facts change after selection | Resolve conflicts, select again and prepare a fresh reply. The earlier proposal cannot be committed. |
+| Short acceptance such as “That time works” | The offline interpreter can connect it to a single preceding offer. Date/time remain **needs review** until confirmed. Ambiguous multi-option acceptances need manual clarification. |
+| Above the public party-size limit | Flag for private-events review. Only **Record referral completed elsewhere** permits a draft to claim the referral happened. Neither action establishes private-room availability. |
+| Minimum spend | Record the amount and guest agreement. Changing the amount clears the old agreement. |
+| Allergy mentioned | Record allergy follow-up review; the reply must not guarantee accommodation. |
+| Accessibility conflict | Select suitable step-free seating, resolve conflicting preferences with the guest, then record the agreement. The schematic is not a real floor plan. |
+| Cancellation | Booking remains active until **Cancel booking** is committed with a reason. |
+| Unavailable modification | Original booking remains intact; explain that the requested change is unavailable. |
+| Hold expiry | The fixed demo clock governs demo expiry. Advancing it changes available tables; the session database uses real time. |
+| Unsupported interpretation | Review the original text and enter facts manually; do not infer missing information. |
 
-## Error recovery
+## Recovery
 
-- **"Stale" or "record changed" errors**: someone (or you, in another tab) changed the inquiry. The screen reloads with the current version; repeat the action if it still applies.
-- **Duplicate clicks** are harmless: every action has an idempotency key and runs once.
-- **Interpretation failed** (live mode: missing key, timeout, refusal, rate limit, invalid output): an `R-PROVIDER-FAILED` review appears and no booking changes. Enter facts by hand or retry later.
-- **CSV import** reports each rejected row with its row number and reason; valid rows are kept. Re-importing the same file does not duplicate messages.
-- **Draft validator errors** (a number or status that does not match the record, a prohibited claim) are shown under the draft. Fix the text or regenerate. A draft generated before a material change is marked stale.
+Record-version checks reject stale edits from other tabs. Reload and review the current facts. Duplicate commands are idempotent. Validation errors block draft approval; correct the text or regenerate it. The app is a single-operator prototype with independent connections per browser session, not a multi-user production service.
 
-## Live interpreter (optional)
-
-Set `RW_PROVIDER=live` and `ANTHROPIC_API_KEY` in `.env` and restart. The sidebar shows the mode and whether a key is present (never the key). Seating, rules and draft facts stay deterministic.
+To use the optional live interpreter, configure `.env` from `.env.example` and restart. Only that provider calls an external API. Availability and booking decisions remain deterministic. Live integration has fake-client tests but no real API verification in this release.

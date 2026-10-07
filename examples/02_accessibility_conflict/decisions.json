@@ -32,21 +32,21 @@
     "actor": "operator",
     "action": "Approve proposal",
     "ok": true,
-    "message": "Proposal P-0001 approved for record version 2."
+    "message": "Proposal P-0001 approved for record version 3."
   },
   {
     "at": "2026-11-10T15:00:00+00:00",
     "actor": "operator",
     "action": "Generate draft",
     "ok": true,
-    "message": "Draft DR-0001 generated (alternative_offer, prose: deterministic)."
+    "message": "Draft DR-0001 generated (availability_offer, prose: deterministic)."
   },
   {
     "at": "2026-11-10T15:00:00+00:00",
     "actor": "operator",
     "action": "Mark draft reviewed",
-    "ok": true,
-    "message": "Draft marked reviewed. It has not been sent anywhere."
+    "ok": false,
+    "message": "Fix validation errors first: Numbers not found in canonical facts/policy: 2"
   },
   {
     "at": "2026-11-10T15:00:00+00:00",
@@ -58,9 +58,9 @@
   {
     "at": "2026-11-10T15:00:00+00:00",
     "actor": "operator",
-    "action": "Mark reply sent (reported) - awaiting guest",
-    "ok": true,
-    "message": "INQ-0001: awaiting guest marked."
+    "action": "Record exact reviewed reply as sent elsewhere",
+    "ok": false,
+    "message": "Review a current draft before reporting it sent."
   },
   {
     "at": "2026-11-10T16:30:00+00:00",
@@ -88,7 +88,7 @@
     "actor": "operator",
     "action": "Approve proposal",
     "ok": true,
-    "message": "Proposal P-0002 approved for record version 3."
+    "message": "Proposal P-0002 approved for record version 5."
   },
   {
     "at": "2026-11-10T16:30:00+00:00",

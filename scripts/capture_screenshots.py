@@ -1,4 +1,6 @@
-"""Capture real screenshots of the running app with Playwright (Chromium).
+"""ARCHIVED: release 1.0 layout only. For current captures use capture_refined.py.
+
+Capture real screenshots of the running app with Playwright (Chromium).
 
 Usage: streamlit run app.py --server.port 8599   (against a freshly reset demo DB)
        python scripts/capture_screenshots.py --url http://localhost:8599 --out docs/screenshots

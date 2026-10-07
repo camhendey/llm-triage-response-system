@@ -347,8 +347,8 @@ class Workbench:
         if prior is not None:
             return CommandResult(ok=True, duplicate=True, message="Interpretation already recorded.")
         msgs = self.repo.messages(inquiry_id)
-        inputs = [MessageInput(id=m.id, text=m.text, received_at=m.received_at, is_new=m.id in pending)
-                  for m in msgs if m.direction == Direction.INBOUND]
+        inputs = [MessageInput(id=m.id, text=m.text, received_at=m.received_at,
+                               is_new=m.id in pending, direction=m.direction.value) for m in msgs]
         ctx = InterpretContext(timezone=self.cfg.restaurant.timezone, restaurant_name=self.cfg.restaurant.name,
                                table_ids=[t.id for t in self.cfg.tables], now=self.now())
         try:
@@ -418,12 +418,31 @@ class Workbench:
                 field=fname, value=v, source_type="operator", status=FieldStatus.OPERATOR_CONFIRMED,
                 note=self._reason(reason, required=False), observed_at=self.now(),
             ))
+            if fname == FieldName.MIN_SPEND_AMOUNT and old.value != v and before.value(FieldName.MIN_SPEND_ACKNOWLEDGED) == "yes":
+                self.repo.insert_observation(Observation(
+                    id="OBS-" + uuid.uuid4().hex[:10], inquiry_id=inquiry_id,
+                    seq=self.repo.next_obs_seq(inquiry_id), field=FieldName.MIN_SPEND_ACKNOWLEDGED,
+                    value="no", source_type="operator", status=FieldStatus.OPERATOR_CONFIRMED,
+                    note="Amount changed; renewed guest acknowledgment required.", observed_at=self.now()))
             self._event(key, "fact_set_by_operator", inquiry_id, before={"value": old.value, "state": old.state},
                         after={"field": fname.value, "value": v}, reason=reason, record_version=inq.record_version)
             self._after_fact_change(inq, before, f"operator set {fname.value}")
             self._refresh_state(inquiry_id)
             return CommandResult(ok=True, message=f"{fname.value} set to {v!r} (operator-confirmed)")
 
+        return self._run(key, fn)
+
+    def set_facts(self, inquiry_id: str, values: dict, reason: str, key: str,
+                  expected_record_version: int | None = None) -> CommandResult:
+        """Save a typed form atomically, rejecting stale views and invalid fields."""
+        def fn():
+            self._check_version(self._inq(inquiry_id), expected_record_version)
+            for field, value in values.items():
+                r = self.set_fact(inquiry_id, field, value, reason, key + ":" + field)
+                if not r.ok:
+                    raise DomainError(r.code or "validation", r.message)
+            self._event(key, "guest_details_saved", inquiry_id, after={"fields": list(values)})
+            return CommandResult(ok=True, message=f"Saved {len(values)} guest details.")
         return self._run(key, fn)
 
     def confirm_fact(self, inquiry_id: str, field_name: str, key: str, expected_record_version: int | None = None,
@@ -471,7 +490,7 @@ class Workbench:
 
     def _after_fact_change(self, inq: Inquiry, before: Facts, why: str) -> Inquiry:
         after = resolve(self.cfg, self.repo.observations(inq.id))
-        changed = [f.value for f in MATERIAL_FIELDS
+        changed = [f.value for f in FieldName
                    if (before.get(f).value, before.get(f).state) != (after.get(f).value, after.get(f).state)]
         if before.dining_start != after.dining_start or before.dining_end != after.dining_end:
             changed.append("interval")
@@ -543,6 +562,7 @@ class Workbench:
             for p in v.proposals:  # one live proposal at a time
                 if p.status in (ProposalStatus.PROPOSED, ProposalStatus.APPROVED, ProposalStatus.STALE):
                     self.repo.set_proposal_status(p.id, ProposalStatus.REJECTED.value, "superseded by new proposal")
+            inq = self._bump(inq, "selected arrangement changed")
             required = []
             if a.hold_needs_operator_deadline:
                 required.append("operator hold deadline (short notice)")
@@ -886,6 +906,65 @@ class Workbench:
         return self._sticky(inquiry_id, InquiryState.ESCALATED, "inquiry_escalated", reason, key,
                             extra={"note": "private-events review; availability not checked by this system"})
 
+    def report_reply_sent(self, inquiry_id: str, draft_id: str, key: str) -> CommandResult:
+        """Record an operator assertion and the exact reviewed text; never sends email."""
+        def fn():
+            v = self.load(inquiry_id)
+            d = self.repo.get_draft(draft_id)
+            if d is None or d.inquiry_id != inquiry_id or not v.draft_approval_current(d) or v.draft_is_stale(d):
+                raise DomainError("not_reviewed", "Review a current draft before reporting it sent.")
+            if any(e.event_type == "reply_reported_sent" and (e.after or {}).get("draft_id") == draft_id for e in v.events):
+                return CommandResult(ok=True, duplicate=True, message="This reply is already in the conversation.")
+            seq = self.repo.message_count(inquiry_id) + 1
+            mid = f"{inquiry_id}-M{seq}"
+            self.repo.insert_message(Message(id=mid, inquiry_id=inquiry_id, seq=seq,
+                direction=Direction.OUTBOUND_REPORTED, text=d.text, received_at=self.now(), source=MessageSource.PASTED))
+            self._event(key, "reply_reported_sent", inquiry_id, after={"draft_id": draft_id,
+                "message_id": mid, "assertion": "operator-reported, not sent by application"})
+            # Final notices do not reopen a resolved booking as awaiting a reply.
+            final = d.purpose in ("confirmation", "change_confirmed", "cancellation_confirmed", "decline", "hold_released")
+            self._sticky(inquiry_id, InquiryState.RESOLVED if final else InquiryState.AWAITING_GUEST,
+                "reply_handoff_recorded", "Operator reported sending the reviewed reply", key + ":state")
+            return CommandResult(ok=True, message="Reply added to the conversation as reported sent.")
+        return self._run(key, fn)
+
+    def report_referral(self, inquiry_id: str, reason: str, key: str) -> CommandResult:
+        def fn():
+            inq = self._inq(inquiry_id)
+            r = self._reason(reason)
+            inq = self._bump(inq, "external referral reported")
+            self._event(key, "referral_reported", inquiry_id, reason=r,
+                after={"assertion": "operator reports referral completed externally; not verified"})
+            self._sticky(inquiry_id, InquiryState.ESCALATED, "inquiry_escalated", r, key + ":state")
+            return CommandResult(ok=True, message="Referral recorded as reported by operator.")
+        return self._run(key, fn)
+
+    def review_and_commit(self, proposal_id: str, action: str, key: str,
+                          expires_at: datetime | None = None) -> CommandResult:
+        """Single operator action; existing approval/version/transaction guards still apply."""
+        def fn():
+            p = self.repo.get_proposal(proposal_id)
+            if p is None:
+                raise DomainError("not_found", "Select an arrangement first.")
+            if p.status == ProposalStatus.PROPOSED:
+                approved = self.approve_proposal(p.id, key + ":review", "Reviewed in final decision panel")
+                if not approved.ok:
+                    raise DomainError(approved.code or "review", approved.message)
+            if action == "hold":
+                result = self.create_hold(p.id, key + ":commit", expires_at)
+            elif action == "confirm":
+                result = self.confirm(p.inquiry_id, key + ":commit", proposal_id=p.id)
+            elif action == "modify":
+                result = self.commit_modification(p.id, key + ":commit")
+            else:
+                raise DomainError("invalid_action", "Unknown booking action.")
+            if not result.ok:
+                raise DomainError(result.code or "blocked", result.message)
+            self._event(key, "review_and_commit_completed", p.inquiry_id,
+                        after={"proposal_id": p.id, "action": action})
+            return result
+        return self._run(key, fn)
+
     def mark_awaiting_guest(self, inquiry_id: str, note: str | None, key: str) -> CommandResult:
         """Operator reports that a reply was sent outside this app (not verified)."""
         return self._sticky(inquiry_id, InquiryState.AWAITING_GUEST, "awaiting_guest_marked", note, key,
@@ -1024,7 +1103,7 @@ class Workbench:
             if d is None:
                 raise DomainError("not_found", "draft not found")
             v = self.load(d.inquiry_id)
-            if d.source_record_version != v.inquiry.record_version:
+            if v.draft_is_stale(d) or d.policy_version != self.cfg.policy_version:
                 raise DomainError("stale", "Draft is stale (facts or booking changed after it was generated). "
                                   "Generate a new draft.")
             validation = validate_text(self.cfg, v, d.purpose, d.text)

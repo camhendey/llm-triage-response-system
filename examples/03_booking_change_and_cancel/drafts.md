@@ -13,7 +13,7 @@ Best regards,
 Reservations Team
 ```
 
-## DR-0002 (change_confirmed, status approved, record v4)
+## DR-0002 (change_confirmed, status approved, record v5)
 
 ```
 Hi Blake,
@@ -30,7 +30,7 @@ Best regards,
 Reservations Team
 ```
 
-## DR-0003 (cancellation_received, status generated, record v4)
+## DR-0003 (cancellation_received, status generated, record v5)
 
 ```
 Hi Blake,
@@ -41,7 +41,7 @@ Best regards,
 Reservations Team
 ```
 
-## DR-0004 (cancellation_confirmed, status approved, record v5)
+## DR-0004 (cancellation_confirmed, status approved, record v6)
 
 ```
 Hi Blake,

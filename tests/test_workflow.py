@@ -32,7 +32,7 @@ def test_A01_extract_supplied_facts_keep_unknowns_and_clarify(wb):
     assert v.facts.value(FieldName.PARTY_SIZE) == 12
     assert v.facts.value(FieldName.REQUESTED_DATE) == "2026-11-13"
     assert v.facts.value(FieldName.REQUESTED_TIME) == "18:00"
-    for f in ("contact_email", "accessibility", "minors", "billing", "occasion", "allergies"):
+    for f in ("contact_email", "accessibility", "minors", "billing", "allergies"):
         assert f in v.assessment.missing_required
         assert v.facts.get(FieldName(f)).state == "unknown"  # unknown, not "none"
     assert v.assessment.next_action == NextAction.CLARIFY
@@ -264,7 +264,8 @@ def test_A15_oversized_group_escalated_without_private_room_claim(wb):
     wb.generate_draft(iid, key=key())
     d = wb.load(iid).latest_draft
     assert d.purpose == "private_events_referral"
-    assert "not able to confirm private-room availability" in d.text
+    assert "not confirmed private-room availability" in d.text
+    assert "We have passed" not in d.text
     assert wb.escalate(iid, "over 25", key()).ok
     v = wb.load(iid)
     assert v.inquiry.state == InquiryState.ESCALATED and v.booking is None

@@ -19,7 +19,7 @@ from datetime import date, datetime
 from typing import TYPE_CHECKING
 
 from ..domain.config import RestaurantConfig
-from ..domain.models import BookingStatus, FieldName, NextAction
+from ..domain.models import BookingStatus, FieldName, NextAction, ProposalStatus
 from ..providers.base import ProseRequest
 from ..rules.availability import hold_is_active
 
@@ -97,6 +97,15 @@ def _seating_sentence(cfg: RestaurantConfig, table_ids: list[str]) -> str:
     return s
 
 
+def selected_option(view: "InquiryView"):
+    """One selected plan for the operator and guest; ranking is only a pre-selection fallback."""
+    p = view.active_proposal
+    if p is not None and p.status in (ProposalStatus.PROPOSED, ProposalStatus.APPROVED):
+        if p.source_record_version == view.inquiry.record_version:
+            return p.option
+    return view.assessment.availability.best() if view.assessment.availability else None
+
+
 def resolve_purpose(view: "InquiryView") -> str | None:
     a = view.assessment
     b = view.booking
@@ -118,7 +127,8 @@ def resolve_purpose(view: "InquiryView") -> str | None:
     if na == NextAction.PROCESS_MODIFICATION:
         return "change_available"
     if na == NextAction.OFFER_ALTERNATIVE:
-        return "alternative_offer"
+        p = view.active_proposal
+        return "availability_offer" if p and p.status in (ProposalStatus.PROPOSED, ProposalStatus.APPROVED) else "alternative_offer"
     if na == NextAction.DECLINE:
         return "decline"
     if b is not None and b.status == BookingStatus.CANCELLED and last_commit == "booking_cancelled":
@@ -143,12 +153,14 @@ def allowed_purposes(view: "InquiryView") -> list[str]:
     confirmed = b is not None and b.status == BookingStatus.CONFIRMED
     out = ["clarification"]
     a = view.assessment
-    if a.availability and a.availability.feasible:
+    if selected_option(view) is not None:
         out.append("availability_offer")
     if held:
         out.append("hold_offer")
     if confirmed:
-        out += ["confirmation", "change_confirmed"]
+        out.append("confirmation")
+        if any(e.event_type == "booking_modified" for e in view.events):
+            out.append("change_confirmed")
     if a.alternatives:
         out.append("alternative_offer")
     if a.next_action == NextAction.EXPLAIN_CHANGE_UNAVAILABLE:
@@ -248,7 +260,7 @@ def build_body(cfg: RestaurantConfig, view: "InquiryView", purpose: str) -> str:
         else:
             paras.append("- Could you confirm the details of your request?")
     elif purpose in ("availability_offer", "hold_offer"):
-        opt = a.availability.best() if a.availability else None
+        opt = selected_option(view)
         if purpose == "hold_offer":
             start, end, tables, size = b.start, b.end, b.table_ids, b.party_size
         else:
@@ -296,7 +308,7 @@ def build_body(cfg: RestaurantConfig, view: "InquiryView", purpose: str) -> str:
             paras.append("Other times we could check for you on the same day: " + ", ".join(
                 _fmt_time(t, cfg) for t, _ in a.alternatives) + ".")
     elif purpose == "change_available":
-        o = a.availability.best()
+        o = selected_option(view)
         paras.append("Thank you for letting us know. We can make the change you asked for: "
                      f"{o.start and _fmt_day(o.start, cfg)} from {_fmt_time(o.start, cfg)} to "
                      f"{_fmt_time(o.end, cfg)} for {a.request.party_size} guests.")
@@ -319,8 +331,12 @@ def build_body(cfg: RestaurantConfig, view: "InquiryView", purpose: str) -> str:
         paras.append(f"Thank you for your reservation request at {name}. Our main restaurant can accommodate groups "
                      f"of up to {cfg.restaurant.max_main_restaurant_party} guests"
                      + (f", so a group of {party} would need our private-events team." if party else "."))
-        paras.append("We have passed your request to our private-events team for review. We are not able to confirm "
-                     "private-room availability ourselves; the team will follow up with options.")
+        if any(e.event_type == "referral_reported" for e in view.events):
+            paras.append("We have passed your request to our private-events team for review. "
+                         "Private-room availability still needs to be checked with that team.")
+        else:
+            paras.append("Our private-events team would need to review this request. "
+                         "We have not confirmed private-room availability or completed a referral yet.")
         paras.append(f"If your group can be {cfg.restaurant.max_main_restaurant_party} guests or fewer, we would be "
                      "glad to check main-restaurant seating for you.")
     elif purpose == "hold_released":
@@ -355,7 +371,8 @@ def compose_draft(cfg: RestaurantConfig, view: "InquiryView", provider: "Provide
     if provider.mode != "offline_rules":
         occ = view.facts.value(FieldName.OCCASION)
         res = provider.draft_prose(ProseRequest(purpose=p, guest_name=view.facts.value(FieldName.GUEST_NAME),
-                                                occasion=occ if occ != "none" else None, fixed_body=body))
+                                                occasion=occ if occ != "none" else None, fixed_body=body,
+                                                conversation=[{"direction": m.direction.value, "text": m.text} for m in view.messages[-8:]]))
         if res.ok:
             checks = validate_prose(res.opening + "\n" + res.closing)
             if checks:
@@ -414,6 +431,11 @@ def _allowed_numbers(cfg: RestaurantConfig, view: "InquiryView") -> set[str]:
               f"{cfg.policies.auto_gratuity_percent:g}", facts.value(FieldName.MIN_SPEND_AMOUNT)):
         if v is not None:
             nums.add(str(v).rstrip("0").rstrip(".") if isinstance(v, float) else str(v))
+    opt = selected_option(view)
+    if opt:
+        add_dt(opt.start)
+        add_dt(opt.end)
+        nums.add(str(opt.capacity))
     add_dt(facts.dining_start)
     add_dt(facts.dining_end)
     if facts.duration_minutes:
@@ -482,9 +504,27 @@ def validate_text(cfg: RestaurantConfig, view: "InquiryView", purpose: str, text
         (r"\bopentable\b", "mentions an external booking system"),
         (r"\b(sent|emailed) (you|it)\b", "claims a message was sent"),
     ]:
-        if re.search(pat, text, re.I) and not re.search(r"cannot guarantee|can't guarantee|not able to confirm private",
-                                                        text, re.I):
-            out.append({"check": "prohibited_claim", "severity": "error", "message": f"Text {label}."})
+        # Negation is local to the matched clause. A disclaimer elsewhere cannot suppress a claim.
+        for sentence in re.split(r"[.!?;\n]+|\bbut\b|\bhowever\b", text, flags=re.I):
+            for match in re.finditer(pat, sentence, re.I):
+                prefix = sentence[max(0, match.start()-24):match.start()]
+                negated = bool(re.search(r"(?:cannot|can't|do not|does not|not able to)\s*$", prefix, re.I))
+                if not negated:
+                    out.append({"check": "prohibited_claim", "severity": "error", "message": f"Text {label}."})
+                    break
+    if re.search(r"(?:have|has) (?:passed|forwarded|referred)|referral (?:is|was) (?:complete|sent)", text, re.I) and not any(
+            e.event_type == "referral_reported" for e in view.events):
+        out.append({"check": "action_status", "severity": "error", "message": "Referral has not been reported completed."})
+    if purpose in ("availability_offer", "change_available"):
+        opt = selected_option(view)
+        if opt:
+            # Preserve the exact selected arrangement even when the operator edits surrounding prose.
+            for required in (_fmt_day(opt.start, cfg), _fmt_time(opt.start, cfg), _fmt_time(opt.end, cfg),
+                             _seating_sentence(cfg, opt.table_ids)):
+                if required not in text:
+                    out.append({"check": "selected_plan", "severity": "error",
+                                "message": "Reply must preserve the selected time and seating description. Regenerate after changing the plan."})
+                    break
     allowed = _allowed_numbers(cfg, view)
     unknown = []
     for mm in re.finditer(r"(?<![\w@.-])(\d+(?:\.\d+)?)(?![\w@])", text):

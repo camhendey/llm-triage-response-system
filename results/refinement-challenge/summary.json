@@ -1,0 +1,77 @@
+{
+  "cases_total": 12,
+  "cases_run": 12,
+  "cases_not_run_budget": 0,
+  "run_errors": 0,
+  "field_agreement_all": {
+    "n": 31,
+    "d": 32,
+    "rate": 0.9688
+  },
+  "field_agreement_known_values": {
+    "n": 25,
+    "d": 26,
+    "rate": 0.9615
+  },
+  "unknown_kept_unknown": {
+    "n": 6,
+    "d": 6,
+    "rate": 1.0
+  },
+  "ambiguity_sent_to_review": {
+    "n": 0,
+    "d": 0,
+    "rate": null
+  },
+  "provenance_verbatim_valid": {
+    "n": 45,
+    "d": 45,
+    "rate": 1.0
+  },
+  "provenance_gold_message_match": {
+    "n": 0,
+    "d": 0,
+    "rate": null
+  },
+  "citations_rejected_by_validator": 0,
+  "next_action_allowed": {
+    "n": 0,
+    "d": 0,
+    "rate": null
+  },
+  "required_constraint_recall": {
+    "n": 0,
+    "d": 0,
+    "rate": null
+  },
+  "false_warnings": 0,
+  "drafts_generated": 11,
+  "drafts_with_prohibited_claims": 0,
+  "prohibited_claims_total": 0,
+  "drafts_with_validator_errors": 0,
+  "cases_with_critical_errors": 0,
+  "critical_errors_total": 0,
+  "provider_status_counts": {
+    "ok": 12,
+    "partial": 2,
+    "unsupported": 1
+  },
+  "provider_failures": 0,
+  "interpret_calls": 15,
+  "interpret_latency_ms": {
+    "median": 1,
+    "max": 8
+  },
+  "usage_tokens": {
+    "input_tokens": 0,
+    "output_tokens": 0
+  },
+  "by_group": {
+    "refinement": {
+      "cases": 12,
+      "next_ok": 0,
+      "next_scored": 0,
+      "critical_cases": 0
+    }
+  }
+}

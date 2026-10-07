@@ -22,7 +22,8 @@ class MessageInput(BaseModel):
     id: str
     text: str
     received_at: datetime  # aware
-    is_new: bool = True  # False = earlier context only; facts must not cite it
+    is_new: bool = True  # False = context only; facts must not cite it
+    direction: str = "inbound"
 
 
 class ExtractedFact(BaseModel):
@@ -71,6 +72,7 @@ class ProseRequest:
     occasion: str | None
     fixed_body: str  # deterministic text the prose must not contradict
     allowed_numbers: set[str] = field(default_factory=set)
+    conversation: list[dict[str, str]] = field(default_factory=list)
 
 
 @dataclass
@@ -156,6 +158,8 @@ def validate_evidence(result: InterpretationResult, messages: list[MessageInput]
         reason = None
         if m is None:
             reason = "evidence cites an unknown message id"
+        elif m.direction != "inbound":
+            reason = "restaurant reply is context, not guest evidence"
         elif not m.is_new:
             reason = "evidence cites an earlier message that was context only"
         elif not f.quote or not f.quote.strip():

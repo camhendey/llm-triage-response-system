@@ -117,6 +117,31 @@ class OfflineRulesProvider:
         for m in messages:
             if not m.is_new:
                 continue
+            # Short acceptance is resolved only against a reported outbound offer,
+            # and remains review-required rather than committing a booking.
+            acceptance = re.fullmatch(r"\s*(?:yes[,! ]*)?(?:(?:the )?(later|earlier|first|second) (?:option|time)|that(?: time)?|that works|yes|sounds good)(?: (?:works|is fine|please))?[.! ]*", m.text, re.I)
+            prior = [x for x in messages if x.direction == "outbound_reported" and x.received_at <= m.received_at]
+            if acceptance and prior:
+                offer = prior[-1]
+                dates = re.findall(r"(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday), ([A-Za-z]+ \d{1,2}, \d{4})", offer.text)
+                starts = re.findall(r"(?:from |^- )(\d{1,2}:\d{2} [AP]M) to", offer.text, re.M)
+                choices = list(dict.fromkeys(starts))
+                which = (acceptance.group(1) or "").lower()
+                chosen = None
+                if len(choices) == 1: chosen = choices[0]
+                elif choices and which in ("later", "earlier"):
+                    ordered = sorted(choices, key=lambda t: datetime.strptime(t, "%I:%M %p").time())
+                    chosen = ordered[-1 if which == "later" else 0]
+                elif choices and which in ("first", "second") and len(choices) >= (2 if which == "second" else 1):
+                    chosen = choices[1 if which == "second" else 0]
+                if chosen and len(set(dates)) == 1:
+                    day = datetime.strptime(dates[0], "%B %d, %Y").date().isoformat()
+                    tm = datetime.strptime(chosen, "%I:%M %p").strftime("%H:%M")
+                    for field, value in ((FieldName.REQUESTED_DATE, day), (FieldName.REQUESTED_TIME, tm)):
+                        facts.append(ExtractedFact(field=field, value=value, message_id=m.id, quote=m.text,
+                            status="needs_review", note=f"Acceptance interpreted using reported reply {offer.id}; coordinator must confirm."))
+                    intents.add("provide_details")
+                    continue
             hits, m_intents, m_amb, m_unint = self._interpret_one(m, tz, table_ids)
             intents |= m_intents
             ambiguities += m_amb

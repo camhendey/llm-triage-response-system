@@ -1,20 +1,8 @@
-flowchart LR
-  subgraph A["1. Inherited base templates (historical)"]
-    A1["Response templates and booking-note format<br/>inherited by Cameron"]
-  end
-  subgraph B["2. Cameron's workflow during employment (historical)"]
-    B1["Created additional workflow on top of the templates"]
-    B2["General LLM prompted with structured templates"]
-    B3["Manual checks of availability and service flow;<br/>booking changes done by hand"]
-    B4["No Python scripts or API integrations"]
-    B1 --> B2 --> B3
-  end
-  subgraph C["3. This application (later, independent, synthetic)"]
-    C1["Typed facts with quotes and review states"]
-    C2["Deterministic seating, hold and policy rules"]
-    C3["Human approvals tied to record versions"]
-    C4["Template drafts + validators; nothing sent"]
-  end
-  A --> B --> C
-  N["~45 to ~5 min: Cameron's own estimate for active handling of one typical complex inquiry<br/>in workflow 2. Not a benchmark of this application."]
-  B -.-> N
+flowchart TD
+  A["Inherited base guest-response templates"] --> B
+  B["2024 · JOEY: Cameron develops the operational workflow"] --> C
+  C["2025 · Cameron refines the workflow"] --> D
+  B --> E["LLM chat, manual availability checks and reservation updates"]
+  D["Later software implementation · sole developer Cameron Hendey"] --> F["Typed facts and deterministic seating checks"]
+  D --> G["Human decisions, versioned approvals and service handoff"]
+  E --> H["Reported 45-to-5-minute estimate; not a software benchmark"]

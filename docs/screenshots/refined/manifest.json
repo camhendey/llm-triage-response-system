@@ -1,0 +1,22 @@
+{
+  "source": "Unedited Chromium captures; disposable synthetic database",
+  "viewports": [
+    {
+      "width": 1440,
+      "height": 1700
+    },
+    {
+      "width": 820,
+      "height": 1400
+    }
+  ],
+  "journey": "Select arrangement \u2192 confirm \u2192 prepare/review reply \u2192 report sent \u2192 inspect conversation and service handoff",
+  "images": [
+    "01-overview.png",
+    "02-seating.png",
+    "03-reply.png",
+    "04-conversation.png",
+    "05-service.png",
+    "06-narrow.png"
+  ]
+}

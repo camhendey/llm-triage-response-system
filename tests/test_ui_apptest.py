@@ -45,3 +45,43 @@ def test_opening_an_inquiry_shows_next_action_without_send_claims(at):
     txt = _text(at)
     assert "Offer checked alternative times" in txt
     assert "OpenTable" not in txt
+
+
+@pytest.mark.ui
+def test_confirmation_reply_handoff_and_unsaved_navigation(at):
+    at.button(key="open_INQ-0101").click().run()
+    at.button(key="suggest_INQ-0101").click().run()
+    assert not at.exception
+    at.button(key="confirm_INQ-0101").click().run()
+    assert not at.exception
+    assert "Confirmed" in _text(at)
+    at.button(key="gen_INQ-0101").click().run()
+    reply = next(x for x in at.text_area if x.label == "Reply")
+    original = reply.value
+    edited = original + "\nWe look forward to welcoming you."
+    draft_id = reply.key.removeprefix("draft_text_")
+    reply.set_value(edited).run()
+    at.button(key="open_INQ-0103").click().run()
+    # A confirmed inquiry is still reachable through All after handoff.
+    at.selectbox(key="q_filter").set_value("All").run()
+    at.button(key="open_INQ-0101").click().run()
+    assert at.text_area(key="draft_text_" + draft_id).value == edited
+    at.button(key="save_" + draft_id).click().run()
+    at.button(key="approve_" + draft_id).click().run()
+    assert not at.button(key="sent_" + draft_id).disabled
+    at.button(key="sent_" + draft_id).click().run()
+    assert not at.exception
+    assert "Team reply · reported sent" in _text(at)
+    assert "welcoming you" in _text(at)
+
+
+@pytest.mark.ui
+def test_typed_edit_invalidates_selected_plan(at):
+    at.button(key="open_INQ-0101").click().run()
+    at.button(key="suggest_INQ-0101").click().run()
+    party = next(x for x in at.number_input if x.label == "Party size")
+    party.set_value(10)
+    next(x for x in at.button if x.label == "Save details").click().run()
+    assert not at.exception
+    assert any("earlier arrangement is stale" in x.value for x in at.warning)
+    assert any(x.label == "Party size" and x.value == 10 for x in at.number_input)

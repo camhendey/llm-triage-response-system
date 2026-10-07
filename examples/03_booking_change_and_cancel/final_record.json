@@ -4,7 +4,7 @@
     "guest_label": "Synthetic Guest B",
     "state": "resolved",
     "booking_id": "B002",
-    "record_version": 5,
+    "record_version": 6,
     "created_at": "2026-11-10T15:00:00Z",
     "updated_at": "2026-11-10T16:30:00Z",
     "title": "Existing booking B002",
@@ -63,7 +63,7 @@
       "reason": null,
       "after": {
         "facts": 7,
-        "interpretation_id": "INT-a6e0e43bbb",
+        "interpretation_id": "INT-11b462a52e",
         "provider": "offline_rules",
         "rejected": 0,
         "status": "ok"
@@ -137,7 +137,7 @@
       "reason": null,
       "after": {
         "facts": 2,
-        "interpretation_id": "INT-c6cac130c5",
+        "interpretation_id": "INT-131b5f2ef6",
         "provider": "offline_rules",
         "rejected": 0,
         "status": "ok"
@@ -165,6 +165,16 @@
     },
     {
       "at": "2026-11-10T15:30:00+00:00",
+      "type": "draft_approval_stale",
+      "actor": "system",
+      "booking": null,
+      "reason": "selected arrangement changed",
+      "after": {
+        "draft_id": "DR-0001"
+      }
+    },
+    {
+      "at": "2026-11-10T15:30:00+00:00",
       "type": "proposal_created",
       "actor": "operator",
       "booking": null,
@@ -187,7 +197,7 @@
       "booking": null,
       "reason": null,
       "after": {
-        "record_version": 3,
+        "record_version": 4,
         "status": "approved"
       }
     },
@@ -285,7 +295,7 @@
       "reason": null,
       "after": {
         "facts": 0,
-        "interpretation_id": "INT-30e99d5913",
+        "interpretation_id": "INT-379aed9869",
         "provider": "offline_rules",
         "rejected": 0,
         "status": "ok"

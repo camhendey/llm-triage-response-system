@@ -124,7 +124,7 @@ def freeze(eval_dir: Path = EVAL_DIR) -> dict[str, Any]:
     rec = {
         "frozen_at": datetime.now().astimezone().isoformat(timespec="seconds"),
         "files": {SPLIT_FILES[s]: file_hash(eval_dir / SPLIT_FILES[s]) for s in SPLIT_FILES},
-        "note": "Frozen before the first held-out run (the development split was run beforehand to debug the runner). Labels written by the same coding agent that built the "
+        "note": "Frozen before the first held-out run (the development split was run beforehand to debug the runner). Labels produced within the same development process as the "
                 "workbench; no independent review yet.",
     }
     target.write_text(json.dumps(rec, indent=2) + "\n", encoding="utf-8")

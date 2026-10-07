@@ -1,5 +1,7 @@
 # Domain and policies
 
+Sole developer: Cameron Hendey. Original workflow developed at JOEY in 2024; refined in 2025.
+
 Everything here describes the **simulated** restaurant in `config/restaurant_demo.yaml` (policy version `demo-2026-11-a`). The values are demonstration assumptions chosen to exercise the software. They are not the current or historical policy of any real restaurant.
 
 ## Restaurant model
@@ -23,7 +25,7 @@ Everything here describes the **simulated** restaurant in `config/restaurant_dem
 | Auto-gratuity | 18% for parties of 8+, disclosed in drafts |
 | Arrival grace | 15 min, stated in drafts |
 | Minimum spend | reviewed for parties of 25+; **no amount is configured**, the operator enters it and records the guest's acknowledgment |
-| Required for confirmation | party size, dining start/end, contact email, accessibility, minors, billing, occasion, allergies |
+| Required for confirmation | party size, dining start/end, contact email, accessibility, minors, billing, allergies (occasion is optional) |
 | Arrival-bucket heuristic | warns when 3+ parties of 8+ arrive in the same local clock hour. It is a heuristic for the operator, not a capacity rule |
 | Urgency | high when a hold expires within 6 h or dining starts within 24 h |
 
@@ -119,3 +121,5 @@ Commit rules:
 ## Drafts
 
 Drafts are built from templates by purpose (clarification, availability offer, hold offer, alternative offer, confirmation, change available, change confirmed, change unavailable, cancellation received, cancellation confirmed, decline, private-events referral, hold released). Only purposes that match the current booking and action state are offered. Dates, times, party size, tables, policy amounts and status come from the record. Validators check that every number and status claim matches the record and that no prohibited claim appears (sent, guaranteed, any external booking system). A live model may add only a greeting and closing line without digits or booking words (A30). A draft approved before a material fact changes becomes stale (A24).
+
+Policy version `demo-2026-11-b` makes occasion optional for confirmation. Selected proposals control offer wording; all fact changes invalidate existing draft approvals. Outgoing replies and referrals are separately recorded human assertions.

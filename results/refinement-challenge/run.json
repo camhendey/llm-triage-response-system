@@ -1,0 +1,33 @@
+{
+  "run_id": "refinement-challenge-first-pass",
+  "split": "challenge",
+  "mode": "offline",
+  "repeats": 1,
+  "started_at": "2026-10-06T22:33:39.455618-04:00",
+  "duration_s": null,
+  "frozen_check": "2ad720b92158e2ba315d1eb8fe0ec385cc012d10b739779a4260ccf4e907ec70",
+  "retest_note": "First execution of development-authored supplemental cases; not independent or a replacement for the original blind run.",
+  "environment": {
+    "python": "3.12.14",
+    "platform": "Linux-6.18.44-x86_64-with-glibc2.39",
+    "packages": {
+      "pydantic": "2.13.5",
+      "anthropic": "1.11.0",
+      "streamlit": "1.65.0",
+      "pyyaml": "6.0.3"
+    },
+    "code_version": "unknown (not a git checkout)",
+    "config_hash": "99629f5141a6017371f6509fd499f3bdb501ced9cacb36c2410fa4d3be06f68a",
+    "mode": "offline",
+    "provider_mode": "offline_rules",
+    "dataset_hashes": {
+      "scenarios_dev.yaml": "3592494d77e454c1bc2b9f389618a64cd0d69fba65b351796e86d18fbd27c43b",
+      "scenarios_heldout.yaml": "d731ee1ec2c7fbacf074fb7aa602f24d85b7db4661b180b0dc4832a3622fe3cb"
+    },
+    "generation": {
+      "model": "offline-pattern-v1",
+      "note": "deterministic pattern rules, not a language model"
+    }
+  },
+  "cost": "No API calls"
+}

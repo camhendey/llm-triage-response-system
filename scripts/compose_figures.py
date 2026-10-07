@@ -1,4 +1,6 @@
-"""Compose explanatory figures from real screenshots in docs/screenshots.
+"""ARCHIVED: release 1.0 layout only. For current captures use capture_refined.py.
+
+Compose explanatory figures from real screenshots in docs/screenshots.
 
     python scripts/compose_figures.py
 

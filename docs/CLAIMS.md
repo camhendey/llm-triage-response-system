@@ -6,13 +6,13 @@ Every public claim about this project should appear here with its evidence and q
 
 | # | Claim | Status | Evidence | Qualification |
 |---|---|---|---|---|
-| C1 | A working, human-reviewed reservation workbench with queue, facts with provenance, seating rules, holds, confirmations, changes, cancellations and reviewed drafts | supported | source; `docs/screenshots/`; 102 passing tests | Simulated restaurant and synthetic data only |
+| C1 | A working, human-reviewed reservation workbench with queue, facts with provenance, seating rules, holds, confirmations, changes, cancellations and reviewed drafts | supported | source; `docs/screenshots/`; 117 passing tests | Simulated restaurant and synthetic data only |
 | C2 | Seating decisions are deterministic and explainable (every rejected option lists its reasons) | supported | `rules/availability.py`; screenshot 03; `examples/02_accessibility_conflict/snapshots.json` | Simple fixed ranking, not an optimiser |
 | C3 | It never sends messages or updates an external booking system | supported | no network code besides the optional model API; copy/send events (A25); draft validator | Operators can record that they sent something elsewhere; the app cannot verify it |
 | C4 | Operator corrections are never silently overwritten | supported | `rules/facts.py`; test A03 | |
 | C5 | Approvals are tied to a record version; a fact change blocks the old approval | supported | tests A02, A10, A24; `docs/figures/correction_sequence.png` | |
 | C6 | Holds reserve real tables until expiry; groupings consume their tables | supported | tests A06, A09 | |
-| C7 | Changes are atomic and actions are idempotent | supported | tests A11, A13, A14 | Single-process SQLite |
+| C7 | Changes are atomic and actions are idempotent | supported | tests A11, A13, A14 | SQLite transactions and record-version checks; single-operator prototype |
 | C8 | Guest text cannot instruct the system | qualified | tests A19 (offline and fake live client); held-out adversarial group 3/3 | Live-model behaviour not tested against the real API |
 | C9 | Critical facts in drafts (dates, times, party size, status) come from the record, not from a model | supported | `services/drafting.py`; test A30; 0 validator errors across 38 drafts per held-out run | |
 | C10 | Live model integration with structured output, validation and bounded retries | qualified | `providers/anthropic_live.py`; fake-client tests A20, A22 | **Not run against the real API.** Do not claim measured live accuracy |
@@ -45,4 +45,14 @@ Every public claim about this project should appear here with its evidence and q
 
 | # | Claim | Status | Evidence | Qualification |
 |---|---|---|---|---|
-| B1 | Cameron designed the workflow and requirements; the implementation was AI-assisted | supported | PROVENANCE.md; build kit | Say "AI-assisted"; git history does not prove line-by-line authorship |
+| B1 | Sole developer: Cameron Hendey. Original workflow developed at JOEY in 2024; refined in 2025 | supported (Cameron’s statement) | PROVENANCE.md | Inherited base response templates remain credited as inherited; development tools do not imply co-developers. This does not backdate the later Python implementation. |
+
+## Refinement evidence (1.1)
+
+| Claim | Evidence | Qualification |
+|---|---|---|
+| Selected-arrangement drafts, full reported conversation, typed editing and daily handoff | `tests/test_refinements.py`, UI tests and refined screenshots | Simulated bookings; outbound records are operator assertions |
+| Current regression result: 39/40 next actions, 97/97 field agreement, 0 critical-error cases | `results/eval/20261006T222849-heldout-offline/` | Previously inspected 40-case suite, not blind; occasion policy change explains two improved next actions |
+| 15 new regression/UI tests, 117 total | `results/verification/pytest.txt` | Passing tests demonstrate specified cases, not production reliability |
+
+Supplemental extraction challenge: 31/32 labelled fields and 6/6 unknowns across 12 new development-authored cases (`results/refinement-challenge/`). First execution, no subsequent tuning; not independent, and next-action accuracy was not scored.

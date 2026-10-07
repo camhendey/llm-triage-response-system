@@ -1,0 +1,290 @@
+[
+  {
+    "path": "README.md",
+    "change": "modify"
+  },
+  {
+    "path": "config/restaurant_demo.yaml",
+    "change": "modify"
+  },
+  {
+    "path": "constraints-tested.txt",
+    "change": "create"
+  },
+  {
+    "path": "data/eval/refinement_challenge.json",
+    "change": "create"
+  },
+  {
+    "path": "data/eval/refinement_challenge.sha256",
+    "change": "create"
+  },
+  {
+    "path": "docs/BUILD_STATUS.md",
+    "change": "modify"
+  },
+  {
+    "path": "docs/CLAIMS.md",
+    "change": "modify"
+  },
+  {
+    "path": "docs/DECISIONS.md",
+    "change": "modify"
+  },
+  {
+    "path": "docs/DOMAIN_AND_POLICIES.md",
+    "change": "modify"
+  },
+  {
+    "path": "docs/EVALUATION.md",
+    "change": "modify"
+  },
+  {
+    "path": "docs/OPERATOR_GUIDE.md",
+    "change": "modify"
+  },
+  {
+    "path": "docs/PROVENANCE.md",
+    "change": "modify"
+  },
+  {
+    "path": "docs/REFINEMENT.md",
+    "change": "create"
+  },
+  {
+    "path": "docs/VERIFICATION.md",
+    "change": "modify"
+  },
+  {
+    "path": "docs/archive/VERIFICATION_1.0.md",
+    "change": "create"
+  },
+  {
+    "path": "docs/diagrams/historical_comparison.mmd",
+    "change": "modify"
+  },
+  {
+    "path": "docs/screenshots/README.md",
+    "change": "create"
+  },
+  {
+    "path": "docs/screenshots/refined/01-overview.png",
+    "change": "create"
+  },
+  {
+    "path": "docs/screenshots/refined/02-seating.png",
+    "change": "create"
+  },
+  {
+    "path": "docs/screenshots/refined/03-reply.png",
+    "change": "create"
+  },
+  {
+    "path": "docs/screenshots/refined/04-conversation.png",
+    "change": "create"
+  },
+  {
+    "path": "docs/screenshots/refined/05-service.png",
+    "change": "create"
+  },
+  {
+    "path": "docs/screenshots/refined/06-narrow.png",
+    "change": "create"
+  },
+  {
+    "path": "docs/screenshots/refined/manifest.json",
+    "change": "create"
+  },
+  {
+    "path": "examples/01_normal_booking/README.md",
+    "change": "modify"
+  },
+  {
+    "path": "examples/01_normal_booking/booking_notes.txt",
+    "change": "modify"
+  },
+  {
+    "path": "examples/01_normal_booking/decisions.json",
+    "change": "modify"
+  },
+  {
+    "path": "examples/01_normal_booking/drafts.md",
+    "change": "modify"
+  },
+  {
+    "path": "examples/01_normal_booking/final_record.json",
+    "change": "modify"
+  },
+  {
+    "path": "examples/01_normal_booking/snapshots.json",
+    "change": "modify"
+  },
+  {
+    "path": "examples/02_accessibility_conflict/README.md",
+    "change": "modify"
+  },
+  {
+    "path": "examples/02_accessibility_conflict/booking_notes.txt",
+    "change": "modify"
+  },
+  {
+    "path": "examples/02_accessibility_conflict/decisions.json",
+    "change": "modify"
+  },
+  {
+    "path": "examples/02_accessibility_conflict/drafts.md",
+    "change": "modify"
+  },
+  {
+    "path": "examples/02_accessibility_conflict/final_record.json",
+    "change": "modify"
+  },
+  {
+    "path": "examples/02_accessibility_conflict/snapshots.json",
+    "change": "modify"
+  },
+  {
+    "path": "examples/03_booking_change_and_cancel/README.md",
+    "change": "modify"
+  },
+  {
+    "path": "examples/03_booking_change_and_cancel/booking_notes.txt",
+    "change": "modify"
+  },
+  {
+    "path": "examples/03_booking_change_and_cancel/decisions.json",
+    "change": "modify"
+  },
+  {
+    "path": "examples/03_booking_change_and_cancel/drafts.md",
+    "change": "modify"
+  },
+  {
+    "path": "examples/03_booking_change_and_cancel/final_record.json",
+    "change": "modify"
+  },
+  {
+    "path": "examples/03_booking_change_and_cancel/snapshots.json",
+    "change": "modify"
+  },
+  {
+    "path": "pyproject.toml",
+    "change": "modify"
+  },
+  {
+    "path": "results/eval/20261006T222849-heldout-offline/cases.jsonl",
+    "change": "create"
+  },
+  {
+    "path": "results/eval/20261006T222849-heldout-offline/report.md",
+    "change": "create"
+  },
+  {
+    "path": "results/eval/20261006T222849-heldout-offline/run.json",
+    "change": "create"
+  },
+  {
+    "path": "results/eval/20261006T222849-heldout-offline/summary.json",
+    "change": "create"
+  },
+  {
+    "path": "results/refinement-challenge/cases.jsonl",
+    "change": "create"
+  },
+  {
+    "path": "results/refinement-challenge/report.md",
+    "change": "create"
+  },
+  {
+    "path": "results/refinement-challenge/run.json",
+    "change": "create"
+  },
+  {
+    "path": "results/refinement-challenge/summary.json",
+    "change": "create"
+  },
+  {
+    "path": "scripts/capture_refined.py",
+    "change": "create"
+  },
+  {
+    "path": "scripts/capture_screenshots.py",
+    "change": "modify"
+  },
+  {
+    "path": "scripts/compose_figures.py",
+    "change": "modify"
+  },
+  {
+    "path": "scripts/run_refinement_challenge.py",
+    "change": "create"
+  },
+  {
+    "path": "scripts/run_worked_examples.py",
+    "change": "modify"
+  },
+  {
+    "path": "src/reservation_workbench/evaluation/dataset.py",
+    "change": "modify"
+  },
+  {
+    "path": "src/reservation_workbench/evaluation/runner.py",
+    "change": "modify"
+  },
+  {
+    "path": "src/reservation_workbench/providers/anthropic_live.py",
+    "change": "modify"
+  },
+  {
+    "path": "src/reservation_workbench/providers/base.py",
+    "change": "modify"
+  },
+  {
+    "path": "src/reservation_workbench/providers/offline.py",
+    "change": "modify"
+  },
+  {
+    "path": "src/reservation_workbench/services/drafting.py",
+    "change": "modify"
+  },
+  {
+    "path": "src/reservation_workbench/services/handoff.py",
+    "change": "create"
+  },
+  {
+    "path": "src/reservation_workbench/services/workbench.py",
+    "change": "modify"
+  },
+  {
+    "path": "src/reservation_workbench/ui/components.py",
+    "change": "modify"
+  },
+  {
+    "path": "src/reservation_workbench/ui/main.py",
+    "change": "modify"
+  },
+  {
+    "path": "src/reservation_workbench/ui/seating_visual.py",
+    "change": "create"
+  },
+  {
+    "path": "src/reservation_workbench/ui/service_view.py",
+    "change": "modify"
+  },
+  {
+    "path": "src/reservation_workbench/ui/workbench_view.py",
+    "change": "modify"
+  },
+  {
+    "path": "tests/test_refinements.py",
+    "change": "create"
+  },
+  {
+    "path": "tests/test_ui_apptest.py",
+    "change": "modify"
+  },
+  {
+    "path": "tests/test_workflow.py",
+    "change": "modify"
+  }
+]

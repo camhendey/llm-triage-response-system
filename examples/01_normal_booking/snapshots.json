@@ -132,7 +132,7 @@
     "label": "after demo confirmation",
     "at": "2026-11-10T15:45:00+00:00",
     "inquiry_state": "resolved",
-    "record_version": 4,
+    "record_version": 5,
     "booking": {
       "id": "B-A0001",
       "status": "confirmed",

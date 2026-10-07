@@ -1,0 +1,60 @@
+1. Normal booking
+  [guest] message received (new inquiry): ok - Created INQ-0001
+  [operator] Interpret new messages (offline rules): ok - Interpretation partial: 9 facts
+  [operator] Check & propose: ok - Proposal P-0001: L3, Sat Nov 14 19:30. Approve it before creating a hold or confirmation.
+  [operator] Approve proposal: ok - Proposal P-0001 approved for record version 3.
+  [operator] Approve proposal again (double click): REFUSED - Proposal P-0001 is approved; only proposed can be approved.
+  [operator] Create demo hold: ok - Demo hold B-A0001 created on L3 until 2026-11-12 10:00.
+  [operator] Generate draft: ok - Draft DR-0001 generated (hold_offer, prose: deterministic).
+  [operator] Mark draft reviewed: ok - Draft marked reviewed. It has not been sent anywhere.
+  [operator] Record that I copied the draft (not sent): ok - draft copy/export recorded (not a send).
+  [guest] message received: ok - Added message INQ-0001-M2
+  [operator] Interpret new messages (offline rules): ok - Interpretation ok: 0 facts
+  [operator] Record demo confirmation: ok - Demo confirmation recorded for B-A0001.
+  [operator] Generate draft: ok - Draft DR-0002 generated (confirmation, prose: deterministic).
+  [operator] Mark draft reviewed: ok - Draft marked reviewed. It has not been sent anywhere.
+  [operator] Record that I copied the draft (not sent): ok - draft copy/export recorded (not a send).
+  [operator] Record that I copied booking notes: ok - booking_notes copy/export recorded (not a send).
+2. Accessibility / availability conflict
+  [guest] message received (new inquiry): ok - Created INQ-0001
+  [operator] Interpret new messages (offline rules): ok - Interpretation ok: 10 facts
+  [operator] Try proposing stairs-only M1 (should be refused): REFUSED - M1 cannot be used: R-ACCESS: stairs-only seating; guest needs step-free access
+  [operator] Propose checked alternative 20:30 on G_L3_L4: ok - Proposal P-0001: G_L3_L4 (tables L3+L4), Fri Nov 13 20:30. Approve it before creating a hold or confirmation.
+  [operator] Approve proposal: ok - Proposal P-0001 approved for record version 3.
+  [operator] Generate draft: ok - Draft DR-0001 generated (availability_offer, prose: deterministic).
+  [operator] Mark draft reviewed: REFUSED - Fix validation errors first: Numbers not found in canonical facts/policy: 2
+  [operator] Record that I copied the draft (not sent): ok - draft copy/export recorded (not a send).
+  [operator] Record exact reviewed reply as sent elsewhere: REFUSED - Review a current draft before reporting it sent.
+  [guest] message received: ok - Added message INQ-0001-M2
+  [operator] Interpret new messages (offline rules): ok - Interpretation ok: 1 facts
+  [operator] Check & propose: ok - Proposal P-0002: G_L3_L4 (tables L3+L4), Fri Nov 13 20:30. Approve it before creating a hold or confirmation.
+  [operator] Approve proposal: ok - Proposal P-0002 approved for record version 5.
+  [operator] Create demo hold: ok - Demo hold B-A0001 created on L3, L4 until 2026-11-12 11:30.
+  [operator] Record demo confirmation: ok - Demo confirmation recorded for B-A0001.
+  [operator] Generate draft: ok - Draft DR-0002 generated (confirmation, prose: deterministic).
+  [operator] Mark draft reviewed: ok - Draft marked reviewed. It has not been sent anywhere.
+  [operator] Record that I copied the draft (not sent): ok - draft copy/export recorded (not a send).
+3. Existing booking changes, then a cancellation
+  [guest] message received: ok - Added message INQ-B002-M2
+  [operator] Interpret new messages (offline rules): ok - Interpretation ok: 7 facts
+  [operator] Check & propose (L1 at 19:00): REFUSED - L1 cannot be used: R-OVERLAP: table L1 confirmed by B001 18:00-20:30
+  [operator] Generate draft: ok - Draft DR-0001 generated (change_unavailable, prose: deterministic).
+  [operator] Mark draft reviewed: ok - Draft marked reviewed. It has not been sent anywhere.
+  [operator] Record that I copied the draft (not sent): ok - draft copy/export recorded (not a send).
+  [guest] message received: ok - Added message INQ-B002-M3
+  [operator] Interpret new messages (offline rules): ok - Interpretation ok: 2 facts
+  [operator] Check & propose: ok - Proposal P-0001: D1, Fri Nov 13 19:00. Approve it before creating a hold or confirmation.
+  [operator] Approve proposal: ok - Proposal P-0001 approved for record version 4.
+  [operator] Commit demo change: ok - B002 moved to D1 2026-11-13 19:00.
+  [operator] Commit demo change again (rerun): REFUSED - Proposal P-0001 was already committed.
+  [operator] Generate draft: ok - Draft DR-0002 generated (change_confirmed, prose: deterministic).
+  [operator] Mark draft reviewed: ok - Draft marked reviewed. It has not been sent anywhere.
+  [operator] Record that I copied the draft (not sent): ok - draft copy/export recorded (not a send).
+  [guest] message received: ok - Added message INQ-B002-M4
+  [operator] Interpret new messages (offline rules): ok - Interpretation ok: 0 facts
+  [operator] Generate draft: ok - Draft DR-0003 generated (cancellation_received, prose: deterministic).
+  [operator] Record demo cancellation: ok - Demo cancellation recorded for B002; tables released.
+  [operator] Generate draft: ok - Draft DR-0004 generated (cancellation_confirmed, prose: deterministic).
+  [operator] Mark draft reviewed: ok - Draft marked reviewed. It has not been sent anywhere.
+  [operator] Record that I copied the draft (not sent): ok - draft copy/export recorded (not a send).
+saved to /workspace/scratch/adbef9b8f0e5/revision/reservation-workbench/examples

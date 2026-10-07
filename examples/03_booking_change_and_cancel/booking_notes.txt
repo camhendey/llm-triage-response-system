@@ -17,4 +17,4 @@ Guest: Synthetic Guest B / Blake
 Email: guest.b@example.com
 Tel: UNKNOWN - ask guest
 ------------------------------
-Inquiry: INQ-B002  record v5  policy demo-2026-11-a
+Inquiry: INQ-B002  record v6  policy demo-2026-11-b

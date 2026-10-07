@@ -1,4 +1,4 @@
-## DR-0001 (hold_offer, status approved, record v3)
+## DR-0001 (hold_offer, status approved, record v4)
 
 ```
 Hello,
@@ -15,7 +15,7 @@ Best regards,
 Reservations Team
 ```
 
-## DR-0002 (confirmation, status approved, record v4)
+## DR-0002 (confirmation, status approved, record v5)
 
 ```
 Hello,

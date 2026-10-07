@@ -4,13 +4,13 @@
     "guest_label": "Synthetic Guest (Taylor)",
     "state": "resolved",
     "booking_id": "B-A0001",
-    "record_version": 5,
+    "record_version": 7,
     "created_at": "2026-11-10T15:00:00Z",
     "updated_at": "2026-11-10T16:30:00Z",
     "title": "",
     "handled_seq": 2,
     "handled_obs_seq": 11,
-    "state_set_seq": 1
+    "state_set_seq": 0
   },
   "booking": {
     "id": "B-A0001",
@@ -62,7 +62,7 @@
       "reason": null,
       "after": {
         "facts": 10,
-        "interpretation_id": "INT-a323c51260",
+        "interpretation_id": "INT-063baea8d6",
         "provider": "offline_rules",
         "rejected": 0,
         "status": "ok"
@@ -103,7 +103,7 @@
       "booking": null,
       "reason": null,
       "after": {
-        "record_version": 2,
+        "record_version": 3,
         "status": "approved"
       }
     },
@@ -115,22 +115,10 @@
       "reason": null,
       "after": {
         "draft_id": "DR-0001",
-        "errors": 0,
+        "errors": 1,
         "prose_error": null,
         "prose_source": "deterministic",
-        "purpose": "alternative_offer"
-      }
-    },
-    {
-      "at": "2026-11-10T15:00:00+00:00",
-      "type": "draft_approved",
-      "actor": "operator",
-      "booking": null,
-      "reason": null,
-      "after": {
-        "draft_id": "DR-0001",
-        "note": "approved text; NOT sent",
-        "purpose": "alternative_offer"
+        "purpose": "availability_offer"
       }
     },
     {
@@ -143,17 +131,6 @@
         "draft_id": "DR-0001",
         "note": "copied/exported only; not sent, not synced",
         "what": "draft"
-      }
-    },
-    {
-      "at": "2026-11-10T15:00:00+00:00",
-      "type": "awaiting_guest_marked",
-      "actor": "operator",
-      "booking": null,
-      "reason": "operator reports reply sent from their own mail client",
-      "after": {
-        "assertion": "operator-reported; not verified",
-        "state": "awaiting_guest"
       }
     },
     {
@@ -170,23 +147,13 @@
     },
     {
       "at": "2026-11-10T16:30:00+00:00",
-      "type": "inquiry_state_changed",
-      "actor": "system",
-      "booking": null,
-      "reason": "offer_alternative",
-      "after": {
-        "state": "needs_review"
-      }
-    },
-    {
-      "at": "2026-11-10T16:30:00+00:00",
       "type": "interpretation_recorded",
       "actor": "provider",
       "booking": null,
       "reason": null,
       "after": {
         "facts": 1,
-        "interpretation_id": "INT-d455281834",
+        "interpretation_id": "INT-a502b35be9",
         "provider": "offline_rules",
         "rejected": 0,
         "status": "ok"
@@ -200,16 +167,6 @@
       "reason": "new guest message: changed interval, requested_time",
       "after": {
         "status": "stale"
-      }
-    },
-    {
-      "at": "2026-11-10T16:30:00+00:00",
-      "type": "draft_approval_stale",
-      "actor": "system",
-      "booking": null,
-      "reason": "new guest message: changed interval, requested_time",
-      "after": {
-        "draft_id": "DR-0001"
       }
     },
     {
@@ -237,7 +194,7 @@
       "booking": null,
       "reason": null,
       "after": {
-        "record_version": 3,
+        "record_version": 5,
         "status": "approved"
       }
     },
@@ -249,16 +206,6 @@
       "reason": "confirm_booking",
       "after": {
         "state": "ready_for_action"
-      }
-    },
-    {
-      "at": "2026-11-10T16:30:00+00:00",
-      "type": "draft_approval_stale",
-      "actor": "system",
-      "booking": null,
-      "reason": "hold created",
-      "after": {
-        "draft_id": "DR-0001"
       }
     },
     {
@@ -275,16 +222,6 @@
           "L3",
           "L4"
         ]
-      }
-    },
-    {
-      "at": "2026-11-10T16:30:00+00:00",
-      "type": "draft_approval_stale",
-      "actor": "system",
-      "booking": null,
-      "reason": "booking confirmed",
-      "after": {
-        "draft_id": "DR-0001"
       }
     },
     {

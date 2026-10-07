@@ -2,7 +2,7 @@
 schema_version: 1
 # Demonstration policy version. Bump when any value below changes; proposals and
 # drafts record the version they were evaluated against.
-policy_version: demo-2026-11-a
+policy_version: demo-2026-11-b
 restaurant:
   id: demo_restaurant
   name: Harbour Table Demo
@@ -32,7 +32,6 @@ policies:
     - accessibility
     - minors
     - billing
-    - occasion
     - allergies
   large_party_min_size: 8
   arrival_bucket_minutes: 60
