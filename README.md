@@ -1,151 +1,102 @@
-## LLM Triage Response System
+# Reservation Operations Workbench
 
-This repo is a **translation of an operational workflow into code**. The original system was **not code-based**—it was a decision-making process used in a high-volume restaurant environment to triage and respond to incoming guest reservation requests. This project is the **first structured implementation** of that process in Python.
+A single-operator, human-reviewed workbench for large-party restaurant reservation inquiries, built on a **simulated restaurant** ("Harbour Table Demo") with **synthetic data only**. It turns guest emails into typed facts with quoted evidence, checks seating with deterministic rules, records holds, confirmations, changes and cancellations in a local demo database, and prepares reviewed draft replies that the operator copies elsewhere.
 
-The implementation keeps things split cleanly: **classify and triage** the message, **pick a response template** by category, then **draft a reply** that still sounds like a person wrote it.
+Nothing in this application sends email, reads or updates any external booking system, takes payments or is deployed anywhere. It is a portfolio project by Cameron Hendey; see [docs/PROVENANCE.md](docs/PROVENANCE.md) for how it relates to his earlier, manual, LLM-assisted workflow.
 
-You can run that flow from a **small Streamlit page** (`app.py`) or from the **command line** (`main.py`). Same pipeline; pick whatever fits how you’re working.
+![Annotated workbench overview (real screenshot)](docs/figures/annotated_overview.png)
 
-### One-line mental model
+## Status (2026-10-07)
 
-**A real-world decision system that used to live in someone’s head, now encoded so a machine can run it.**
+| Gate | State |
+|---|---|
+| Implemented | Workbench UI, service layer, rules engine, offline and live interpreters, CLI, evaluation runner, study harness |
+| Deterministic tests | **102 passed** (`pytest`), covering acceptance scenarios A01-A30 |
+| Actual UI verified | Real Playwright screenshots at 1440 px and 820 px, plus headless Streamlit script runs ([docs/VERIFICATION.md](docs/VERIFICATION.md)) |
+| Live model verified | **not_run**: no API key or spending limit was supplied ([results/eval/live_status.json](results/eval/live_status.json)) |
+| Human handling-time study | **pending**: harness and protocol ready, 0 of 36 sessions recorded |
 
----
+Held-out evaluation (40 agent-authored scenarios, offline interpreter): the first blind run allowed the expected next action in **33/40** cases with **1** critical-error case; after fixes the final retest reached **37/40** with **0** critical-error cases. Retests are not blind. Details and limitations: [docs/EVALUATION.md](docs/EVALUATION.md).
 
-## Why this exists
+## Quick start
 
-Incoming guest requests were often:
+Requires Python 3.11+.
 
-- inconsistent in format
-- incomplete or ambiguous
-- time-sensitive
-
-Without a system, responses could drift and training new people took longer. The workflow was meant to add repeatability, consistency, and less mental overhead.
-
-This repo is one way to show that kind of operational logic **formalized and routed** through software—not slide deck theory.
-
----
-
-## What the system does (current state)
-
-Given a message string (a guest request), the pipeline does:
-
-1. **Interpretation**  
-   No brittle parsing layer yet—the model reads the message and infers intent.
-
-2. **Classification**  
-   One category from:
-
-   - `inquiry`
-   - `complaint`
-   - `urgent_request`
-   - `confirmation`
-   - `cancellation`
-   - `other`
-
-   You also get `confidence` (`high` / `medium` / `low`), a one-line `reasoning`, and a `priority` bucket from `PRIORITY_MAP`.
-
-3. **Response**  
-   `templates.py` picks the template for that category. Claude drafts the actual text using that template and the original message (including filling `{specific_detail}`).
-
-That’s still an **early translation layer**: clarity and traceability matter more than clever abstraction right now. Tighter rules and validation can come later.
-
----
-
-## Key code components
-
-- `app.py` — Streamlit UI: paste a message, hit one button, see category, priority, reasoning, and suggested reply.
-- `classifier.py` — Calls Claude for structured JSON classification; attaches `priority` via `PRIORITY_MAP`.
-- `responder.py` — Chooses a template from `TEMPLATES`, asks Claude to write the final reply.
-- `templates.py` — Category templates and `PRIORITY_MAP` (category → `high` / `medium` / `low`).
-- `main.py` — CLI: one message as a string, or a batch from a CSV.
-
----
-
-## Repository intent (what this is / isn’t)
-
-This is not a toy demo, a tutorial walkthrough, or a paper architecture exercise.
-
-It **is** a real workflow turned into code: systems thinking, process formalization, and a working sketch of something you could actually run in front of someone.
-
-It’s not pretending to be a finished product. The structure is meant to stay readable while the internals evolve.
-
----
-
-## Getting started
-
-### 1. Install dependencies
-
-From the project directory:
-
-```powershell
-python -m pip install -r requirements.txt
+```bash
+python -m venv .venv && source .venv/bin/activate      # Windows: .venv\Scripts\activate
+pip install -e ".[dev]"
+cp .env.example .env                                     # optional; values are empty by default
+streamlit run app.py                                     # http://localhost:8501
 ```
 
-### 2. Configure Anthropic credentials
+The app opens on the **demo** database (`data/demo/workbench_demo.sqlite`), seeded from `data/synthetic/demo_inquiries.json` with a fixed demo clock of Tue Nov 10 2026, 10:00 America/Toronto. Use **+1 hour / +1 day** in the sidebar to move the demo clock (holds expire against it). Switch to the **session** database for a persistent workspace on the real clock.
 
-Create or edit a `.env` in the project root:
-
-```text
-ANTHROPIC_API_KEY=your_key_here
+```bash
+rw init-demo                    # create/seed the demo database if missing
+rw reset-demo                   # delete and re-seed ONLY the designated demo database
+rw queue                        # queue as text
+rw show INQ-0103 --notes        # facts, rules and copyable booking notes
+rw import-csv messages.csv --interpret          # into the session database
+pytest                                          # 102 tests
+rw eval validate                                # dataset shape and freeze hash
+rw eval run --split heldout --mode offline      # writes results/eval/<run>/
+python scripts/run_worked_examples.py           # replays examples/01-03
+python scripts/make_charts.py                   # figures from saved results
 ```
 
----
+`reset-demo` refuses any path other than the designated demo database and refuses any database whose stored kind is not `demo`.
 
-## Usage
+## Demo versus live interpreter
 
-### Web UI (Streamlit)
+| | Offline (default) | Live (optional) |
+|---|---|---|
+| What reads the email | Deterministic pattern rules in `providers/offline.py` | Anthropic Messages API with JSON-schema output, validated again locally |
+| Needs | nothing | `RW_PROVIDER=live` and `ANTHROPIC_API_KEY` in `.env` |
+| Honesty | Labelled "offline pattern rules (not a language model)"; unsupported text is returned as `unsupported` for manual interpretation | Every quote must exist verbatim in a guest message; invalid output is retried a bounded number of times, then fails visibly |
 
-```powershell
-streamlit run app.py
+In both modes seating, policy checks, booking state and the critical facts in drafts (dates, times, party size, tables, status) come from deterministic code. A live model may only write a greeting line and a closing line, and validators reject digits or booking/policy words in that prose.
+
+Live evaluation runs only with a key **and** explicit limits:
+
+```bash
+rw eval live --max-calls 400 --budget-usd 5 --usd-per-mtok-input <rate> --usd-per-mtok-output <rate>
 ```
 
-Streamlit should print a local URL (usually `http://localhost:8501`). If your browser doesn’t open on its own, paste that URL in manually.
+Without them it writes `results/eval/live_status.json` with `status: not_run` and reports no live numbers.
 
-On the page: paste an incoming message, click **Process Message**, and you’ll see category, priority (with a simple visual cue), the model’s reasoning, and the suggested response.
+## What the operator can do
 
-### Single message (CLI)
+- Queue sorted by urgency and deadline; add or paste messages; import CSV with row-level errors.
+- Facts with status (known, unknown, needs review, conflict, operator-confirmed), quoted evidence and change history. Operator values are never overwritten by later guest text; disagreements become conflicts.
+- Seating check over tables and groupings with reasons for every rejected option, checked alternative times, split-seating disclosure, and a private-events route above 25 guests.
+- Proposals bound to a record version; approve, then create a demo hold (reserving every constituent table until expiry), record a demo confirmation, commit a change atomically, record a cancellation, release, decline or escalate. Each action is idempotent.
+- Minimum spend and allergies require a recorded human decision; nothing is guaranteed to the guest.
+- Drafts from templates with deterministic validators; edit, mark reviewed, copy or export. Copying is recorded as copying, never as sending.
+- Service view (occupancy grid and an arrival-bucket heuristic, labelled as such) and an operator study timer.
 
-```powershell
-python main.py "Hi I need to cancel my booking for Friday"
-```
+## Repository map
 
-Output includes `category`, `priority`, `confidence`, `reasoning`, and `suggested_response`.
+| Path | Contents |
+|---|---|
+| `src/reservation_workbench/domain` | Typed models, config loading, clocks |
+| `src/reservation_workbench/rules` | Fact reconciliation, availability engine, assessment (next action, rule results) |
+| `src/reservation_workbench/providers` | Offline interpreter, live Anthropic provider, shared validation |
+| `src/reservation_workbench/services` | Workbench service layer (used by UI, CLI, tests and evaluation), drafting, CSV import, bootstrap/reset |
+| `src/reservation_workbench/persistence` | SQLite schema and repository (events, idempotency keys) |
+| `src/reservation_workbench/ui` | Streamlit views |
+| `src/reservation_workbench/evaluation`, `data/eval` | Scenario loader, freeze, runner; 20 development + 40 held-out scenarios |
+| `src/reservation_workbench/study`, `data/study`, `docs/study` | Handling-time study harness, cases and protocol |
+| `config/restaurant_demo.yaml` | Synthetic restaurant: tables, groupings, policies, seed bookings |
+| `examples/` | Three replayable worked examples |
+| `results/eval/` | Every saved evaluation run, including the first blind run |
+| `docs/` | Documentation, diagrams, figures, screenshots |
 
-### Batch from CSV
+## Documentation
 
-```powershell
-python main.py --batch sample_messages.csv
-```
+[Domain and policies](docs/DOMAIN_AND_POLICIES.md) · [Decisions](docs/DECISIONS.md) · [Provenance](docs/PROVENANCE.md) · [Operator guide](docs/OPERATOR_GUIDE.md) · [Evaluation](docs/EVALUATION.md) · [Verification](docs/VERIFICATION.md) · [Claims](docs/CLAIMS.md) · [Build status](docs/BUILD_STATUS.md)
 
-The CSV needs a `message` column. Results go to `output.csv`.
+## Scope boundaries
 
----
+Synthetic restaurant and guests only. Policies in `config/restaurant_demo.yaml` are demonstration values, not any real restaurant's current policy. No real guest data, no restaurant branding, no affiliation with or integration into any reservation platform, no deployment. All guest text is treated as untrusted data and never as instructions.
 
-## Example input
-
-`sample_messages.csv` has a mix of intents—inquiries, complaints, urgent requests, confirmations, cancellations, and so on—if you want something to batch through without writing strings by hand.
-
----
-
-## Planned evolution
-
-Rough direction from here:
-
-- clearer modular boundaries as the logic grows
-- more explicit, config- or rule-driven routing (not only prompt constraints)
-- stronger validation and handling of messy inputs
-- tests on the weird edge cases
-- integrations (API, webhooks, whatever fits the next use case)
-
-Longer term, the same triage shape could apply outside reservations—support queues, intake forms, anything where messy text shows up and you need consistent routing.
-
----
-
-## Why employers should care
-
-Rough signal for:
-
-- pulling structure out of messy real-world input
-- making implicit decision rules explicit and repeatable
-- building something that reduces one-off judgment calls without pretending the hard parts disappear
+License: MIT.
