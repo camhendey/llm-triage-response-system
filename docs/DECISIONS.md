@@ -1,5 +1,17 @@
 # Decisions
 
+## Version 3.0
+
+**Separate operational records from simulation.** `/` has an unseeded SQLite store; `/demo` retains legacy data and evaluation. No existing schema migration is needed.
+
+**Evidence-bound completion.** Acceptance, external allocation, approvals, reviewed/sent responses and outstanding tasks are separate. Hashes invalidate stale evidence; revisions reject stale-tab commands. Sending a clarification never completes a booking or declined outcome.
+
+**Persist the shift.** Reports and URL-specific working drafts survive reloads. Raw reports expire on access or at shift end. Retention and local security limitations are explicit.
+
+**Assist conditionally; verify manually.** Snapshot reasoning uses declared coverage, reviewed configuration and estimated duration. Unknowns block assessment. Current availability and flow remain human decisions.
+
+The numbered decisions below describe the preserved legacy/demo architecture. Its shared `services/workbench.py` layer and idempotency keys do not describe every new coordinator action; the coordinator has its own revision-guarded command layer.
+
 Sole developer: Cameron Hendey. Original workflow developed at JOEY in 2024; refined in 2025.
 
 Each entry gives the decision, the alternatives considered and why they were rejected.
@@ -90,3 +102,9 @@ Email or inbox integration, sending messages, any reservation-platform integrati
 **D16. Replace the frontend while preserving domain services.** NiceGUI supplies the primary reservation-desk interface. It retains a Python build and reuses the existing rules, providers and persistence schema. The prior Streamlit interface remains optional for regression comparison. No frontend framework was selected merely to increase the technology count.
 
 **D17. Treat a rendered screen as a versioned snapshot.** New-interface commands check the record version and latest audit-event ID inside the same transaction. The latter catches concurrent draft edits that do not change the booking version. Failed grouped commands roll back; unsaved page-local drafts remain available for recovery. This does not introduce production multi-user administration.
+
+## D18 · Reviewed export snapshots, not assumed OpenTable schema (2.1)
+
+The supplied research pack does not verify current dashboard CSV headers. Accept mapped CSV/TSV with explicit locale, zone, export time and coverage, then atomic validation and operator approval. Keep notes by source category, unknown statuses conservatively included, and contact matches as candidates. Replace page-scoped snapshots instead of persisting or appending external guest data.
+
+Do not insert source table numbers into the synthetic occupancy model. Without verified layout, duration and coverage this would produce plausible but unsupported availability. Display read-only service context at the inquiry decision point and explicitly label the simulated seating model. No new database schema or provider coupling is needed.

@@ -1,5 +1,15 @@
 # Claims register
 
+## Version 3.0 scope
+
+Supported: separately persisted unseeded coordinator workflow, reviewed snapshots, independent acceptance/external verification/response completion, change invalidation, follow-ups, staff review receipts, synthetic automated and actual browser verification. Exact evidence is in `VERIFICATION.md` and its logs.
+
+Qualified: snapshot feasibility depends on declared coverage, current layout and estimated duration; quotes establish provenance rather than semantic acceptance; external actions are human attestations. The coordinator uses offline patterns; optional live AI remains in the synthetic demo.
+
+Not claimed: measured live-model accuracy, measured human time savings, certified current export compatibility, production deployment, autonomous booking/sending, complete staffing/pacing optimization or production security/accessibility compliance. Authorship/workflow dates are not software deployment dates.
+
+The numbered claims below belong to the retained demo/evaluation architecture unless specifically stated otherwise.
+
 Every public claim about this project should appear here with its evidence and qualification. If a claim is not here, it should not be made. Status: **supported** (evidence in this repository), **qualified** (supported only with the stated caveat), **not supported** (do not claim).
 
 ## About the software
@@ -70,3 +80,9 @@ Supplemental extraction challenge: 31/32 labelled fields and 6/6 unknowns across
 | The inspected regression still records 39/40 allowed next actions with no critical-error cases | `results/verification/nicegui-regression.txt` | Prior inspected cases; no new blind evaluation |
 
 No measured human speed improvement or live-model accuracy claim is added by the interface migration.
+
+## Version 2.1: export ingestion
+
+Supported: reviewed schema mapping, atomic CSV/TSV validation, source-separated notes, explicit time/coverage/freshness, exact-contact candidates and browser-page isolation. Verified on illustrative fixtures with 24 new contract tests and a real browser upload journey.
+
+Unsupported: certification against current genuine dashboard exports, OpenTable API integration, table occupancy imported into the seating engine, real restaurant deployment or measured operator time savings. The source evidence pack expressly does not contain authenticated recent dashboard exports.

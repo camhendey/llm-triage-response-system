@@ -1,0 +1,1 @@
+PASS: start shift, settings, report mapping/apply/reload, inquiry, visit facts, snapshot check, external verification, premature-final guard, call acceptance, draft recovery/review/copy/sent, service review, 820/390px layout, end shift.

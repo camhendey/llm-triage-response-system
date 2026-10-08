@@ -1,8 +1,22 @@
-# Verification: version 2.0 (NiceGUI)
+# Verification · version 3.0
 
-Sole developer: Cameron Hendey. Original workflow developed at JOEY in 2024; refined in 2025.
+## Current release
 
-Checks ran on Linux with Python 3.12.14. `results/verification/environment.json` records the actual installed package versions. `constraints-tested.txt` pins direct packages used for reproduction. Earlier verification reports are retained under `docs/archive/`.
+`python scripts/run_release_checks.py` captures actual outputs and environment metadata under `results/verification/`. Current suite: **198 passing tests**, including 45 coordinator cases and all 153 retained regressions.
+
+The coordinator browser journey verifies shift setup, Settings forms, CSV mapping/preview/apply, reload persistence, intake, confirmed visit facts, conditional availability, external verification, blocked premature confirmation, call acceptance, draft recovery, review, real clipboard contents, reported sending, staff review, 820/390 px layouts and shift end. Data are synthetic; screenshots under `docs/screenshots/coordinator/` are actual browser output at 1440 px plus narrow captures.
+
+The other three browser scripts cover the preserved demo booking, import and screenshot journeys. Exact outputs: `coordinator-browser.txt`, `nicegui-workflows.txt`, `opentable-browser.txt`, `nicegui-browser.txt`, `pytest.txt` and `environment.json`. The runner stops on failure; run dates are actual execution dates.
+
+New tests cover stale tabs/operators, atomic rollback, independent completion gates, change invalidation, no-answer follow-ups, quoted acceptance, separate policy thresholds, photos/attachments, unique references, cancellation matching, hold expiry, conservative snapshot assumptions, reconciliation, expiry/venue identity, draft isolation, before/after audits and scoped closed-case deletion.
+
+Limits: synthetic fixtures, Chromium only, no live-model run, no current authenticated dashboard-export certification, no production pilot, no controlled human study and no formal accessibility audit. External actions are operator attestations, not API receipts. The old 39/40 demo retest is not a new v3 benchmark.
+
+## Historical version 2.1 verification
+
+The sections below describe the previous release. Per-page imports remain in `/demo`; coordinator imports now persist for the shift. The prior document is also retained in `docs/archive/VERIFICATION_2.1.md`.
+
+Sole developer: Cameron Hendey. Original workflow developed at JOEY in 2024; refined in 2025. Software checks below were run in October 2026, not during the original manual workflow.
 
 ## Reproduce
 
@@ -10,24 +24,24 @@ Checks ran on Linux with Python 3.12.14. `results/verification/environment.json`
 python -m pip install -c constraints-tested.txt -e '.[dev]'
 python -m pytest -o addopts='' -q
 python -m playwright install chromium --only-shell
-python scripts/capture_nicegui.py
+python scripts/verify_opentable_import.py
 python scripts/verify_nicegui_workflows.py
-python -m reservation_workbench.cli eval validate
-python -m reservation_workbench.cli eval run --split heldout --mode offline --retest '2.0 NiceGUI migration regression'
+python scripts/capture_nicegui.py
 ```
 
-Set `RW_CHROMIUM` to an existing Chromium executable if needed. Both browser scripts create disposable booking/session/study databases and stop their temporary servers. They use ports 8623 and 8624. Screenshot captures are unedited application output.
+Browser scripts launch their own server and temporary databases, on ports 8625, 8624 and 8623 respectively. `RW_CHROMIUM` can point to an existing Chromium executable.
 
 ## Results
 
-- **129 automated tests passed.** The original 123 checks remain, including the optional legacy Streamlit AppTests. Six new tests cover stale record rejection, transactional rollback, idempotent retries, draft changes without record-version increments, connection/database separation and blank environment-path defaults.
-- The NiceGUI screenshot journey edits a selected reservation, verifies plan invalidation, selects again, confirms, generates and edits a reply, preserves unsaved text across navigation, saves/reviews, checks actual clipboard contents and records reported sending. It visits Service, Timeline, Project and Settings, then checks widths of 820 and 390 pixels for document overflow.
-- The additional browser journey creates an inquiry, holds and confirms it, verifies independent unsaved buffers in two browser pages, rejects a stale save, invalidates a reviewed reply after a new message, records cancellation, imports CSV and exercises the study timer.
-- The inspected 40-case offline regression remains 39/40 allowed next actions, 97/97 labelled fields, 20/20 required constraints and zero critical-error cases. It is a retest, not an independent blind benchmark.
-- The previously recorded 12-case challenge remains historical evidence: 31/32 field matches, 6/6 unknowns preserved. It is not relabelled as new migration validation.
+- **153 automated tests pass**, including the previous 129 and 24 import contract cases. Import tests exercise BOM, comma/semicolon/tab separators, quoted and multiline UTF-8 notes, date order, DST, explicit offsets, invalid rows, coverage, duplicate IDs, multi-restaurant rejection, header/shape failures, conservative status handling, shared contacts, freshness and mapping validation.
+- The OpenTable browser journey uses labelled illustrative CSVs: initial setup, rejected empty report, reservations upload, optional guestbook, reviewed preview, replacement without append, date-scoped totals, shared-email candidate records, page isolation, reload reset, mobile setup/mapping and explicit demo continuation. No browser errors or server tracebacks.
+- The existing booking workflow browser test passes: creation, hold, confirmation, independent draft buffers, stale-tab rejection, new-message draft invalidation, cancellation, guest-message CSV import and study timer.
+- The existing screenshot journey passes: selected-plan edits, booking/reply workflow, real clipboard contents, Service/Timeline/Project/Settings and document overflow checks at 820 and 390 pixels.
 
-Exact outputs are saved under `results/verification/`. Current captures are under `docs/screenshots/nicegui/`. The `clean/`, `refined/` and original screenshot folders describe earlier interfaces.
+Exact outputs: `results/verification/pytest.txt`, `opentable-browser.txt`, `nicegui-workflows.txt`, `nicegui-browser.txt`. Screenshots are unedited browser output under `docs/screenshots/opentable/` and `docs/screenshots/nicegui/`.
 
-## Boundaries
+The previous 39/40 next-action regression and challenge results remain historical evidence from inspected synthetic cases. They were not rerun or relabelled as new import benchmarks. Prior verification reports are retained in `docs/archive/`.
 
-No live API calls, human usability/timing sessions, external booking integration or deployment occurred. Browser checks use desktop Chromium, including resized viewports; physical phones, screen readers and Windows/macOS installations were not tested. The UI binds locally by default and has no authentication. The unchanged schema permits existing databases, but no user-owned Windows database was accessed during this work.
+## Limits
+
+No genuine recent dashboard export was available for compatibility testing. No live provider, OpenTable account, human timing/usability study, Windows installation, physical phone or screen-reader test was performed. This is a read-only CSV/TSV workflow, not booking-system synchronization. No real restaurant data or runtime databases are packaged.

@@ -1,225 +1,56 @@
 {
-  "compared_with": "1.2.0 clean-ui package",
-  "files": [
-    {
-      "path": ".env.example",
-      "change": "modify"
-    },
-    {
-      "path": "README.md",
-      "change": "modify"
-    },
-    {
-      "path": "app.py",
-      "change": "modify"
-    },
-    {
-      "path": "constraints-tested.txt",
-      "change": "modify"
-    },
-    {
-      "path": "docs/BUILD_STATUS.md",
-      "change": "modify"
-    },
-    {
-      "path": "docs/CLAIMS.md",
-      "change": "modify"
-    },
-    {
-      "path": "docs/DECISIONS.md",
-      "change": "modify"
-    },
-    {
-      "path": "docs/NICEGUI_MIGRATION.md",
-      "change": "create"
-    },
-    {
-      "path": "docs/OPERATOR_GUIDE.md",
-      "change": "modify"
-    },
-    {
-      "path": "docs/UI_REDESIGN.md",
-      "change": "modify"
-    },
-    {
-      "path": "docs/VERIFICATION.md",
-      "change": "modify"
-    },
-    {
-      "path": "docs/archive/BUILD_STATUS_1.1.md",
-      "change": "create"
-    },
-    {
-      "path": "docs/archive/OPERATOR_GUIDE_1.2.md",
-      "change": "create"
-    },
-    {
-      "path": "docs/archive/VERIFICATION_1.2.md",
-      "change": "create"
-    },
-    {
-      "path": "docs/screenshots/README.md",
-      "change": "modify"
-    },
-    {
-      "path": "docs/screenshots/nicegui/01-inbox.png",
-      "change": "create"
-    },
-    {
-      "path": "docs/screenshots/nicegui/02-workspace.png",
-      "change": "create"
-    },
-    {
-      "path": "docs/screenshots/nicegui/03-edit.png",
-      "change": "create"
-    },
-    {
-      "path": "docs/screenshots/nicegui/04-plan.png",
-      "change": "create"
-    },
-    {
-      "path": "docs/screenshots/nicegui/05-reply.png",
-      "change": "create"
-    },
-    {
-      "path": "docs/screenshots/nicegui/06-reviewed.png",
-      "change": "create"
-    },
-    {
-      "path": "docs/screenshots/nicegui/07-completed.png",
-      "change": "create"
-    },
-    {
-      "path": "docs/screenshots/nicegui/08-service.png",
-      "change": "create"
-    },
-    {
-      "path": "docs/screenshots/nicegui/09-timeline.png",
-      "change": "create"
-    },
-    {
-      "path": "docs/screenshots/nicegui/10-project.png",
-      "change": "create"
-    },
-    {
-      "path": "docs/screenshots/nicegui/11-settings.png",
-      "change": "create"
-    },
-    {
-      "path": "docs/screenshots/nicegui/12-inbox-390.png",
-      "change": "create"
-    },
-    {
-      "path": "docs/screenshots/nicegui/12-inbox-820.png",
-      "change": "create"
-    },
-    {
-      "path": "docs/screenshots/nicegui/13-workspace-390.png",
-      "change": "create"
-    },
-    {
-      "path": "docs/screenshots/nicegui/13-workspace-820.png",
-      "change": "create"
-    },
-    {
-      "path": "pyproject.toml",
-      "change": "modify"
-    },
-    {
-      "path": "results/eval/20261007T171141-heldout-offline/cases.jsonl",
-      "change": "create"
-    },
-    {
-      "path": "results/eval/20261007T171141-heldout-offline/report.md",
-      "change": "create"
-    },
-    {
-      "path": "results/eval/20261007T171141-heldout-offline/run.json",
-      "change": "create"
-    },
-    {
-      "path": "results/eval/20261007T171141-heldout-offline/summary.json",
-      "change": "create"
-    },
-    {
-      "path": "results/verification/environment.json",
-      "change": "modify"
-    },
-    {
-      "path": "results/verification/nicegui-browser.txt",
-      "change": "create"
-    },
-    {
-      "path": "results/verification/nicegui-regression.txt",
-      "change": "create"
-    },
-    {
-      "path": "results/verification/nicegui-workflows.txt",
-      "change": "create"
-    },
-    {
-      "path": "results/verification/pytest.txt",
-      "change": "modify"
-    },
-    {
-      "path": "scripts/capture_clean.py",
-      "change": "modify"
-    },
-    {
-      "path": "scripts/capture_nicegui.py",
-      "change": "create"
-    },
-    {
-      "path": "scripts/capture_refined.py",
-      "change": "modify"
-    },
-    {
-      "path": "scripts/capture_screenshots.py",
-      "change": "modify"
-    },
-    {
-      "path": "scripts/verify_nicegui_workflows.py",
-      "change": "create"
-    },
-    {
-      "path": "src/reservation_workbench/services/bootstrap.py",
-      "change": "modify"
-    },
-    {
-      "path": "src/reservation_workbench/study/harness.py",
-      "change": "modify"
-    },
-    {
-      "path": "src/reservation_workbench/web/__init__.py",
-      "change": "create"
-    },
-    {
-      "path": "src/reservation_workbench/web/common.py",
-      "change": "create"
-    },
-    {
-      "path": "src/reservation_workbench/web/main.py",
-      "change": "create"
-    },
-    {
-      "path": "src/reservation_workbench/web/theme.py",
-      "change": "create"
-    },
-    {
-      "path": "start-windows.cmd",
-      "change": "create"
-    },
-    {
-      "path": "streamlit_app.py",
-      "change": "create"
-    },
-    {
-      "path": "tests/test_nicegui_commands.py",
-      "change": "create"
-    },
-    {
-      "path": "tests/test_ui_apptest.py",
-      "change": "modify"
-    }
-  ]
+  "baseline": "reservation-workbench-opentable.zip",
+  "created": [
+    "docs/COORDINATOR_TRACEABILITY.md",
+    "docs/COORDINATOR_VALIDATION.md",
+    "docs/COORDINATOR_WORKFLOW.md",
+    "docs/archive/BUILD_STATUS_2.1.md",
+    "docs/archive/OPERATOR_GUIDE_2.1.md",
+    "docs/archive/README_2.1.md",
+    "docs/archive/VERIFICATION_2.1.md",
+    "docs/screenshots/coordinator/01-request.png",
+    "docs/screenshots/coordinator/02-plan.png",
+    "docs/screenshots/coordinator/03-communicate.png",
+    "docs/screenshots/coordinator/04-service.png",
+    "docs/screenshots/coordinator/05-communicate-390.png",
+    "docs/screenshots/coordinator/05-communicate-820.png",
+    "results/verification/coordinator-browser.txt",
+    "scripts/package_release.py",
+    "scripts/run_release_checks.py",
+    "scripts/verify_coordinator.py",
+    "src/reservation_workbench/coordinator/__init__.py",
+    "src/reservation_workbench/coordinator/availability.py",
+    "src/reservation_workbench/coordinator/store.py",
+    "src/reservation_workbench/coordinator/workflow.py",
+    "src/reservation_workbench/web/coordinator.py",
+    "tests/test_coordinator.py"
+  ],
+  "modified": [
+    ".env.example",
+    ".gitignore",
+    "README.md",
+    "docs/BUILD_STATUS.md",
+    "docs/CLAIMS.md",
+    "docs/DECISIONS.md",
+    "docs/OPENTABLE_IMPORT.md",
+    "docs/OPERATOR_GUIDE.md",
+    "docs/VERIFICATION.md",
+    "docs/screenshots/README.md",
+    "docs/screenshots/nicegui/01-inbox.png",
+    "docs/screenshots/nicegui/03-edit.png",
+    "docs/screenshots/nicegui/04-plan.png",
+    "docs/screenshots/nicegui/05-reply.png",
+    "docs/screenshots/nicegui/06-reviewed.png",
+    "docs/screenshots/opentable/02-reviewed-reports.png",
+    "docs/screenshots/opentable/03-inquiry-context.png",
+    "docs/screenshots/opentable/05-mobile-mapping.png",
+    "pyproject.toml",
+    "results/verification/environment.json",
+    "results/verification/pytest.txt",
+    "scripts/capture_nicegui.py",
+    "scripts/verify_nicegui_workflows.py",
+    "scripts/verify_opentable_import.py",
+    "src/reservation_workbench/web/main.py"
+  ],
+  "excluded_or_removed": []
 }

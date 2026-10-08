@@ -38,6 +38,7 @@ from .common import (
     key,
 )
 from .theme import CSS
+from .imports import SessionImports
 
 
 def notify(message, **kwargs):
@@ -79,7 +80,8 @@ class Desk:
 
     def __init__(self):
         self.kind = "demo"
-        self.view = "Inquiries"
+        self.imports = SessionImports(self)
+        self.view = "Session exports"
         self.iid = None
         self.stage = "Plan"
         self.query = ""
@@ -143,6 +145,7 @@ class Desk:
         with self.nav:
             label("WORKSPACE", "eyebrow px-3 mb-3")
             for name, icon in [
+                ("Session exports", "upload_file"),
                 ("Inquiries", "inbox"),
                 ("Service", "calendar_today"),
                 ("Project", "layers"),
@@ -180,6 +183,10 @@ class Desk:
             )
         self.root.clear()
         with self.root:
+            if not self.imports.ready or self.view == "Session exports":
+                self.imports.page()
+                return
+            self.imports.banner()
             if self.view == "Inquiries":
                 self.workspace() if self.v else self.inbox()
             elif self.view == "Service":
@@ -830,7 +837,8 @@ class Desk:
 
     def plan(self, v):
         a, b, p = v.assessment, v.booking, v.active_proposal
-        label("Reservation plan", "section-title")
+        self.imports.context(v)
+        label("Reservation plan · synthetic seating model", "section-title")
         if b:
             with ui.column().classes("booking-summary gap-1"):
                 label("CURRENT BOOKING · " + b.status.value.upper(), "eyebrow")
@@ -2167,7 +2175,12 @@ def start():
     load_dotenv()
 
     @ui.page("/")
-    def index():
+    def index(case: str = '', view: str = 'Queue', buffer: str = ''):
+        from .coordinator import CoordinatorDesk
+        CoordinatorDesk(case, view, buffer)
+
+    @ui.page("/demo")
+    def demo():
         Desk()
 
     ui.run(

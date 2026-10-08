@@ -48,7 +48,7 @@ def main():
                     page.on("pageerror", lambda e: errors.append(str(e)))
                     for _ in range(40):
                         try:
-                            page.goto("http://127.0.0.1:8623")
+                            page.goto("http://127.0.0.1:8623/demo")
                             break
                         except Exception:
                             time.sleep(0.25)
@@ -70,6 +70,7 @@ def main():
                         page.evaluate("window.scrollTo(0,0)")
                         page.screenshot(path=str(OUT / (name + ".png")))
 
+                    page.get_by_test_id("ot-demo").click()
                     page.get_by_test_id("new-inquiry").wait_for()
                     settle()
                     shot("01-inbox")
@@ -133,7 +134,8 @@ def main():
                         page = browser.new_page(
                             viewport={"width": width, "height": height}
                         )
-                        page.goto("http://127.0.0.1:8623")
+                        page.goto("http://127.0.0.1:8623/demo")
+                        page.get_by_test_id("ot-demo").click()
                         page.get_by_test_id("new-inquiry").wait_for()
                         settle()
                         shot(f"12-inbox-{width}")

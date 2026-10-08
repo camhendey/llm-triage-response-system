@@ -1,39 +1,57 @@
-# Operator guide: NiceGUI
+# Coordinator operator guide · 3.0
 
 Sole developer: Cameron Hendey. Original workflow developed at JOEY in 2024; refined in 2025.
 
-Start with `python app.py` and open http://localhost:8080. The main navigation contains Inquiries, Service, Project and Settings. The default workspace contains synthetic restaurant data and uses a fixed demo clock. Nothing is sent to a guest or synchronized with an external booking system.
+## First setup
 
-## Complete an inquiry
+Start `app.py`, open localhost:8080 and enter your coordinator name, restaurant and IANA time zone. Confirm authorized local storage. Settings must reflect the **current restaurant**, not an old manual. Add actual table IDs, capacities, area/style, verified step-free status and allowed combinations. Add occupancy-duration estimates, turnover buffer and separate minimum-spend and manager-approval thresholds. A blank threshold disables that automated threshold; it does not prove the restaurant has no policy. Record who reviewed the configuration. Table changes clear that review.
 
-1. **Find the request.** Inquiries shows a searchable list with reservation details, next steps and expiring holds. Filter by progress or unread messages, then choose Open. The reading indicator is separate from whether text has been interpreted.
-2. **Read and check.** The conversation sits beside the Plan/Reply panel. On smaller screens, switch between Request, Plan and Reply. Unknown information remains missing; disputed values retain their sources. Add guest replies through the conversation panel. Offline interpretation runs after adding a reply. Live mode requires an explicit Interpret message action.
-3. **Correct details.** Expand Reservation, Requirements or Guest & preferences and use Edit. Save a source/reason with the changes. Blank duration uses the restaurant default. Clearing a value marks it unknown without deleting its history. Inline review controls can confirm an extracted value or resolve a conflicting guest correction.
-4. **Choose seating.** Select the suggested arrangement, or compare other tables and times. The schematic is a preview, not a real floor plan. Selecting an alternative prepares an offer; it does not establish guest agreement. Record accepted date/time changes before finalizing.
-5. **Record the booking decision.** Confirm booking, Create hold, Confirm held booking or Apply booking change calls the existing rules and availability checks. Short-notice holds require an expiry deadline. The original booking stays allocated until a modification succeeds. Missing requirements and policy reviews remain visible.
-6. **Prepare the reply.** In Reply, prepare the record-grounded draft. Edit, Save reply and Mark reviewed. Reply options contains purpose selection and regeneration. New messages, changed facts or changed seating invalidate earlier approval. Earlier versions remain accessible.
-7. **Hand off.** Copy or download the reviewed reply. Copy success is shown only when the browser reports a successful clipboard write. Use the download if clipboard permission is blocked. After actually sending elsewhere, Mark as sent externally records the exact reviewed reply in conversation history. It does not verify delivery.
-8. **Prepare service.** Service defaults to arrival briefs. Choose a date, inspect requirements and outstanding work, open the corresponding inquiry or export a CSV handoff. Timeline shows occupancy at 15-minute granularity; arrival briefs retain exact times.
+Upload authorized seating photographs with meaningful captions. Real layout, current policy and photographs are not invented for you. Use another database for another restaurant: name/time zone are locked once cases exist, and imported restaurant IDs remain pinned after report clearing.
 
-## Exceptions
+## Each shift
 
-- Cancellation, hold release, decline, closure and reopening are in Other booking actions. A dialog requires a reason. Closing an inquiry does not cancel its booking.
-- Private-events escalation is an internal flag. Record completed referral only after performing the referral elsewhere. Neither action confirms private-room availability.
-- Allergy follow-up records human review, never a guarantee of accommodation.
-- Minimum-spend changes invalidate earlier agreement. Save the new amount before recording renewed agreement.
-- Interpretation limitations remain visible. Review the source text and enter missing facts manually; the app does not infer unknown information to make a booking look complete.
-- Activity & evidence contains append-only events, source values, interpretation diagnostics and rule results.
+In **Shift & reports**, upload a fresh reservations CSV/TSV. Optional guestbooks are separate. Check mappings, report type, slash-date order, export timestamp with explicit offset, and inclusive date coverage. Preview warnings and changes before applying. Attest completeness only after checking filters; otherwise the report remains reference-only. Remembered header mappings still require review.
 
-## Drafts and concurrent tabs
+A report replaces its type, never appends duplicates. Missing rows do not mean cancellation. Exports over four hours old cannot support snapshot assistance. Reloads preserve the shift; ending it clears raw reports. Reports also expire after 24 hours on next access. If unavailable, record a manual-check reason and check availability externally.
 
-Draft edits survive navigation within the same open browser page. Save before reloading, closing the page or stopping the server. Separate browser pages do not share unsaved buffers. Saved records are shared through SQLite.
+## Request
 
-A command based on an older record or audit event is rejected. Refresh and inspect the current state. If another tab changed a saved draft, your unsaved text remains visible beside the current saved text for comparison. A failed form submission retains its values.
+Enter the original inquiry, source and originally received timestamp with offset. The queue prioritizes overdue and near-term tasks/holds, then original receipt time. Record requirements as not asked, awaiting, historical or confirmed. Confirmation requires a value and evidence; use explicit `None` where appropriate. Local extraction provides quoted suggestions, never automatic fact replacement.
 
-## Settings and project tools
+Record new messages as changes unless genuinely acknowledgement-only. Changes block outcome responses until reviewed. Record reached-guest calls, no answer, voicemail, incorrect number or callback requested. Unsuccessful calls create follow-up tasks. The calling window is a warning, not a telephone integration; schedule any specific callback as an owned follow-up task.
 
-Settings switches between the fixed-clock demo and the real-clock session database. Advancing the demo clock can expire holds. Reset requires confirmation and only replaces the designated demo database; reload other tabs afterward. CSV files are staged in the browser session and imported only after clicking Import CSV. Live mode can make external model calls when interpreting imported rows.
+## Plan
 
-Project contains guided examples, evidence boundaries, the operator study timer and synthetic restaurant policies. Study sessions record actual timer actions and checklist entries. Browser verification uses disposable study databases; it is not a human productivity study.
+Save date/time, party, duration, configured tables and a guest-facing seating explanation. Multiple tables need an allowed grouping with sufficient capacity. Where relevant, record spend amount, currency, total/per-person basis and inclusions/exclusions; waivers require approval. Choose a seating photograph or record a case-specific exception.
 
-The optional older interface runs with `python -m streamlit run streamlit_app.py`. Use one interface at a time during ordinary work. Neither interface provides production authentication or multi-user administration.
+`Cannot assess` means missing or unsafe evidence, not no availability. `Potentially feasible` assumes the configured layout, declared coverage and estimated occupancy. Verify current OpenTable availability and restaurant flow in every case, record evidence, then obtain any required approval.
+
+Perform the actual booking externally. Reopen and check date/time, tables/party, guest requirements, large-party classification and saved notes/Made by. Record reference, status and evidence. A hold deadline must be future and before the visit. Expiry creates a manual-release action, never an automatic external release.
+
+Obtain guest agreement using an exact quote from an Email/Phone message or reached-guest call. Explicitly attest that it accepts the current arrangement and terms. A plan change makes acceptance stale. Contact/requirement changes require renewed external verification without necessarily discarding the accepted seating terms.
+
+## Communicate
+
+Choose clarification, offer, final confirmation, decline, referral or cancellation/release. Final confirmation requires complete plan and visit facts, guest acceptance, current external verification, reviewed policy, photo/exception and required approvals. An offer is not final confirmation.
+
+Save edited text, review the saved version, copy, send externally, then report sent. If a photo is selected, attach it in your email client and attest that it was attached. The wording guard is deliberately narrow; human review remains essential. `Saved` never means `Sent`.
+
+Working text and response purpose survive reload for the same browser URL. A recovered buffer can predate another tab's changes. Review it before saving. Changed evidence invalidates saved review.
+
+## Outcomes and follow-ups
+
+Plan → Alternative outcome supports decline, referral, cancellation and release with reasons. Release/cancel active external bookings before decline/referral. Referral requires a current feasibility record and actual recipient/handoff evidence. Cancellation/release must match the linked external reference. Prepare the matching outcome response; a clarification cannot complete a declined case.
+
+Tasks need an owner, waiting-on party, offset-aware deadline and completion evidence. Offer sending creates a guest-acceptance follow-up; acceptance closes that task, not unrelated work. Close only fully completed inquiries. A new change message can reopen one.
+
+## Service and end of shift
+
+Select the service date. The brief shows the **saved external allocation**, not the proposed change. Review requirements, promises, owner and pending work. Record the staff recipient. Changes since that receipt are flagged. CSV export neutralizes leading spreadsheet formula characters.
+
+End the shift in Shift & reports. Inquiries, copied evidence, photos and audits remain; raw snapshots are cleared and running timers stop. Timers record elapsed click intervals, not validated productivity evidence.
+
+## Privacy and recovery
+
+Back up `data/coordinator/workbench.sqlite` with the app stopped and protect it as guest information. No authentication, encryption, remote synchronization or secure-delete guarantee is provided. Do not expose this server publicly. Typed-ID removal of a closed case deletes its local record, audit and buffers, with no in-app undo; source reports, photos, backups and external bookings are unaffected.
+
+`/demo` preserves the synthetic workbench and optional live-provider path. Its data and fixed clock never establish real availability. Its older session mode is distinct from the new empty coordinator database.

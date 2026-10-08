@@ -1,0 +1,4 @@
+Reservation ID,Restaurant ID,Guest ID,Guest name,Email,Visit date,Visit time,Party size,Status,Table numbers,Guest request,Visit notes,Guestbook notes,Tags
+EXAMPLE-R1,EXAMPLE-VENUE,EXAMPLE-G1,Morgan,morgan@example.invalid,2026-11-13,6:00 PM,6,Confirmed,"805, 806",Window if possible,"Call before arrival",Historical allergy note - confirm with guest,Returning
+EXAMPLE-R2,EXAMPLE-VENUE,EXAMPLE-G2,Sam,sam@example.invalid,2026-11-13,19:30,2,Canceled,807,,,A quiet table,
+EXAMPLE-R3,EXAMPLE-VENUE,EXAMPLE-G3,Zoë,zoe@example.invalid,2026-11-14,18:00,4,Review required,,"Please discuss dietary needs",,,

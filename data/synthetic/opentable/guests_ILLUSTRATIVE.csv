@@ -1,0 +1,3 @@
+Guest ID,Restaurant ID,Guest name,Email,Phone,Guestbook notes,Tags
+EXAMPLE-G1,EXAMPLE-VENUE,Morgan,morgan@example.invalid,15555550123,Prefers a quiet table,Returning
+EXAMPLE-G4,EXAMPLE-VENUE,Morgan household,morgan@example.invalid,15555550123,Shared contact details - verify identity,

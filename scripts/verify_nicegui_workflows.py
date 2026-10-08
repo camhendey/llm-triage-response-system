@@ -37,7 +37,7 @@ def main():
                     page.on("pageerror", lambda e: errors.append(str(e)))
                     for _ in range(40):
                         try:
-                            page.goto("http://127.0.0.1:8624")
+                            page.goto("http://127.0.0.1:8624/demo")
                             break
                         except Exception:
                             time.sleep(0.25)
@@ -52,6 +52,7 @@ def main():
                         pg.get_by_test_id(test).click()
                         settle(pg)
 
+                    page.get_by_test_id("ot-demo").click()
                     page.get_by_test_id("new-inquiry").wait_for()
                     click("new-inquiry")
                     page.get_by_label("Guest name / label", exact=True).fill("Riley")
@@ -74,7 +75,8 @@ def main():
                     settle()
                     # Independent browser page sees the saved text, not the first page's buffer.
                     second = browser.new_page(viewport={"width": 1440, "height": 1050})
-                    second.goto("http://127.0.0.1:8624")
+                    second.goto("http://127.0.0.1:8624/demo")
+                    second.get_by_test_id("ot-demo").click()
                     second.get_by_test_id("new-inquiry").wait_for()
                     settle(second)
                     second.locator(".inbox-row").filter(has_text="Riley").get_by_role(

@@ -4,6 +4,7 @@ __pycache__/
 .env
 data/demo/
 data/sessions/
+data/coordinator/
 data/study/*.sqlite
 .pytest_cache/
 *.egg-info/

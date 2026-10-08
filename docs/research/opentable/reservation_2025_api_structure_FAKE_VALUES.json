@@ -1,0 +1,53 @@
+{
+  "id": "99999-EXAMPLE-RESERVATION-001",
+  "href": "https://platform.opentable.com/sync/v2/reservations/99999-EXAMPLE-RESERVATION-001",
+  "rid": 99999,
+  "sequence_id": 7081528,
+  "guest_id": "99999-EXAMPLE-GUEST-001",
+  "guest": "https://platform.opentable.com/sync/v2/guests/99999-EXAMPLE-GUEST-001",
+  "confirmation_id": 2110995303,
+  "state": "Confirmed",
+  "table_number": [
+    "805"
+  ],
+  "created_date": "2025-04-11T11:39:03",
+  "scheduled_time": "2025-04-24T19:30:00",
+  "party_size": 2,
+  "visit_tags": null,
+  "origin": "Web",
+  "updated_at": "2025-04-23T09:27:09",
+  "seated_time": null,
+  "done_time": null,
+  "pos_data": {
+    "check_ids": null,
+    "pos_sub_total": null,
+    "pos_tax": null,
+    "pos_tip": null,
+    "pos_total_spend": null
+  },
+  "scheduled_time_utc": "2025-04-24T23:30:00Z",
+  "marketing_opted_out": false,
+  "guest_request": "",
+  "venue_notes": null,
+  "opentable_notes": "",
+  "table_category": null,
+  "seated_time_utc": null,
+  "done_time_utc": null,
+  "created_date_utc": "2025-04-11T15:39:03Z",
+  "updated_at_utc": "2025-04-23T13:27:09Z",
+  "server": null,
+  "referrer": null,
+  "added_to_waitlist": null,
+  "added_to_waitlist_utc": null,
+  "arrived_time": null,
+  "arrived_time_utc": null,
+  "currency_code": null,
+  "currency_denominator": 100,
+  "deposit": {
+    "total_paid": null,
+    "total_refunded": null,
+    "currency": null,
+    "currency_denominator": 100,
+    "status": null
+  }
+}

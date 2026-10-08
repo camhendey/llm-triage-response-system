@@ -1,30 +1,33 @@
 {
-  "verified_at": "2026-10-07",
-  "release": "2.0.0",
-  "python": "3.12.14",
-  "platform": "Linux-6.18.44-x86_64-with-glibc2.39",
+  "verified_at": "2026-10-08T15:05:47.840840+00:00",
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
   "packages": {
     "nicegui": "3.18.0",
-    "fastapi": "0.142.4",
-    "starlette": "1.7.0",
-    "uvicorn": "0.54.0",
-    "streamlit": "1.65.0",
     "pydantic": "2.13.5",
-    "anthropic": "1.11.0",
-    "pyyaml": "6.0.3",
-    "python-dotenv": "1.2.4",
-    "tzdata": "2026.4",
     "pytest": "9.1.1",
     "playwright": "1.55.0",
-    "matplotlib": "3.10.8",
     "pillow": "12.3.0"
   },
-  "provider": "offline_rules",
-  "live_api_run": false,
-  "browser": "Chromium headless 140 / Playwright 1.55.0",
-  "viewports": [
-    1440,
-    820,
-    390
+  "checks": [
+    {
+      "check": "pytest.txt",
+      "exit_code": 0
+    },
+    {
+      "check": "coordinator-browser.txt",
+      "exit_code": 0
+    },
+    {
+      "check": "nicegui-workflows.txt",
+      "exit_code": 0
+    },
+    {
+      "check": "opentable-browser.txt",
+      "exit_code": 0
+    },
+    {
+      "check": "nicegui-browser.txt",
+      "exit_code": 0
+    }
   ]
 }

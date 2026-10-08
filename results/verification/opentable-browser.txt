@@ -1,0 +1,1 @@
+PASS: setup gate, CSV mapping/preview/apply, optional guestbook, replacement, date totals, shared-contact candidates, tab isolation, reload, mobile setup, demo path. No browser errors or server tracebacks.
