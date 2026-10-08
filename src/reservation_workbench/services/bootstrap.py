@@ -39,11 +39,11 @@ class ResetRefused(RuntimeError):
 
 
 def demo_db_path() -> Path:
-    return Path(os.getenv("RW_DEMO_DB", str(DEMO_DB_PATH))).resolve()
+    return Path(os.getenv("RW_DEMO_DB") or str(DEMO_DB_PATH)).resolve()
 
 
 def session_db_path() -> Path:
-    return Path(os.getenv("RW_SESSION_DB", str(SESSION_DB_PATH))).resolve()
+    return Path(os.getenv("RW_SESSION_DB") or str(SESSION_DB_PATH)).resolve()
 
 
 def open_workbench(kind: str = "demo", path: str | Path | None = None, provider=None,

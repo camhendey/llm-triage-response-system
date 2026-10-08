@@ -1,5 +1,6 @@
-"""Run with: streamlit run app.py"""
+"""Start the NiceGUI workbench: python app.py"""
 
-from reservation_workbench.ui.main import run
+from reservation_workbench.web.main import start
 
-run()
+if __name__ == "__main__":
+    start()

@@ -1,36 +1,39 @@
-# Operator guide
+# Operator guide: NiceGUI
 
 Sole developer: Cameron Hendey. Original workflow developed at JOEY in 2024; refined in 2025.
 
-The app records decisions for a simulated restaurant. Email sending and external reservation updates happen outside this app. Start with a guided example under **Project** or an inquiry in the sidebar. **Settings** contains the fixed demo clock, database switch, CSV import and demo reset.
+Start with `python app.py` and open http://localhost:8080. The main navigation contains Inquiries, Service, Project and Settings. The default workspace contains synthetic restaurant data and uses a fixed demo clock. Nothing is sent to a guest or synchronized with an external booking system.
 
-## Complete one inquiry
+## Complete an inquiry
 
-1. **Understand the request.** Read the conversation and the next action. Adding a guest reply runs offline interpretation automatically. In live mode use **Interpret new reply** explicitly. Unknown information stays unknown.
-2. **Review details.** Use **Edit reservation**, **Edit requirements** or **Edit guest & preferences** for typed dates, times, party size and policy values. Save related changes together with a source/reason. Resolve ambiguous statements in the inline review cards and **Sources for these details**. Occasion is optional. Use **Mark unknown** to clear an incorrect value explicitly; clearing preserves its history.
-3. **Choose seating.** **Select suggested arrangement** is the shortcut. **Compare seating & other times** shows feasible options, a table schematic, comparison rows and rejected-option reasons. Selecting an alternative is an offer, not evidence the guest accepted it. Update/confirm the requested time from the guest's reply before finalizing.
-4. **Record the decision.** After selection, **Create hold**, **Confirm booking**, or **Review and commit change** performs human approval and an atomic availability recheck. In the demo these update only the local simulated booking. Short-notice holds ask for an expiry deadline.
-5. **Prepare the reply.** The **Reply** panel uses the selected arrangement and actual action status. Edit the single reply field, **Save reply**, then **Mark reviewed**. Draft edits survive navigation within the current browser session; save to persist across restarts. Changed facts, seating or a new guest message invalidate earlier drafts and approvals.
-6. **Hand off.** Copy the reviewed reply, or download it and the booking notes. Once you have sent a reply elsewhere, **Record sent elsewhere** adds the exact reviewed text to the conversation as an operator assertion. It does not send or verify delivery.
-7. **Prepare service.** In **Service**, choose a date, read arrival briefs or switch to the timeline and export the daily service handoff with access, allergens, billing, occasion and outstanding items. Expired or cancelled bookings are excluded.
+1. **Find the request.** Inquiries shows a searchable list with reservation details, next steps and expiring holds. Filter by progress or unread messages, then choose Open. The reading indicator is separate from whether text has been interpreted.
+2. **Read and check.** The conversation sits beside the Plan/Reply panel. On smaller screens, switch between Request, Plan and Reply. Unknown information remains missing; disputed values retain their sources. Add guest replies through the conversation panel. Offline interpretation runs after adding a reply. Live mode requires an explicit Interpret message action.
+3. **Correct details.** Expand Reservation, Requirements or Guest & preferences and use Edit. Save a source/reason with the changes. Blank duration uses the restaurant default. Clearing a value marks it unknown without deleting its history. Inline review controls can confirm an extracted value or resolve a conflicting guest correction.
+4. **Choose seating.** Select the suggested arrangement, or compare other tables and times. The schematic is a preview, not a real floor plan. Selecting an alternative prepares an offer; it does not establish guest agreement. Record accepted date/time changes before finalizing.
+5. **Record the booking decision.** Confirm booking, Create hold, Confirm held booking or Apply booking change calls the existing rules and availability checks. Short-notice holds require an expiry deadline. The original booking stays allocated until a modification succeeds. Missing requirements and policy reviews remain visible.
+6. **Prepare the reply.** In Reply, prepare the record-grounded draft. Edit, Save reply and Mark reviewed. Reply options contains purpose selection and regeneration. New messages, changed facts or changed seating invalidate earlier approval. Earlier versions remain accessible.
+7. **Hand off.** Copy or download the reviewed reply. Copy success is shown only when the browser reports a successful clipboard write. Use the download if clipboard permission is blocked. After actually sending elsewhere, Mark as sent externally records the exact reviewed reply in conversation history. It does not verify delivery.
+8. **Prepare service.** Service defaults to arrival briefs. Choose a date, inspect requirements and outstanding work, open the corresponding inquiry or export a CSV handoff. Timeline shows occupancy at 15-minute granularity; arrival briefs retain exact times.
 
-## Exceptions and review
+## Exceptions
 
-| Situation | Action |
-|---|---|
-| Facts change after selection | Resolve conflicts, select again and prepare a fresh reply. The earlier proposal cannot be committed. |
-| Short acceptance such as “That time works” | The offline interpreter can connect it to a single preceding offer. Date/time remain **needs review** until confirmed. Ambiguous multi-option acceptances need manual clarification. |
-| Above the public party-size limit | Flag for private-events review. Only **Record referral completed elsewhere** permits a draft to claim the referral happened. Neither action establishes private-room availability. |
-| Minimum spend | Record the amount and guest agreement. Changing the amount clears the old agreement. |
-| Allergy mentioned | Record allergy follow-up review; the reply must not guarantee accommodation. |
-| Accessibility conflict | Select suitable step-free seating, resolve conflicting preferences with the guest, then record the agreement. The schematic is not a real floor plan. |
-| Cancellation | Booking remains active until **Cancel booking** is committed with a reason. |
-| Unavailable modification | Original booking remains intact; explain that the requested change is unavailable. |
-| Hold expiry | The fixed demo clock governs demo expiry. Advancing it changes available tables; the session database uses real time. |
-| Unsupported interpretation | Review the original text and enter facts manually; do not infer missing information. |
+- Cancellation, hold release, decline, closure and reopening are in Other booking actions. A dialog requires a reason. Closing an inquiry does not cancel its booking.
+- Private-events escalation is an internal flag. Record completed referral only after performing the referral elsewhere. Neither action confirms private-room availability.
+- Allergy follow-up records human review, never a guarantee of accommodation.
+- Minimum-spend changes invalidate earlier agreement. Save the new amount before recording renewed agreement.
+- Interpretation limitations remain visible. Review the source text and enter missing facts manually; the app does not infer unknown information to make a booking look complete.
+- Activity & evidence contains append-only events, source values, interpretation diagnostics and rule results.
 
-## Recovery
+## Drafts and concurrent tabs
 
-Record-version checks reject stale edits from other tabs. Reload and review the current facts. Duplicate commands are idempotent. Validation errors block draft approval; correct the text or regenerate it. The app is a single-operator prototype with independent connections per browser session, not a multi-user production service.
+Draft edits survive navigation within the same open browser page. Save before reloading, closing the page or stopping the server. Separate browser pages do not share unsaved buffers. Saved records are shared through SQLite.
 
-To use the optional live interpreter, configure `.env` from `.env.example` and restart. Only that provider calls an external API. Availability and booking decisions remain deterministic. Live integration has fake-client tests but no real API verification in this release.
+A command based on an older record or audit event is rejected. Refresh and inspect the current state. If another tab changed a saved draft, your unsaved text remains visible beside the current saved text for comparison. A failed form submission retains its values.
+
+## Settings and project tools
+
+Settings switches between the fixed-clock demo and the real-clock session database. Advancing the demo clock can expire holds. Reset requires confirmation and only replaces the designated demo database; reload other tabs afterward. CSV files are staged in the browser session and imported only after clicking Import CSV. Live mode can make external model calls when interpreting imported rows.
+
+Project contains guided examples, evidence boundaries, the operator study timer and synthetic restaurant policies. Study sessions record actual timer actions and checklist entries. Browser verification uses disposable study databases; it is not a human productivity study.
+
+The optional older interface runs with `python -m streamlit run streamlit_app.py`. Use one interface at a time during ordinary work. Neither interface provides production authentication or multi-user administration.

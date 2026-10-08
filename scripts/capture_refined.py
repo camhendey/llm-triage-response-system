@@ -35,7 +35,7 @@ def main():
                     "-m",
                     "streamlit",
                     "run",
-                    str(ROOT / "app.py"),
+                    str(ROOT / "streamlit_app.py"),
                     "--server.port",
                     "8613",
                     "--server.address",

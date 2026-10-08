@@ -1,51 +1,33 @@
-# Verification — version 1.2
+# Verification: version 2.0 (NiceGUI)
 
 Sole developer: Cameron Hendey. Original workflow developed at JOEY in 2024; refined in 2025.
 
-Current checks ran on Linux with Python 3.12.14. Exact package versions are in `results/verification/environment.json`; `constraints-tested.txt` pins the directly used packages for reproduction. Original-release verification is retained in `archive/VERIFICATION_1.0.md` and is not a current test report.
+Checks ran on Linux with Python 3.12.14. `results/verification/environment.json` records the actual installed package versions. `constraints-tested.txt` pins direct packages used for reproduction. Earlier verification reports are retained under `docs/archive/`.
 
 ## Reproduce
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -c constraints-tested.txt -e '.[dev]'
+python -m pip install -c constraints-tested.txt -e '.[dev]'
 python -m pytest -o addopts='' -q
-rw eval validate
-rw eval run --split heldout --mode offline --retest '1.2 UI and response-state regression replay'
-python scripts/run_refinement_challenge.py --out results/challenge-replay
-python scripts/run_worked_examples.py
-python -m playwright install chromium
-python scripts/capture_clean.py
+python -m playwright install chromium --only-shell
+python scripts/capture_nicegui.py
+python scripts/verify_nicegui_workflows.py
+python -m reservation_workbench.cli eval validate
+python -m reservation_workbench.cli eval run --split heldout --mode offline --retest '2.0 NiceGUI migration regression'
 ```
 
-The supplemental challenge refuses to overwrite its saved first-pass results. The screenshot script creates disposable databases and closes its server when finished. Set `RW_CHROMIUM` when using an existing Chromium executable.
-
-Editable installation was also checked with `pip install --no-deps --no-build-isolation -e .` against the installed dependencies. A separate clean environment dependency download was not repeated in this revision.
+Set `RW_CHROMIUM` to an existing Chromium executable if needed. Both browser scripts create disposable booking/session/study databases and stop their temporary servers. They use ports 8623 and 8624. Screenshot captures are unedited application output.
 
 ## Results
 
-- **123 tests passed**: original service/rule/provider/evaluation acceptance checks plus refinement regression, UI interaction and six additional progress/clearing/read-receipt tests. Exact test output: `results/verification/pytest.txt`.
-- The UI journey selects seating, confirms a simulated booking, prepares a reply, edits it, navigates away/back without losing the edit, saves/reviews it and records the exact reported outgoing message. An AppTest verifies updated details invalidate a selected plan. The real Chromium journey separately edits party size through the actual dialog, checks the stale-plan warning, selects again, confirms, reviews and records the reply as sent.
-- Frozen 40-case offline regression: 39/40 expected next actions, 97/97 field agreement, 20/20 required constraints, 0 critical-error cases. Previously inspected cases, not blind.
-- New 12-case development-authored extraction challenge: 31/32 fields, 6/6 unknowns preserved; one conservatively reviewed access-negation phrase. No next-action accuracy measured in this set.
-- Three replayable worked examples cover a normal booking, accessibility/alternative-time resolution with reported outgoing history, and modification/cancellation.
-- Actual Chromium screenshots at 1440, 820 and 390 pixels are in `screenshots/clean/`. The screenshot script asserts no Streamlit exception and exercises a real confirmation/reply/handoff journey.
+- **129 automated tests passed.** The original 123 checks remain, including the optional legacy Streamlit AppTests. Six new tests cover stale record rejection, transactional rollback, idempotent retries, draft changes without record-version increments, connection/database separation and blank environment-path defaults.
+- The NiceGUI screenshot journey edits a selected reservation, verifies plan invalidation, selects again, confirms, generates and edits a reply, preserves unsaved text across navigation, saves/reviews, checks actual clipboard contents and records reported sending. It visits Service, Timeline, Project and Settings, then checks widths of 820 and 390 pixels for document overflow.
+- The additional browser journey creates an inquiry, holds and confirms it, verifies independent unsaved buffers in two browser pages, rejects a stale save, invalidates a reviewed reply after a new message, records cancellation, imports CSV and exercises the study timer.
+- The inspected 40-case offline regression remains 39/40 allowed next actions, 97/97 labelled fields, 20/20 required constraints and zero critical-error cases. It is a retest, not an independent blind benchmark.
+- The previously recorded 12-case challenge remains historical evidence: 31/32 field matches, 6/6 unknowns preserved. It is not relabelled as new migration validation.
 
-## Visual checks
+Exact outputs are saved under `results/verification/`. Current captures are under `docs/screenshots/nicegui/`. The `clean/`, `refined/` and original screenshot folders describe earlier interfaces.
 
-| Capture | What it demonstrates |
-|---|---|
-| `01-inbox.png` | Focused inquiry entry and compact queue |
-| `02-plan.png`, `04-selected.png` | Conversation alongside the next seating decision |
-| `03-edit.png` | Grouped reservation editor with explicit unknown controls |
-| `05-reply.png`, `06-reviewed.png` | Draft and reviewed handoff states |
-| `07-complete.png` | Reported sending closes into a completion record |
-| `08-service.png`, `09-timeline.png` | Arrival briefs and secondary occupancy timeline |
-| `10-workspace-820.png`, `10-workspace-390.png` | Action-first stacked layout without document overflow |
+## Boundaries
 
-These are unedited application captures. Automated checks verified document widths at 820 and 390 pixels. This is not a formal accessibility or mobile-device audit. Older screenshot folders remain historical evidence. Clipboard support depends on browser permissions; downloadable text is available as a fallback.
-
-## Unverified boundaries
-
-The live provider has fake-client tests, but no real API run occurred. No handling-time sessions or independent label review occurred. Browser coverage is Chromium; Windows/macOS installations, real mobile devices and screen readers were not tested. No production service or external integration was deployed. The 2024/2025 provenance dates do not date these tests.
+No live API calls, human usability/timing sessions, external booking integration or deployment occurred. Browser checks use desktop Chromium, including resized viewports; physical phones, screen readers and Windows/macOS installations were not tested. The UI binds locally by default and has no authentication. The unchanged schema permits existing databases, but no user-owned Windows database was accessed during this work.

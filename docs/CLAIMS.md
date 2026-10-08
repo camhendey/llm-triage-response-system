@@ -6,12 +6,12 @@ Every public claim about this project should appear here with its evidence and q
 
 | # | Claim | Status | Evidence | Qualification |
 |---|---|---|---|---|
-| C1 | A working, human-reviewed reservation workbench with queue, facts with provenance, seating rules, holds, confirmations, changes, cancellations and reviewed drafts | supported | source; `docs/screenshots/`; 117 passing tests | Simulated restaurant and synthetic data only |
+| C1 | A working, human-reviewed reservation workbench with queue, facts with provenance, seating rules, holds, confirmations, changes, cancellations and reviewed drafts | supported | source; `docs/screenshots/`; 129 passing tests | Simulated restaurant and synthetic data only |
 | C2 | Seating decisions are deterministic and explainable (every rejected option lists its reasons) | supported | `rules/availability.py`; screenshot 03; `examples/02_accessibility_conflict/snapshots.json` | Simple fixed ranking, not an optimiser |
-| C3 | It never sends messages or updates an external booking system | supported | no network code besides the optional model API; copy/send events (A25); draft validator | Operators can record that they sent something elsewhere; the app cannot verify it |
+| C3 | It never sends messages or updates an external booking system | supported | no external-service calls besides the optional model API; copy/send events (A25); draft validator | Operators can record that they sent something elsewhere; the app cannot verify it |
 | C4 | Operator corrections are never silently overwritten | supported | `rules/facts.py`; test A03 | |
 | C5 | Approvals are tied to a record version; a fact change blocks the old approval | supported | tests A02, A10, A24; `docs/figures/correction_sequence.png` | |
-| C6 | Holds reserve real tables until expiry; groupings consume their tables | supported | tests A06, A09 | |
+| C6 | Holds reserve configured synthetic table units until expiry; groupings consume their constituent units | supported | tests A06, A09 | |
 | C7 | Changes are atomic and actions are idempotent | supported | tests A11, A13, A14 | SQLite transactions and record-version checks; single-operator prototype |
 | C8 | Guest text cannot instruct the system | qualified | tests A19 (offline and fake live client); held-out adversarial group 3/3 | Live-model behaviour not tested against the real API |
 | C9 | Critical facts in drafts (dates, times, party size, status) come from the record, not from a model | supported | `services/drafting.py`; test A30; 0 validator errors across 38 drafts per held-out run | |
@@ -53,6 +53,20 @@ Every public claim about this project should appear here with its evidence and q
 |---|---|---|
 | Selected-arrangement drafts, full reported conversation, typed editing and daily handoff | `tests/test_refinements.py`, UI tests and refined screenshots | Simulated bookings; outbound records are operator assertions |
 | Current regression result: 39/40 next actions, 97/97 field agreement, 0 critical-error cases | `results/eval/20261006T222849-heldout-offline/` | Previously inspected 40-case suite, not blind; occasion policy change explains two improved next actions |
-| 15 new regression/UI tests, 117 total | `results/verification/pytest.txt` | Passing tests demonstrate specified cases, not production reliability |
+| Version 1.1 added 15 regression/UI tests, reaching 117 then | `docs/archive/VERIFICATION_1.1.md` | Passing tests demonstrate specified cases, not production reliability |
 
 Supplemental extraction challenge: 31/32 labelled fields and 6/6 unknowns across 12 new development-authored cases (`results/refinement-challenge/`). First execution, no subsequent tuning; not independent, and next-action accuracy was not scored.
+
+
+## NiceGUI migration evidence (2.0)
+
+| Claim | Evidence | Qualification |
+|---|---|---|
+| Primary interface migrated without changing the booking schema or rules | `web/`, `docs/NICEGUI_MIGRATION.md` | Interface rewrite; not a new booking engine |
+| 129 automated tests pass | `results/verification/pytest.txt` | Includes retained legacy UI checks and six new command-boundary tests |
+| Main and exception workflows work in Chromium | `scripts/capture_nicegui.py`, `scripts/verify_nicegui_workflows.py`, saved logs | Synthetic, automated journeys; no real-user usability study |
+| Desktop, tablet-width and phone-width layouts were inspected | `docs/screenshots/nicegui/` | Resized Chromium, not physical device or accessibility certification |
+| Old screens cannot approve a concurrently edited reply through the new command boundary | `tests/test_nicegui_commands.py`; browser stale-save check | Read/version guards, not a claim of production-scale collaboration |
+| The inspected regression still records 39/40 allowed next actions with no critical-error cases | `results/verification/nicegui-regression.txt` | Prior inspected cases; no new blind evaluation |
+
+No measured human speed improvement or live-model accuracy claim is added by the interface migration.

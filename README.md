@@ -6,36 +6,54 @@ A single-operator, human-reviewed workbench for large-party restaurant reservati
 
 Nothing in this application sends email, reads or updates any external booking system, takes payments or is deployed anywhere. It is a portfolio project by Cameron Hendey; see [docs/PROVENANCE.md](docs/PROVENANCE.md) for how it relates to his earlier, manual, LLM-assisted workflow.
 
-![Refined workbench (real application screenshot)](docs/screenshots/clean/02-plan.png)
+![Refined workbench (real application screenshot)](docs/screenshots/nicegui/02-workspace.png)
 
 ## Status (2026-10-07)
 
 | Gate | State |
 |---|---|
 | Implemented | Workbench UI, service layer, rules engine, offline and live interpreters, CLI, evaluation runner, study harness |
-| Deterministic tests | **123 passed** (`pytest`), covering acceptance scenarios A01-A30 |
-| Actual UI verified | Chromium captures at 1440 px, 820 px and 390 px; end-to-end Streamlit interaction tests ([docs/VERIFICATION.md](docs/VERIFICATION.md)) |
+| Deterministic tests | **129 passed** (`pytest`), covering acceptance scenarios A01-A30 |
+| Actual UI verified | Chromium captures at 1440 px, 820 px and 390 px; two real NiceGUI browser journeys plus retained legacy UI tests ([docs/VERIFICATION.md](docs/VERIFICATION.md)) |
 | Live model verified | **not_run**: no API key or spending limit was supplied ([results/eval/live_status.json](results/eval/live_status.json)) |
 | Human handling-time study | **pending**: harness and protocol ready, 0 of 36 sessions recorded |
 
 The original 40-case blind offline run allowed the expected next action in **33/40** cases with **1 critical-error case**. The refinement regression run reaches **39/40** with **0 critical-error cases** and 97/97 labelled field agreement. This is a **retest of previously inspected synthetic cases**, not a fresh blind benchmark; making occasion optional explains two improved next-action results. Live AI performance and time savings remain unmeasured. [Evaluation and limitations](docs/EVALUATION.md).
 
-Version **1.2** simplifies navigation, separates booking and reply progress, groups editable details, adds explicit unknown-value clearing, and puts arrival briefs first. [UI changes and decisions](docs/UI_REDESIGN.md).
+Version **2.0** replaces the primary interface with NiceGUI: compact inquiry rows, a conversation-and-decision workspace, focused reply editing, mobile Request/Plan/Reply views, and arrival briefs. Business rules and the SQLite schema are retained. [Migration and workflow coverage](docs/NICEGUI_MIGRATION.md).
+
+Version **1.2** simplified navigation, separated booking and reply progress, grouped editable details, added explicit unknown-value clearing, and put arrival briefs first. [UI changes and decisions](docs/UI_REDESIGN.md).
 
 Version **1.1** added a unified coordinator workspace, typed guest-detail editing, selected-plan drafting, seating/time comparisons, outgoing conversation history, explicit referral reporting and a daily handoff export. [Changes](docs/REFINEMENT.md).
 
 ## Quick start
 
-Requires Python 3.11+.
+Requires Python 3.11+. NiceGUI is the main UI. No separate Node.js, npm or frontend build is required. The offline demo requires no API key.
+
+In **Cursor → Terminal → New Terminal**, use PowerShell:
+
+```powershell
+cd "C:\Users\camer\Documents\dev\reservation-workbench"
+# Create the environment only if it does not exist:
+py -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -c constraints-tested.txt -e .
+.\.venv\Scripts\python.exe app.py
+```
+
+Open **http://localhost:8080**. Keep the terminal running; Ctrl+C stops the app. After setup, `start-windows.cmd` runs the same command. For subsequent launches, only run `.\.venv\Scripts\python.exe app.py`.
+
+When upgrading, stop the previous app and copy the files inside this ZIP's `reservation-workbench` folder into your existing project folder. Keep your `.env`, `.venv` and existing `data` databases. Re-run the installation command above to install NiceGUI. The database schema has not changed. Avoid creating a nested `reservation-workbench/reservation-workbench` folder.
+
+For development and testing on macOS/Linux:
 
 ```bash
 python -m venv .venv && source .venv/bin/activate      # Windows: .venv\Scripts\activate
 pip install -c constraints-tested.txt -e ".[dev]"
-cp .env.example .env                                     # optional; values are empty by default
-streamlit run app.py                                     # http://localhost:8501
+cp .env.example .env                                     # optional; offline mode is the default
+python app.py                                           # http://localhost:8080
 ```
 
-The app opens on the **demo** database (`data/demo/workbench_demo.sqlite`), seeded from `data/synthetic/demo_inquiries.json` with a fixed demo clock of Tue Nov 10 2026, 10:00 America/Toronto. Use **+1 hour / +1 day** in **Settings** to move the demo clock (holds expire against it). Switch to the **session** database for a persistent workspace on the real clock.
+The app opens on the **demo** database (`data/demo/workbench_demo.sqlite`), seeded from `data/synthetic/demo_inquiries.json` with a fixed demo clock of Tue Nov 10 2026, 10:00 America/Toronto. Use **Advance 1 hour / Advance 1 day** in **Settings** to move the demo clock (holds expire against it). Switch to the **session** database for a persistent workspace on the real clock.
 
 ```bash
 rw init-demo                    # create/seed the demo database if missing
@@ -43,12 +61,12 @@ rw reset-demo                   # delete and re-seed ONLY the designated demo da
 rw queue                        # queue as text
 rw show INQ-0103 --notes        # facts, rules and copyable booking notes
 rw import-csv messages.csv --interpret          # into the session database
-pytest                                          # 123 tests
+pytest                                          # 129 tests
 rw eval validate                                # dataset shape and freeze hash
 rw eval run --split heldout --mode offline      # writes results/eval/<run>/
 python scripts/run_worked_examples.py           # replays examples/01-03
 python scripts/make_charts.py                   # historical evaluation figures
-python scripts/capture_clean.py                # current screenshots; needs Playwright Chromium
+python scripts/capture_nicegui.py                # current screenshots; needs Playwright Chromium
 ```
 
 `reset-demo` refuses any path other than the designated demo database and refuses any database whose stored kind is not `demo`.
@@ -91,7 +109,8 @@ Without them it writes `results/eval/live_status.json` with `status: not_run` an
 | `src/reservation_workbench/providers` | Offline interpreter, live Anthropic provider, shared validation |
 | `src/reservation_workbench/services` | Workbench service layer (used by UI, CLI, tests and evaluation), drafting, CSV import, bootstrap/reset |
 | `src/reservation_workbench/persistence` | SQLite schema and repository (events, idempotency keys) |
-| `src/reservation_workbench/ui` | Streamlit views |
+| `src/reservation_workbench/web` | NiceGUI interface, command boundary and visual system |
+| `src/reservation_workbench/ui` | Optional legacy Streamlit interface |
 | `src/reservation_workbench/evaluation`, `data/eval` | Scenario loader, freeze, runner; 20 development + 40 held-out scenarios |
 | `src/reservation_workbench/study`, `data/study`, `docs/study` | Handling-time study harness, cases and protocol |
 | `config/restaurant_demo.yaml` | Synthetic restaurant: tables, groupings, policies, seed bookings |
@@ -108,3 +127,16 @@ Without them it writes `results/eval/live_status.json` with `status: not_run` an
 Synthetic restaurant and guests only. Policies in `config/restaurant_demo.yaml` are demonstration values, not any real restaurant's current policy. No real guest data, no restaurant branding, no affiliation with or integration into any reservation platform, no deployment. All guest text is treated as untrusted data and never as instructions.
 
 License: MIT.
+
+## Legacy interface
+
+The previous Streamlit UI remains available for comparison and recovery:
+
+```bash
+python -m pip install -c constraints-tested.txt -e ".[legacy]"
+python -m streamlit run streamlit_app.py
+```
+
+Use `python app.py` for the new interface. Do not run `streamlit run app.py`. Both interfaces use the same configured database, so run one interface at a time during normal use.
+
+The server binds to `127.0.0.1:8080`. `RW_PORT` can change the port. This remains a local single-operator prototype, with no login, role permissions or production deployment configuration.

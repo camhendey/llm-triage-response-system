@@ -1,0 +1,20 @@
+wrote /workspace/scratch/adbef9b8f0e5/revision/reservation-workbench/results/eval/20261007T171141-heldout-offline
+{
+  "cases_run": 40,
+  "next_action_allowed": {
+    "n": 39,
+    "d": 40,
+    "rate": 0.975
+  },
+  "field_agreement_all": {
+    "n": 97,
+    "d": 97,
+    "rate": 1.0
+  },
+  "required_constraint_recall": {
+    "n": 20,
+    "d": 20,
+    "rate": 1.0
+  },
+  "cases_with_critical_errors": 0
+}

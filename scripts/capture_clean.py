@@ -23,7 +23,7 @@ with tempfile.TemporaryDirectory() as td:
                 "-m",
                 "streamlit",
                 "run",
-                str(ROOT / "app.py"),
+                str(ROOT / "streamlit_app.py"),
                 "--server.address",
                 "127.0.0.1",
                 "--server.port",

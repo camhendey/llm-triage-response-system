@@ -1,5 +1,7 @@
 # UI refinement, version 1.2
 
+Historical Streamlit design record. The current interface is described in [NICEGUI_MIGRATION.md](NICEGUI_MIGRATION.md).
+
 Sole developer: Cameron Hendey. Original workflow developed at JOEY in 2024; refined in 2025.
 
 ## Design goal

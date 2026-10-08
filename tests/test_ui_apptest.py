@@ -10,7 +10,7 @@ from pathlib import Path
 import pytest
 
 AppTest = pytest.importorskip("streamlit.testing.v1").AppTest
-APP = str(Path(__file__).resolve().parents[1] / "app.py")
+APP = str(Path(__file__).resolve().parents[1] / "streamlit_app.py")
 
 
 @pytest.fixture

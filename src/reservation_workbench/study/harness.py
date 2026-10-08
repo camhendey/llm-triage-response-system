@@ -28,7 +28,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[3]
 CASES_PATH = ROOT / "data" / "study" / "cases.yaml"
-DB_PATH = Path(os.getenv("RW_STUDY_DB", str(ROOT / "data" / "study" / "study_sessions.sqlite")))
+DB_PATH = Path(os.getenv("RW_STUDY_DB") or str(ROOT / "data" / "study" / "study_sessions.sqlite"))
 OUT_DIR = ROOT / "results" / "study"
 METHODS = ("template_only", "structured_llm", "workbench")
 METHOD_LABELS = {"template_only": "1. Template-only + manual availability check",

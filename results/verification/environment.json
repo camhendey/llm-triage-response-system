@@ -1,7 +1,13 @@
 {
+  "verified_at": "2026-10-07",
+  "release": "2.0.0",
   "python": "3.12.14",
   "platform": "Linux-6.18.44-x86_64-with-glibc2.39",
   "packages": {
+    "nicegui": "3.18.0",
+    "fastapi": "0.142.4",
+    "starlette": "1.7.0",
+    "uvicorn": "0.54.0",
     "streamlit": "1.65.0",
     "pydantic": "2.13.5",
     "anthropic": "1.11.0",
@@ -15,6 +21,10 @@
   },
   "provider": "offline_rules",
   "live_api_run": false,
-  "verified_at": "2026-10-07",
-  "release": "1.2.0"
+  "browser": "Chromium headless 140 / Playwright 1.55.0",
+  "viewports": [
+    1440,
+    820,
+    390
+  ]
 }

@@ -1,0 +1,3 @@
+{"viewport": 820, "width": 820}
+{"viewport": 390, "width": 390}
+NiceGUI browser journey passed

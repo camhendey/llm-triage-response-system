@@ -4,14 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "reservation-workbench"
-version = "1.2.0"
+version = "2.0.0"
 description = "Human-reviewed reservation operations workbench for a synthetic restaurant (portfolio project)."
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
 authors = [{ name = "Cameron Hendey" }]
 dependencies = [
-  "streamlit>=1.40",
+  "nicegui>=3.18,<4",
   "pydantic>=2.7",
   "pyyaml>=6.0",
   "python-dotenv>=1.0",
@@ -20,7 +20,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+legacy = ["streamlit>=1.40"]
 dev = [
+  "streamlit>=1.40",
   "pytest>=8.0",
   "matplotlib>=3.8",
   "pillow>=10.0",
@@ -39,6 +41,6 @@ reservation_workbench = ["py.typed"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 markers = [
-  "ui: headless Streamlit AppTest runs of app.py (no browser)",
+  "ui: headless Streamlit AppTest runs of streamlit_app.py (no browser)",
 ]
 addopts = "-q"

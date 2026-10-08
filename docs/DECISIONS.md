@@ -6,7 +6,7 @@ Each entry gives the decision, the alternatives considered and why they were rej
 
 ## Architecture
 
-**D1. One service layer for UI, CLI, tests and evaluation.** `services/workbench.py` owns every state change. The Streamlit views, the `rw` CLI, the automated tests, the worked examples and the evaluation runner all call it. *Rejected:* logic inside Streamlit callbacks, which would leave the evaluation testing a different code path from the one the operator uses.
+**D1. One service layer for UI, CLI, tests and evaluation.** `services/workbench.py` owns every state change. The NiceGUI interface, optional Streamlit views, the `rw` CLI, the automated tests, the worked examples and the evaluation runner all call it. *Rejected:* logic inside Streamlit callbacks, which would leave the evaluation testing a different code path from the one the operator uses.
 
 **D2. SQLite with an append-only event table and idempotency keys.** Every command runs in one transaction keyed by an action key; a repeat returns the stored result. *Rejected:* in-memory session state (lost on restart, A23) and a server database (deployment scope the brief excludes).
 
@@ -85,3 +85,8 @@ Email or inbox integration, sending messages, any reservation-platform integrati
 **D31. Occasion is optional.** It enriches service handoff but does not make a feasible, otherwise complete request unconfirmable. Changing a minimum-spend amount requires renewed agreement.
 
 **D32. Schematics and handoffs over optimization theater.** The seating visual explains existing constraint decisions. The service handoff exports useful operational information. Neither pretends to predict kitchen capacity or optimize revenue.
+
+
+**D16. Replace the frontend while preserving domain services.** NiceGUI supplies the primary reservation-desk interface. It retains a Python build and reuses the existing rules, providers and persistence schema. The prior Streamlit interface remains optional for regression comparison. No frontend framework was selected merely to increase the technology count.
+
+**D17. Treat a rendered screen as a versioned snapshot.** New-interface commands check the record version and latest audit-event ID inside the same transaction. The latter catches concurrent draft edits that do not change the booking version. Failed grouped commands roll back; unsaved page-local drafts remain available for recovery. This does not introduce production multi-user administration.
