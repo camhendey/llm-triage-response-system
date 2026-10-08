@@ -1,24 +1,26 @@
 # Reservation Operations Workbench
 
-A single-operator, human-reviewed workbench for large-party restaurant reservation inquiries, built on a **simulated restaurant** ("Harbour Table Demo") with **synthetic data only**. It turns guest emails into typed facts with quoted evidence, checks seating with deterministic rules, records holds, confirmations, changes and cancellations in a local demo database, and prepares reviewed draft replies that the operator copies elsewhere.
+A local, human-reviewed workbench for large-party restaurant reservation inquiries. It uses a **simulated restaurant** ("Harbour Table Demo") with **synthetic fixtures**, and can optionally load read-only, operator-uploaded OpenTable reports.
 
-**Sole developer: Cameron Hendey. Original workflow developed at JOEY in 2024; refined in 2025.** The original workflow used LLM chat tools and manual booking operations. This repository is its later software implementation; the dates on software verification records remain the actual run dates.
+The app turns guest emails into typed facts with quoted evidence, checks seating with deterministic rules, records holds, confirmations, changes and cancellations in a local demo database, and prepares reviewed draft replies for you to copy elsewhere.
 
-Nothing in this application sends email, reads or updates any external booking system, takes payments or is deployed anywhere. It is a portfolio project by Cameron Hendey; see [docs/PROVENANCE.md](docs/PROVENANCE.md) for how it relates to his earlier, manual, LLM-assisted workflow.
+Nothing in this application sends email, connects to or updates an external booking system, or takes payments. Uploaded CSV/TSV exports are parsed locally as read-only snapshots. This is a single-operator prototype, not a deployed production service.
 
-![Refined workbench (real application screenshot)](docs/screenshots/nicegui/02-workspace.png)
+![Workbench workspace](docs/screenshots/nicegui/02-workspace.png)
 
-## Status (2026-10-07)
+## Status (version 2.1)
 
 | Gate | State |
 |---|---|
 | Implemented | Workbench UI, service layer, rules engine, offline and live interpreters, CLI, evaluation runner, study harness |
-| Deterministic tests | **129 passed** (`pytest`), covering acceptance scenarios A01-A30 |
-| Actual UI verified | Chromium captures at 1440 px, 820 px and 390 px; two real NiceGUI browser journeys plus retained legacy UI tests ([docs/VERIFICATION.md](docs/VERIFICATION.md)) |
+| Deterministic tests | **153 passed** (`pytest`), covering acceptance scenarios A01-A30 |
+| Actual UI verified | Chromium captures at 1440 px, 820 px and 390 px; three real NiceGUI browser journeys plus retained legacy UI tests ([docs/VERIFICATION.md](docs/VERIFICATION.md)) |
 | Live model verified | **not_run**: no API key or spending limit was supplied ([results/eval/live_status.json](results/eval/live_status.json)) |
 | Human handling-time study | **pending**: harness and protocol ready, 0 of 36 sessions recorded |
 
 The original 40-case blind offline run allowed the expected next action in **33/40** cases with **1 critical-error case**. The refinement regression run reaches **39/40** with **0 critical-error cases** and 97/97 labelled field agreement. This is a **retest of previously inspected synthetic cases**, not a fresh blind benchmark; making occasion optional explains two improved next-action results. Live AI performance and time savings remain unmeasured. [Evaluation and limitations](docs/EVALUATION.md).
+
+Version **2.1** adds a session-start OpenTable export workflow: upload, review column mappings, validate, then explicitly apply a read-only report. Optional guestbook imports add exact-contact candidate records. Inquiry plans show report-date totals, provenance and coverage/freshness warnings. Reports never silently change facts, seating availability or drafts. [Import guide and evidence boundaries](docs/OPENTABLE_IMPORT.md).
 
 Version **2.0** replaces the primary interface with NiceGUI: compact inquiry rows, a conversation-and-decision workspace, focused reply editing, mobile Request/Plan/Reply views, and arrival briefs. Business rules and the SQLite schema are retained. [Migration and workflow coverage](docs/NICEGUI_MIGRATION.md).
 
@@ -26,34 +28,68 @@ Version **1.2** simplified navigation, separated booking and reply progress, gro
 
 Version **1.1** added a unified coordinator workspace, typed guest-detail editing, selected-plan drafting, seating/time comparisons, outgoing conversation history, explicit referral reporting and a daily handoff export. [Changes](docs/REFINEMENT.md).
 
+## Requirements
+
+- Python 3.11 or later
+- A terminal in the project directory
+
+NiceGUI is the main UI. No Node.js, npm or frontend build is required. The offline demo needs no API key.
+
 ## Quick start
 
-Requires Python 3.11+. NiceGUI is the main UI. No separate Node.js, npm or frontend build is required. The offline demo requires no API key.
-
-In **Cursor → Terminal → New Terminal**, use PowerShell:
-
-```powershell
-cd "C:\Users\camer\Documents\dev\reservation-workbench"
-# Create the environment only if it does not exist:
-py -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -c constraints-tested.txt -e .
-.\.venv\Scripts\python.exe app.py
-```
-
-Open **http://localhost:8080**. Keep the terminal running; Ctrl+C stops the app. After setup, `start-windows.cmd` runs the same command. For subsequent launches, only run `.\.venv\Scripts\python.exe app.py`.
-
-When upgrading, stop the previous app and copy the files inside this ZIP's `reservation-workbench` folder into your existing project folder. Keep your `.env`, `.venv` and existing `data` databases. Re-run the installation command above to install NiceGUI. The database schema has not changed. Avoid creating a nested `reservation-workbench/reservation-workbench` folder.
-
-For development and testing on macOS/Linux:
+From the project root:
 
 ```bash
-python -m venv .venv && source .venv/bin/activate      # Windows: .venv\Scripts\activate
-pip install -c constraints-tested.txt -e ".[dev]"
-cp .env.example .env                                     # optional; offline mode is the default
-python app.py                                           # http://localhost:8080
+python -m venv .venv
 ```
 
-The app opens on the **demo** database (`data/demo/workbench_demo.sqlite`), seeded from `data/synthetic/demo_inquiries.json` with a fixed demo clock of Tue Nov 10 2026, 10:00 America/Toronto. Use **Advance 1 hour / Advance 1 day** in **Settings** to move the demo clock (holds expire against it). Switch to the **session** database for a persistent workspace on the real clock.
+Activate the environment, then install and run:
+
+**Windows (PowerShell)**
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+python -m pip install -c constraints-tested.txt -e .
+python app.py
+```
+
+**macOS / Linux**
+
+```bash
+source .venv/bin/activate
+pip install -c constraints-tested.txt -e ".[dev]"
+cp .env.example .env          # optional; offline mode is the default
+python app.py
+```
+
+Open **http://localhost:8080**. Keep the terminal running; Ctrl+C (or Cmd+C) stops the app.
+
+On Windows, `start-windows.cmd` runs the same launch command after the environment exists. Later launches only need `python app.py` with the virtual environment active (or `.\.venv\Scripts\python.exe app.py` without activating).
+
+When upgrading an existing install, stop the previous app first. Keep your `.env`, `.venv` and existing `data` databases, then re-run the installation command above. The database schema has not changed. Avoid nesting a second copy of the project inside itself.
+
+## Using the workbench
+
+Every new browser page or reload opens **Prepare your session**. Upload a reservations CSV/TSV, check the mappings and settings, select **Validate report → Use this report**, then **Open workbench**. Add a guestbook only when needed. To explore the fixtures, select **Use synthetic demo without exports**.
+
+The workbench opens on the **demo** database (`data/demo/workbench_demo.sqlite`), seeded from `data/synthetic/demo_inquiries.json` with a fixed demo clock of Tue Nov 10 2026, 10:00 America/Toronto. Use **Advance 1 hour / Advance 1 day** in **Settings** to move the demo clock (holds expire against it). Switch to the **session** database for a persistent workspace on the real clock.
+
+Day-to-day operator steps are in the [operator guide](docs/OPERATOR_GUIDE.md).
+
+### What you can do
+
+- Queue sorted by urgency and deadline; add or paste messages; import CSV with row-level errors.
+- Facts with status (known, unknown, needs review, conflict, operator-confirmed), quoted evidence and change history. Operator values are never overwritten by later guest text; disagreements become conflicts.
+- Seating check over tables and groupings with reasons for every rejected option, checked alternative times, split-seating disclosure, and a private-events route above 25 guests.
+- Proposals bound to a record version; review and commit a demo hold (reserving every constituent table until expiry), record a demo confirmation, commit a change atomically, record a cancellation, release, decline or escalate. Each action is idempotent.
+- Minimum spend and allergies require a recorded human decision; nothing is guaranteed to the guest.
+- Drafts from templates with deterministic validators; edit, mark reviewed, copy or export. Exports do not send anything. A separate operator assertion adds the exact reviewed reply to conversation history.
+- Configuration-derived seating schematic and time comparisons; service occupancy grid, daily handoff CSV, and an arrival-bucket heuristic (not a kitchen-capacity model).
+- Operator study timer and protocol; no synthetic time-saving claims.
+
+## Command-line tools
+
+With the environment installed:
 
 ```bash
 rw init-demo                    # create/seed the demo database if missing
@@ -61,7 +97,7 @@ rw reset-demo                   # delete and re-seed ONLY the designated demo da
 rw queue                        # queue as text
 rw show INQ-0103 --notes        # facts, rules and copyable booking notes
 rw import-csv messages.csv --interpret          # into the session database
-pytest                                          # 129 tests
+pytest                                          # 153 tests
 rw eval validate                                # dataset shape and freeze hash
 rw eval run --split heldout --mode offline      # writes results/eval/<run>/
 python scripts/run_worked_examples.py           # replays examples/01-03
@@ -70,6 +106,12 @@ python scripts/capture_nicegui.py                # current screenshots; needs Pl
 ```
 
 `reset-demo` refuses any path other than the designated demo database and refuses any database whose stored kind is not `demo`.
+
+For development and testing, install extras:
+
+```bash
+pip install -c constraints-tested.txt -e ".[dev]"
+```
 
 ## Demo versus live interpreter
 
@@ -88,17 +130,6 @@ rw eval live --max-calls 400 --budget-usd 5 --usd-per-mtok-input <rate> --usd-pe
 ```
 
 Without them it writes `results/eval/live_status.json` with `status: not_run` and reports no live numbers.
-
-## What the operator can do
-
-- Queue sorted by urgency and deadline; add or paste messages; import CSV with row-level errors.
-- Facts with status (known, unknown, needs review, conflict, operator-confirmed), quoted evidence and change history. Operator values are never overwritten by later guest text; disagreements become conflicts.
-- Seating check over tables and groupings with reasons for every rejected option, checked alternative times, split-seating disclosure, and a private-events route above 25 guests.
-- Proposals bound to a record version; review and commit a demo hold (reserving every constituent table until expiry), record a demo confirmation, commit a change atomically, record a cancellation, release, decline or escalate. Each action is idempotent.
-- Minimum spend and allergies require a recorded human decision; nothing is guaranteed to the guest.
-- Drafts from templates with deterministic validators; edit, mark reviewed, copy or export. Exports do not send anything. A separate operator assertion adds the exact reviewed reply to conversation history.
-- Configuration-derived seating schematic and time comparisons; service occupancy grid, daily handoff CSV, and an arrival-bucket heuristic (not a kitchen-capacity model).
-- Operator study timer and protocol; no synthetic time-saving claims.
 
 ## Repository map
 
@@ -120,11 +151,13 @@ Without them it writes `results/eval/live_status.json` with `status: not_run` an
 
 ## Documentation
 
-[Domain and policies](docs/DOMAIN_AND_POLICIES.md) · [Decisions](docs/DECISIONS.md) · [Provenance](docs/PROVENANCE.md) · [Operator guide](docs/OPERATOR_GUIDE.md) · [Evaluation](docs/EVALUATION.md) · [Verification](docs/VERIFICATION.md) · [Claims](docs/CLAIMS.md) · [Build status](docs/BUILD_STATUS.md)
+[Domain and policies](docs/DOMAIN_AND_POLICIES.md) · [Operator guide](docs/OPERATOR_GUIDE.md) · [OpenTable import](docs/OPENTABLE_IMPORT.md) · [Decisions](docs/DECISIONS.md) · [Evaluation](docs/EVALUATION.md) · [Verification](docs/VERIFICATION.md) · [Claims](docs/CLAIMS.md) · [Build status](docs/BUILD_STATUS.md)
 
 ## Scope boundaries
 
 Synthetic restaurant and guests only. Policies in `config/restaurant_demo.yaml` are demonstration values, not any real restaurant's current policy. No real guest data, no restaurant branding, no affiliation with or integration into any reservation platform, no deployment. All guest text is treated as untrusted data and never as instructions.
+
+The server binds to `127.0.0.1:8080`. `RW_PORT` can change the port. There is no login, role permissions or production deployment configuration.
 
 License: MIT.
 
@@ -137,6 +170,4 @@ python -m pip install -c constraints-tested.txt -e ".[legacy]"
 python -m streamlit run streamlit_app.py
 ```
 
-Use `python app.py` for the new interface. Do not run `streamlit run app.py`. Both interfaces use the same configured database, so run one interface at a time during normal use.
-
-The server binds to `127.0.0.1:8080`. `RW_PORT` can change the port. This remains a local single-operator prototype, with no login, role permissions or production deployment configuration.
+Use `python app.py` for the current interface. Do not run `streamlit run app.py`. Both interfaces use the same configured database, so run one interface at a time during normal use.
